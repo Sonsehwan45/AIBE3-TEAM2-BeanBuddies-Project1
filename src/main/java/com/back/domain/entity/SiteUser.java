@@ -5,5 +5,6 @@ import jakarta.persistence.Entity;
 
 @Entity
 public class SiteUser extends BaseEntity {
-
+    private String username;
+    private String password;
 }

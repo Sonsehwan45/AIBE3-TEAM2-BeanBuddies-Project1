@@ -5,5 +5,5 @@ import jakarta.persistence.Entity;
 
 @Entity
 public class Answer extends BaseEntity {
-
+    private String content;
 }
