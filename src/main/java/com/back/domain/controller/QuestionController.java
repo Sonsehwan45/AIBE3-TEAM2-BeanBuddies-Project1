@@ -9,10 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -44,7 +41,7 @@ public class QuestionController {
             return "question/question_form";
         }
 
-        Question question = questionService.write(questionForm.getTitle(), questionForm.getContent());
+        Question question = questionService.save(null, questionForm.getTitle(), questionForm.getContent());
 
         model.addAttribute("question", question);
 
@@ -59,5 +56,39 @@ public class QuestionController {
         model.addAttribute("question", question);
 
         return "question/question_detail";
+    }
+
+    @GetMapping("/modify/{id}")
+    public String modify(@PathVariable int id, Model model) {
+        Question question = questionService.findById(id);
+
+        QuestionForm questionForm = new QuestionForm(question.getId(), question.getTitle(), question.getContent());
+
+        model.addAttribute("questionForm", questionForm);
+        return "question/question_form";
+    }
+
+    @PostMapping("/modify/{id}")
+    public String modify(
+            @PathVariable Integer id,
+            @Valid QuestionForm questionForm,
+            BindingResult bindingResult
+    ) {
+        if (bindingResult.hasErrors()) {
+            return "question/question_form";
+        }
+
+        questionService.save(id, questionForm.getTitle(), questionForm.getContent());
+
+        return "redirect:/question/detail/" + id;
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public String delete(@PathVariable int id) {
+        Question question = questionService.findById(id);
+
+        questionService.delete(question);
+
+        return "redirect:/";
     }
 }

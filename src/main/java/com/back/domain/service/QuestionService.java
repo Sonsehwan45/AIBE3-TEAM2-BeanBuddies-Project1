@@ -12,8 +12,19 @@ public class QuestionService {
     @Autowired
     private QuestionRepository questionRepository;
 
-    public Question write(String title, String content) {
-        Question question = new Question(title, content);
+    public Question save(Integer id, String title, String content) {
+        Question question;
+
+        if (id == null) { // 등록
+            question = new Question(); // 등록 시에만 생성일 세팅
+        } else { // 수정
+            question = questionRepository.findById(id)
+                    .orElseThrow(() -> new IllegalArgumentException("해당 질문이 존재하지 않습니다."));
+        }
+
+        question.setTitle(title);
+        question.setContent(content);
+
         return questionRepository.save(question);
     }
 
@@ -23,5 +34,9 @@ public class QuestionService {
 
     public List<Question> findAll() {
         return questionRepository.findAll();
+    }
+
+    public void delete(Question question) {
+        questionRepository.delete(question);
     }
 }

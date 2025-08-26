@@ -20,6 +20,7 @@ jsb-project/
         │       └── global/
         │           ├── jpa/entity/               # 공통 엔티티
         │           └── security/                 # 보안 설정
+        │           └── web/WebConfig.java        # HTTP method 확장 설정
         └── resources/
             ├── application.yml                   # 설정 파일
             ├── static/css/style.css              # CSS

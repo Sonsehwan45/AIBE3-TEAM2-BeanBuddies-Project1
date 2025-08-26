@@ -12,7 +12,7 @@
                 <textarea th:field="*{content}" class="form-control" rows="10"></textarea>
                 <div th:if="${#fields.hasErrors('content')}" class="text-danger" th:errors="*{content}"></div>
             </div>
-            <button type="submit" class="btn btn-primary">등록</button>
+            <button type="submit" class="btn btn-primary" th:text="${questionForm.id} != null ? '수정하기' : '등록하기'"></button>
         </form>
     </div>
 </html>

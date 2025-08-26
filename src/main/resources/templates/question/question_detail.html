@@ -5,6 +5,12 @@
             <p th:text="${question.content}">질문 내용</p>
             <p>작성일: <span th:text="${#temporals.format(question.createDate, 'yyyy-MM-dd HH:mm')}">작성일</span></p>
             <a href="/question/list" class="btn btn-secondary">목록으로</a>
+            <a th:href="@{|/question/modify/${question.id}|}" class="btn btn-primary">수정</a>
+            <form th:action="@{|/question/delete/${question.id}|}" method="post" style="display:inline;">
+                <input type="hidden" name="_method" value="delete"/>
+                <button type="submit" class="btn btn-danger"
+                        onclick="return confirm('정말 삭제하시겠습니까?');">삭제</button>
+            </form>
         </th:block>
     </div>
 </html>
