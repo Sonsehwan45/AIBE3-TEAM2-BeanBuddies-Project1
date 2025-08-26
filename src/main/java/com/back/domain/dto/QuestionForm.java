@@ -1,4 +1,4 @@
-package com.back.jsb.dto;
+package com.back.domain.dto;
 
 public class QuestionForm {
 
