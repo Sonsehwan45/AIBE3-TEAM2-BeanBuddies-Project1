@@ -1,4 +1,10 @@
 <html layout:decorate="~{layout}">
     <div layout:fragment="content" class="container my-3">
+        <th:block th:object="${question}">
+            <h1 th:text="${question.title}">질문 제목</h1>
+            <p th:text="${question.content}">질문 내용</p>
+            <p>작성일: <span th:text="${#temporals.format(question.createDate, 'yyyy-MM-dd HH:mm')}">작성일</span></p>
+            <a href="/question/list" class="btn btn-secondary">목록으로</a>
+        </th:block>
     </div>
 </html>
