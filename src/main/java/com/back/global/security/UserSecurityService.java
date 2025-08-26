@@ -1,4 +1,4 @@
-package com.back.domain.security;
+package com.back.global.security;
 
 public class UserSecurityService {
 
