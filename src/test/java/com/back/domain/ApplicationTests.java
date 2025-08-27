@@ -1,4 +1,4 @@
-package com.back.jsb;
+package com.back.domain;
 
 public class ApplicationTests {
 
