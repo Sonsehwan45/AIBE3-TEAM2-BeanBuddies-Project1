@@ -1,0 +1,23 @@
+<h1>게시글 목록</h1>
+
+<table>
+    <thead>
+    <tr>
+        <th>게시글 번호</th>
+        <th>제목</th>
+        <th>작성일시</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <tr th:each="question : ${questions}">
+        <td th:text="${question.Id}"></td>
+        <td>
+            <a th:text="${question.title}" th:href="@{|/questions/detail/${question.getId()}|}"></a>
+        </td>
+        <td th:text="${#temporals.format(question.createDate, 'yyyy-MM-dd HH:mm:ss')}"></td>
+    </tr>
+    </tbody>
+</table>
+<br>
+<a href="/questions/write"> 게시글 작성 </a>

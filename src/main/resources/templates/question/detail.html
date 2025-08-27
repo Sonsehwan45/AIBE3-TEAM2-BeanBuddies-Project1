@@ -1,0 +1,13 @@
+<h1>게시글 상세</h1>
+
+<div>
+    <ul th:object="${question}">
+        <h3>제목</h3>
+        <li th:text="*{title}"></li>
+        <h3>내용</h3>
+        <li th:text="*{content}"></li>
+        <h3>생성일</h3>
+        <li th:text="*{createDate}"></li>
+    </ul>
+</div>
+<a href="/questions/list">게시글 목록</a>
