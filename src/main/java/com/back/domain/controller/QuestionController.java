@@ -55,6 +55,7 @@ public class QuestionController {
         Question question = questionService.findById(id);
 
         model.addAttribute("question", question);
+        answerForm.setQuestionId(question.getId());
         model.addAttribute("answerForm", answerForm);
 
         return "question/question_detail";

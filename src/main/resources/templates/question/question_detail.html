@@ -9,13 +9,16 @@
             <div>
                 <h3>답변</h3>
                 <!-- 등록된 답변 나열 -->
-
+                <div th:each="answer : *{answers}" class="">
+                    <span th:text="${answer.content}"></span> / <span th:text="${answer.createDate}"></span> / <a th:href="|/answer/modify/${answer.id}|">수정</a>
+                </div>
                 <!-- 신규 답변 등록창 -->
                 <h4>등록</h4>
                 <th:block th:object="${answerForm}">
-                    <form th:action="@{|/answer/write/${question.id}|}" method="post">
+                    <form action="/answer/write" method="post">
                         <div class="d-flex">
                             <input type="text" th:field="*{content}" class="form-control"/>
+                            <input type="hidden" th:field="*{questionId}">
                             <button type="submit" class="btn btn-primary">등록</button>
                         </div>
                         <div th:if="${#fields.hasErrors('content')}" class="text-danger" th:errors="*{content}"></div>

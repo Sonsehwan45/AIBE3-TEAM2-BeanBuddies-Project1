@@ -35,4 +35,8 @@ public class AnswerService {
 
         return answerRepository.save(answer);
     }
+
+    public Answer findById(int id) {
+        return answerRepository.findById(id).orElseThrow(() -> new RuntimeException("Answer not found"));
+    }
 }
