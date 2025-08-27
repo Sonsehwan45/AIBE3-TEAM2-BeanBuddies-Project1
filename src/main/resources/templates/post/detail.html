@@ -1,0 +1,11 @@
+<h3>[[${question.id}]] 번</h3>
+<h2>[[${question.title}]]</h2>
+<p>[[${question.content}]]</p>
+
+<div>
+    <a th:href="@{|/post/modify/${question.id}|}">수정</a>
+    <br>
+    <a th:href="@{|/post/delete/${question.id}|}">삭제</a>
+    <br>
+    <a href="/post/list">글 목록</a>
+</div>
