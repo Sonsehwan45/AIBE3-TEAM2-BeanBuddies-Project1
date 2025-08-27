@@ -1,4 +1,4 @@
-package com.back.jsb.security;
+package com.back.jsb.global.security;
 
 public class UserSecurityService {
 

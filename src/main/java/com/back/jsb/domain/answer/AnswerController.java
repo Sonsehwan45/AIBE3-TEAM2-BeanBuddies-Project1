@@ -1,4 +1,4 @@
-package com.back.jsb.controller;
+package com.back.jsb.domain.answer;
 
 public class AnswerController {
 
