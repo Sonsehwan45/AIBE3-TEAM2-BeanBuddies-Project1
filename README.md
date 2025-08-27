@@ -179,3 +179,50 @@ null 값을 부여할 수 있는 Wrapper 클래스를 사용하는 것이 권장
 
 [하이버네이트 사용자 가이드](https://docs.jboss.org/hibernate/orm/5.3/userguide/html_single/Hibernate_User_Guide.html#entity-pojo-constructor)
 
+### 이름이 동일한 애노테이션 뭘 써야할까?
+
+1. @Id
+2. @Transactional
+
+
+## 🚀 트러블슈팅
+
+### 삭제처리
+**과정**
+
+삭제를 위해 코드를 작성하는 도중 JPARepository에 `delete`, `deleteById` 두 가지 메소드가 있는 것을 발견했다.
+
+이에 service에서 새로 정의한 findById -> delete로 진행하는 대신 바로 deleteById를 사용할지 고민했다.
+
+한편, deleteById를 살펴보니 내부적으로 JpaRepository.findById를 사용하고 있었다.
+
+그래서 이러한 상황에서 내가 service에서 예외 메시지를 정의한 findById를 재사용 할지, repository의 deleteById를
+사용하는 것이 좋을지 AI에게 피드백 받았다.
+
+동작의 큰 차이는 없지만 간결성 VS 예외메시지 일관성에 대한 의견을 듣고 싶었다.
+
+```java
+public Question findById(Integer id) {
+    return questionRepository.findById(id)
+            .orElseThrow(() -> new EntityNotFoundException(NOT_FOUND_BY_ID.formatted(id)));
+}
+```
+
+그런데 이 과정에서 existById라는 새로운 메소드를 추천 받았고, existById -> deleteById가 DB 접근 횟수 2회,
+내가 제시한 코드는 DB접근 횟수 3회라는 피드백을 해주었다. 
+
+그리고 1회의 DB접근으로 해결가능한 JPQL 직접 작성하기도 제시하였다. 
+
+**결론**
+
+일단 existById는 SQL로 `SELECT 1 FROM question WHERE id = ?`와 같은 SQL을 작성해 디스크나 메모리에서 Entity의 값을 불러오는 findById보다
+빠른 존재 여부를 조회할 수 있다.
+
+그런데, deleteById 자체가 다시 findById를 호출하므로
+이 코드가 DB 접근 횟수 3회의 코드, 반대로 처음 제시한 코드가 2회가 된다.
+
+논지가 살짝 바뀌어서 existById를 사용할지 말지에 대한 고민으로 바뀌었지만 결국 트러블슈팅 과정속에서
+
+내부코드와 JPA 동작에 대해 리마인드하며 deleteById가 findById -> delete보다 특별히 최적화가 이루어지는 것이 아니라는 확신이 들었고
+
+내가 service에서 선언한 findById를 사용하는 것이 좋겠다는 결론을 내리게 됐다.
