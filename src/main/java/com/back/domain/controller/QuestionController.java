@@ -1,5 +1,6 @@
 package com.back.domain.controller;
 
+import com.back.domain.dto.AnswerForm;
 import com.back.domain.dto.QuestionForm;
 import com.back.domain.entity.Question;
 import com.back.domain.service.QuestionService;
@@ -50,10 +51,11 @@ public class QuestionController {
 
     @GetMapping("/detail/{id}")
     @Transactional(readOnly = true)
-    public String detail(@PathVariable int id, Model model) {
+    public String detail(@PathVariable int id, AnswerForm answerForm, Model model) {
         Question question = questionService.findById(id);
 
         model.addAttribute("question", question);
+        model.addAttribute("answerForm", answerForm);
 
         return "question/question_detail";
     }

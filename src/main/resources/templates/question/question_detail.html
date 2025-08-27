@@ -4,6 +4,25 @@
             <h1 th:text="${question.title}">질문 제목</h1>
             <p th:text="${question.content}">질문 내용</p>
             <p>작성일: <span th:text="${#temporals.format(question.createDate, 'yyyy-MM-dd HH:mm')}">작성일</span></p>
+
+            <!-- 답변 화면 -->
+            <div>
+                <h3>답변</h3>
+                <!-- 등록된 답변 나열 -->
+
+                <!-- 신규 답변 등록창 -->
+                <h4>등록</h4>
+                <th:block th:object="${answerForm}">
+                    <form th:action="@{|/answer/write/${question.id}|}" method="post">
+                        <div class="d-flex">
+                            <input type="text" th:field="*{content}" class="form-control"/>
+                            <button type="submit" class="btn btn-primary">등록</button>
+                        </div>
+                        <div th:if="${#fields.hasErrors('content')}" class="text-danger" th:errors="*{content}"></div>
+                    </form>
+                </th:block>
+            </div>
+
             <a href="/question/list" class="btn btn-secondary">목록으로</a>
             <a th:href="@{|/question/modify/${question.id}|}" class="btn btn-primary">수정</a>
             <form th:action="@{|/question/delete/${question.id}|}" method="post" style="display:inline;">
