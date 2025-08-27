@@ -29,7 +29,8 @@ jsb-project/
                 ├── fragments/header.html         # 헤더 fragment
                 ├── question/question_list.html   # 질문 목록
                 ├── question/question_form.html   # 질문 작성
-                ├── question/question_detail.html # 질문 상세
+                ├── question/question_detail.html # 질문 상세 (답변 출력, 등록, 삭제 기능 포함)
+                ├── answer/answer_form.html       # 답변 수정
                 ├── user/login_form.html          # 로그인
-                └── user/signup_form.html         # 회원가입
+                └── user/signup_form.html         # 회원가입        
 ```
