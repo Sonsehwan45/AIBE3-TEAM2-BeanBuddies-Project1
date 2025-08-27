@@ -10,7 +10,15 @@
                 <h3>답변</h3>
                 <!-- 등록된 답변 나열 -->
                 <div th:each="answer : *{answers}" class="">
-                    <span th:text="${answer.content}"></span> / <span th:text="${answer.createDate}"></span> / <a th:href="|/answer/modify/${answer.id}|">수정</a>
+                    <span th:text="${answer.content}"></span> /
+                    <span th:text="${#temporals.format(answer.createDate, 'yyyy-MM-dd HH:mm')}"></span> /
+                    <a th:href="|/answer/modify/${answer.id}|">수정</a> /
+                    <form th:action="@{|/answer/delete/${answer.id}|}" method="post" style="display:inline;">
+                        <input type="hidden" name="_method" value="delete"/>
+                        <button type="submit" class="btn btn-link" style="padding:0; border:none; background:none;">
+                            삭제
+                        </button>
+                    </form>
                 </div>
                 <!-- 신규 답변 등록창 -->
                 <h4>등록</h4>

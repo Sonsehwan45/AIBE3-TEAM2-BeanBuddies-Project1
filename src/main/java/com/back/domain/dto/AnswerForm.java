@@ -14,7 +14,7 @@ import lombok.Setter;
 public class AnswerForm {
         private Integer id;
 
-        @NotBlank(message = "내용을 입력해주세요.")
+        @NotBlank(message = "답변을 입력해주세요.")
         @Size(min = 2, max = 100, message = "답변은 2 ~ 100 자 이내로 입력해주세요.")
         private String content;
 

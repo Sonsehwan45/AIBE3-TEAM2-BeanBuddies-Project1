@@ -39,4 +39,8 @@ public class AnswerService {
     public Answer findById(int id) {
         return answerRepository.findById(id).orElseThrow(() -> new RuntimeException("Answer not found"));
     }
+
+    public void delete(Answer answer) {
+        answerRepository.delete(answer);
+    }
 }
