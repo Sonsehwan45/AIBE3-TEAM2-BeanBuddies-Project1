@@ -1,0 +1,40 @@
+package com.back.domain.service;
+
+import com.back.domain.constant.UserRole;
+import com.back.domain.entity.SiteUser;
+import com.back.domain.repository.SiteUserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+@Service
+public class UserSecurityService implements UserDetailsService {
+    @Autowired
+    private SiteUserRepository siteUserRepository;
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        Optional<SiteUser> _siteUser = this.siteUserRepository.findByUsername(username);
+        if (_siteUser.isEmpty()) {
+            throw new UsernameNotFoundException("사용자를 찾을수 없습니다.");
+        }
+        SiteUser siteUser = _siteUser.get();
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        // 일단 아이디(username)로 admin 유무 파악
+        if ("admin".equals(username)) {
+            authorities.add(new SimpleGrantedAuthority(UserRole.ADMIN.getValue()));
+        } else {
+            authorities.add(new SimpleGrantedAuthority(UserRole.USER.getValue()));
+        }
+        return new User(siteUser.getUsername(), siteUser.getPassword(), authorities);
+    }
+}
