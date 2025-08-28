@@ -2,6 +2,7 @@ package com.back.domain.controller;
 
 import com.back.domain.dto.AnswerForm;
 import com.back.domain.dto.QuestionForm;
+import com.back.domain.dto.QuestionSearchDto;
 import com.back.domain.entity.Question;
 import com.back.domain.service.QuestionService;
 import jakarta.validation.Valid;
@@ -21,9 +22,10 @@ public class QuestionController {
     private QuestionService questionService;
 
     @GetMapping("/list")
-    public String list(Model model) {
-        List<Question> questions = questionService.findAll();
+    public String list(QuestionSearchDto questionSearchDto, Model model) {
+        List<Question> questions = questionService.findByKeyword(questionSearchDto.getSearchType(), questionSearchDto.getKeyword());
         model.addAttribute("questions", questions);
+        model.addAttribute("questionSearchDto", questionSearchDto);
         return "question/question_list";
     }
 

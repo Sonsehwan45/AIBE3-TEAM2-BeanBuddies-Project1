@@ -39,4 +39,16 @@ public class QuestionService {
     public void delete(Question question) {
         questionRepository.delete(question);
     }
+
+    public List<Question> findByKeyword(String searchType, String keyword) {
+        if (searchType == null || keyword == null) {
+            return questionRepository.findAll();
+        }
+
+        return switch (searchType) {
+            case "title" -> questionRepository.findByTitleContaining(keyword);
+            case "content" -> questionRepository.findByContentContaining(keyword);
+            default -> questionRepository.findAll();
+        };
+    }
 }
