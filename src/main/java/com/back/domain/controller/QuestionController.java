@@ -1,5 +1,6 @@
 package com.back.domain.controller;
 
+import com.back.domain.dto.AnswerForm;
 import com.back.domain.dto.QuestionForm;
 import com.back.domain.entity.Question;
 import com.back.domain.service.QuestionService;
@@ -14,25 +15,24 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RequestMapping("/post")
+@RequestMapping("/question")
 @RequiredArgsConstructor
 @Controller
 public class QuestionController {
     @Autowired
     private final QuestionService questionService;
 
-    @Transactional(readOnly = true)
     @GetMapping("/list")
-    public String list(Model model) {
-        List<Question> questions = questionService.findAll();
+    public String list(Model model, @RequestParam(value = "kw", defaultValue = "") String kw) {
+        // 서비스의 검색 메서드를 호출합니다.
+        List<Question> questions = questionService.search(kw);
         model.addAttribute("questions", questions);
-
-        return "post/list";
+        return "post/question/list";
     }
 
     @GetMapping("/form")
     public String write(@ModelAttribute("form") QuestionForm form) {
-        return "post/form";
+        return "post/question/form";
     }
 
     @Transactional
@@ -43,20 +43,18 @@ public class QuestionController {
             Model model
     ) {
         if (bindingResult.hasErrors()) {
-            return "post/form";
+            return "post/question/form";
         }
 
         Question question = questionService.write(form.getTitle(), form.getContent());
         model.addAttribute("question", question);
-        return "redirect:/post/detail/" + question.getId();
+        return "redirect:/question/detail/" + question.getId();
     }
 
     @GetMapping("/detail/{id}")
-    public String detail(@PathVariable Integer id, Model model) {
-        Question question = questionService.findById(id);
-        model.addAttribute("question", question);
-
-        return "post/detail";
+    public String detail(Model model, @PathVariable Integer id, AnswerForm answerForm) {
+        model.addAttribute("question", questionService.findById(id));
+        return "post/question/detail";
     }
 
     @GetMapping("/modify/{id}")
@@ -64,7 +62,7 @@ public class QuestionController {
         Question question = questionService.findById(id);
         model.addAttribute("question", question);
 
-        return "post/modify";
+        return "post/question/modify";
     }
 
     @PostMapping("/modify/{id}")
@@ -74,20 +72,22 @@ public class QuestionController {
             BindingResult bindingResult
     ) {
         if (bindingResult.hasErrors()) {
-            return "post/modify";
+            return "post/question/modify";
         }
         Question question = questionService.findById(id);
 
         // 서비스 계층의 modify 메서드를 호출하여 데이터를 수정합니다.
         questionService.modify(question, form.getTitle(), form.getContent());
 
-        return "redirect:/post/detail/" + id;
+        return "redirect:/question/detail/" + id;
     }
 
     @GetMapping("/delete/{id}")
     public String delete(@PathVariable Integer id) {
         questionService.delete(id);
 
-        return "redirect:/post/list";
+        return "redirect:/question/list";
     }
+
+
 }

@@ -42,4 +42,8 @@ public class QuestionService {
 
         questionRepository.delete(question);
     }
+
+    public List<Question> search(String kw) {
+        return questionRepository.findAllByKeyword(kw);
+    }
 }

@@ -1,0 +1,18 @@
+<h3>게시글 목록</h3>
+<form action="/question/list" method="get">
+    <input type="text" name="kw" placeholder="검색어를 입력하세요">
+    <input type="submit" value="찾기">
+</form>
+<ul>
+    <li th:each="question : ${questions}">
+        <span>[[${question.id}]]</span>
+        /
+        <span><a th:href="@{|/question/detail/${question.id}|}" th:text="${question.title}"></a></span>
+        /
+        <span th:text="${#temporals.format(question.createDate, 'yy.MM.dd HH:mm')}"></span>
+    </li>
+</ul>
+
+    <div>
+    <a href="/question/form">글쓰기</a>
+</div>

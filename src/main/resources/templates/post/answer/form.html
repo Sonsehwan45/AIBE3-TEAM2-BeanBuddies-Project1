@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>답변 등록</title>
+</head>
+<body>
+<h3 th:text="|'${question.title}'에 답변 등록|"></h3>
+
+<form method="POST" th:action="@{|/answer/form/${question.id}|}" th:object="${answerForm}">
+    <ul th:if="${#fields.hasAnyErrors()}">
+        <li th:each="err : ${#fields.allErrors()}" th:text="${err}" style="color:red;"></li>
+    </ul>
+
+    <div>
+        <textarea id="content" th:field="*{content}" placeholder="답변 내용을 입력해주세요." rows="10"></textarea>
+    </div>
+    <br>
+    <input type="submit" value="답변 완료">
+    <a th:href="@{|/post/question/detail/${question.id}|}">취소</a>
+</form>
+</body>
+</html>

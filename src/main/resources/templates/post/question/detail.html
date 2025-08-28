@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>게시글 상세</title>
+</head>
+<body>
+
+<h3 th:text="|#${question.id}번 게시글|"></h3>
+<h2 th:text="${question.title}"></h2>
+<p th:text="${question.content}"></p>
+<p style="font-size: small;" th:text="|작성일: ${#temporals.format(question.createDate, 'yy.MM.dd HH:mm')}|"></p>
+
+<hr>
+
+<h4><span th:text="${question.answerList.size()}"></span>개의 답변</h4>
+<div th:if="${question.answerList.isEmpty()}">
+    <p>등록된 답변이 없습니다.</p>
+</div>
+<div th:if="${!question.answerList.isEmpty()}">
+    <ul>
+        <li th:each="answer : ${question.answerList}" style="margin-bottom: 15px;">
+            <p th:text="${answer.content}"></p>
+            <div style="font-size: small;">
+                <span th:text="|작성일: ${#temporals.format(answer.createDate, 'yy.MM.dd HH:mm')}|"></span>
+                <a th:href="@{|/answer/modify/${answer.id}|}">수정</a>
+                <a th:href="@{|/answer/delete/${answer.id}|}">삭제</a>
+            </div>
+        </li>
+    </ul>
+</div>
+
+<hr>
+
+<form th:action="@{|/answer/form/${question.id}|}" method="post" th:object="${answerForm}">
+    <div th:if="${#fields.hasErrors('answerForm.*')}">
+        <div th:each="err : ${#fields.errors('answerForm.*')}" th:text="${err}" style="color:red;"></div>
+    </div>
+    <div>
+        <textarea th:field="*{content}" rows="5" placeholder="답변을 입력해주세요." style="width: 50%;"></textarea>
+    </div>
+    <input type="submit" value="답변 등록">
+</form>
+
+<hr>
+
+<div>
+    <a href="/question/list">글 목록</a>
+    <a th:href="@{|/question/modify/${question.id}|}">질문 수정</a>
+    <a th:href="@{|/question/delete/${question.id}|}">질문 삭제</a>
+</div>
+
+</body>
+</html>
