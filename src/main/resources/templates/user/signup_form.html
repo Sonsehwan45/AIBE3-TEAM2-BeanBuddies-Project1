@@ -1,0 +1,57 @@
+<style>
+    .field-error {
+        color: red;
+        font-size: 0.8em; /* 글자 작게 */
+        margin-top: 4px;  /* 입력창과 간격 */
+    }
+</style>
+
+<h1>회원가입</h1>
+<form th:action="@{/user/sign}" th:object="${form}" method="post">
+
+    <!-- 글로벌 에러 표시 -->
+    <div th:if="${#fields.hasGlobalErrors()}">
+        <ul>
+            <li th:each="err : ${#fields.globalErrors()}" th:text="${err}" class="field-error"></li>
+        </ul>
+    </div>
+
+    <div>
+        <label>아이디</label>
+        <input type="text" th:field="*{username}" />
+        <div th:if="${#fields.hasErrors('username')}"
+             th:errors="*{username}"
+             class="field-error"></div>
+    </div>
+
+    <div>
+        <label>닉네임</label>
+        <input type="text" th:field="*{nickname}" />
+        <div th:if="${#fields.hasErrors('nickname')}"
+             th:errors="*{nickname}"
+             class="field-error"></div>
+    </div>
+
+    <div>
+        <label>비밀번호</label>
+        <input type="password" th:field="*{password}" />
+        <div th:if="${#fields.hasErrors('password')}"
+             th:errors="*{password}"
+             class="field-error"></div>
+    </div>
+
+    <div>
+        <label>비밀번호 확인</label>
+        <input type="password" th:field="*{passwordConfirm}" />
+        <div th:if="${#fields.hasErrors('passwordConfirm')}"
+             th:errors="*{passwordConfirm}"
+             class="field-error"></div>
+    </div>
+
+
+
+    <div>
+        <button type="submit">회원가입</button>
+    </div>
+
+</form>

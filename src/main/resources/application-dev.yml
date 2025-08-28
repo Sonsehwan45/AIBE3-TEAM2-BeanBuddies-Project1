@@ -1,6 +1,13 @@
-spring :
+#spring:
+#  datasource:
+#    url: jdbc:h2:./db_dev;MODE=MySQL
+#    username: sa
+#    password:
+#    driver-class-name: org.h2.Driver
+
+spring:
   datasource:
-    url: jdbc:h2:./db_dev;MODE=MySQL
-    username: sa
-    password:
-    driver-class-name: org.h2.Driver
+    url: jdbc:mysql://localhost:3306/jsb_db?useSSL=false&serverTimezone=Asia/Seoul
+    username: root
+    password: 1403
+    driver-class-name: com.mysql.cj.jdbc.Driver

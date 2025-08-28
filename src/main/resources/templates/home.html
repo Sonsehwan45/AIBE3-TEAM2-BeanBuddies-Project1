@@ -1,9 +1,5 @@
-<h1>BeanBuddies!</h1>
-
-<ul>
-    <li><a href="/question/list">질문 목록</a></li>
-    <li><a href="/user/sign">회원가입</a></li>
-    <li><a href="/user/login">로그인</a></li>
-    <li><a href="/user/logout">로그아웃</a></li>
-</ul>
-
+<html layout:decorate="~{layout}">
+<div layout:fragment="content">
+    <h1>home</h1>
+    안녕하세요, <span th:text="${nickname}"></span>님
+</div>

@@ -35,6 +35,10 @@ dependencies {
     annotationProcessor("org.projectlombok:lombok")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+    testImplementation("org.springframework.security:spring-security-test")
+    implementation("org.springframework.boot:spring-boot-starter-security")
+    implementation("nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect")
+    implementation("org.springframework.boot:spring-boot-starter-validation")
 }
 
 tasks.withType<Test> {

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Hello, sbb!</title>
+</head>
+<body>
+
+<header>
+    <nav>
+        <ul>
+            <li><a th:href="@{/}">시작</a></li>
+            <li><a th:href="@{/home}">홈</a></li>
+            <li><a th:href="@{/user/sign}">회원가입</a></li>
+            <li><a th:href="@{/user/login}">로그인</a></li>
+            <li><a th:href="@{/user/logout}">로그아웃</a></li>
+            <li><a th:href="@{/user/list}">회원 목록</a></li>
+            <li><a th:href="@{/question/list}">질문 목록</a></li>
+        </ul>
+    </nav>
+</header>
+
+<main>
+    <!-- 개별 페이지의 내용이 들어가는 자리 -->
+    <th:block layout:fragment="content">
+
+    </th:block>
+</main>
+
+</body>
+</html>
