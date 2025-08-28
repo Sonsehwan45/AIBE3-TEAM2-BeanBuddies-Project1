@@ -24,4 +24,13 @@ public class QuestionService {
     public Question findById(Long id) {
         return questionRepository.findById(id) .orElseThrow(() ->new EntityNotFoundException("Question not found"));
     }
+
+    public void deleteById(Long id) {
+        questionRepository.deleteById(id);
+    }
+
+    public void modify(Question question, QuestionForm form) {
+        question.modify(form);
+        questionRepository.save(question);
+    }
 }

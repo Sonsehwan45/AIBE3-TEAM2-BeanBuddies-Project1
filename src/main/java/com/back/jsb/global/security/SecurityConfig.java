@@ -21,13 +21,16 @@ public class SecurityConfig{
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/user/login", "/user/sign", "/question/list", "/question/detail/**").permitAll()
-                        .anyRequest().authenticated()
+                        .requestMatchers(
+                                "/home",
+                                "/question/write"
+                        ).authenticated()
+                        .anyRequest().permitAll()
                 )
 
                 .formLogin(form -> form
                     .loginPage("/user/login")
-                    .defaultSuccessUrl("/home", true)
+                    .defaultSuccessUrl("/question/list", true)
                     .permitAll()
                 )
 

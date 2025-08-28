@@ -5,4 +5,16 @@
     <p th:text="${question.author.nickname}">작성자</p>
     <p th:text="${#temporals.format(question.createdDate, 'yyyy-MM-dd HH:mm')}">작성일</p>
     <p th:text="${#temporals.format(question.modifiedDate, 'yyyy-MM-dd HH:mm')}">수정일</p>
+
+    <div>
+        <a th:href="@{/question/modify/{id}(id=${question.id})}">
+            <button type="button">수정</button>
+        </a>
+
+        <form th:action="@{/question/delete/{id}(id=${question.id})}" method="post" style="display:inline;">
+            <button type="submit" onclick="return confirm('정말 삭제하시겠습니까?');">삭제</button>
+        </form>
+    </div>
+
 </div>
+
