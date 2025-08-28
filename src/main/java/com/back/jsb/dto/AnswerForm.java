@@ -1,5 +1,9 @@
 package com.back.jsb.dto;
 
-public class AnswerForm {
+import jakarta.validation.constraints.NotBlank;
 
-        }
+public record AnswerForm (
+        @NotBlank
+        String content
+){
+}

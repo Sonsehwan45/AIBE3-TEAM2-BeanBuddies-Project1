@@ -1,23 +1,26 @@
-<h1>게시글 목록</h1>
+<html layout:decorate="~{layout}">
+<div layout:fragment="content" class="container my-3">
+    <h1>게시글 목록</h1>
 
-<table>
-    <thead>
-    <tr>
-        <th>게시글 번호</th>
-        <th>제목</th>
-        <th>작성일시</th>
-    </tr>
-    </thead>
+    <table class="table">
+        <thead class="table-dark">
+        <tr>
+            <th>게시글 번호</th>
+            <th>제목</th>
+            <th>작성일시</th>
+        </tr>
+        </thead>
 
-    <tbody>
-    <tr th:each="question : ${questions}">
-        <td th:text="${question.Id}"></td>
-        <td>
-            <a th:text="${question.title}" th:href="@{|/questions/detail/${question.getId()}|}"></a>
-        </td>
-        <td th:text="${#temporals.format(question.createDate, 'yyyy-MM-dd HH:mm:ss')}"></td>
-    </tr>
-    </tbody>
-</table>
-<br>
-<a href="/questions/write"> 게시글 작성 </a>
+        <tbody>
+        <tr th:each="question : ${questions}">
+            <td th:text="${question.id}"></td>
+            <td>
+                <a th:text="${question.title}" th:href="@{|/questions/detail/${question.id}|}"></a>
+            </td>
+            <td th:text="${#temporals.format(question.createDate, 'yy-MM-dd HH:mm')}"></td>
+        </tr>
+        </tbody>
+    </table>
+    <a href="/questions/write" class="btn btn-primary"> 질문 등록 </a>
+</div>
+</html>

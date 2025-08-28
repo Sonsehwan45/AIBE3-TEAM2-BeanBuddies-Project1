@@ -1,5 +1,6 @@
 package com.back.jsb.controller;
 
+import com.back.jsb.dto.AnswerForm;
 import com.back.jsb.dto.QuestionForm;
 import com.back.jsb.entity.Question;
 import com.back.jsb.service.QuestionService;
@@ -36,7 +37,7 @@ public class QuestionController {
     }
 
     @PostMapping("/write")
-    public String doWrite(@Valid QuestionForm questionForm, Model model, BindingResult bindingResult) {
+    public String doWrite(@Valid QuestionForm questionForm, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             model.addAttribute("questionForm", questionForm);
             return "question/write";
@@ -48,7 +49,7 @@ public class QuestionController {
     }
 
     @GetMapping("/detail/{id}")
-    public String detail(@PathVariable Integer id, Model model) {
+    public String detail(@PathVariable Integer id, Model model, AnswerForm answerForm) {
         Question question = questionService.findById(id);
         model.addAttribute("question", question);
 

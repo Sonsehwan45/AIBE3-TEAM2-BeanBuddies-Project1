@@ -226,3 +226,26 @@ public Question findById(Integer id) {
 내부코드와 JPA 동작에 대해 리마인드하며 deleteById가 findById -> delete보다 특별히 최적화가 이루어지는 것이 아니라는 확신이 들었고
 
 내가 service에서 선언한 findById를 사용하는 것이 좋겠다는 결론을 내리게 됐다.
+
+### answer저장
+관계의 주인인 answer가 아닌 question에서 참조변수를 지정하려고 하였다.
+
+```java
+// 변경 전
+public Answer write(Integer questionId, AnswerForm answerForm) {
+  Question question = questionService.findById(questionId);
+  Answer answer = new Answer(answerForm.content());
+  question.getAnswers().add(answer);
+
+  return answerRepository.save(answer);
+}
+
+
+// 변경 후 
+public Answer write(Integer questionId, AnswerForm answerForm) {
+    Question question = questionService.findById(questionId);
+    Answer answer = new Answer(answerForm.content(), question);
+
+    return answerRepository.save(answer);
+}
+```

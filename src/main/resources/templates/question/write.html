@@ -1,7 +1,18 @@
-<h1> 게시글 작성 </h1>
-
-<form method="POST">
-    <input name="title" placeholder="제목을 입력하세요">
-    <textarea name="content" placeholder="내용을 입력하세요"></textarea>
-    <button type="submit">작성</button>
-</form>
+<html layout:decorate="~{layout}">
+<div layout:fragment="content" class="container">
+    <h5 class="my-3 border-bottom pb-2">질문등록</h5>
+    <form th:action="@{/questions/write}" th:object="${questionForm}" method="post">
+        <div th:replace="~{form_errors::fieldErrors}"></div>
+        <div class="mb-3">
+            <label for="title" class="form-label">제목</label>
+            <input type="text" th:field="*{title}" id="title" class="form-control">
+        </div>
+        <div class="mb-3">
+            <label for="content" class="form-label">내용</label>
+            <textarea th:field="*{content}" id="content" class="form-control" rows="10"></textarea>
+        </div>
+        <input type="submit" value="저장하기" class="btn btn-primary my-2">
+    </form>
+    <a href="/questions/list"> 취소 </a>
+</div>
+</html>
