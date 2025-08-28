@@ -1,0 +1,8 @@
+<html layout:decorate="~{layout}">
+<div layout:fragment="content">
+    <h1 th:text="${question.title}">제목</h1>
+    <p th:text="${question.content}">내용</p>
+    <p th:text="${question.author.nickname}">작성자</p>
+    <p th:text="${#temporals.format(question.createdDate, 'yyyy-MM-dd HH:mm')}">작성일</p>
+    <p th:text="${#temporals.format(question.modifiedDate, 'yyyy-MM-dd HH:mm')}">수정일</p>
+</div>

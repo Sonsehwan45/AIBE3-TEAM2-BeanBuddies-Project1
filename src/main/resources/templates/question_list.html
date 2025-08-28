@@ -1,0 +1,24 @@
+<html layout:decorate="~{layout}">
+<div layout:fragment="content">
+    <h1>질문 목록</h1>
+
+    <table>
+        <thead>
+        <tr>
+            <th>제목</th>
+            <th>작성자</th>
+            <th>등록일</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="question : ${questions}">
+            <td>
+                <a th:href="|/question/detail/${question.id}|"
+                   th:text="${question.title}">제목</a>
+            </td>
+            <td th:text="${question.author.username}"></td>
+            <td th:text="${#temporals.format(question.createdDate, 'yyyy-MM-dd HH:mm')}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>

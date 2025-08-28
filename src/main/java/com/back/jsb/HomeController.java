@@ -15,8 +15,8 @@ public class HomeController {
     }
 
     @GetMapping("/home")
-    public String home(Model model, @AuthenticationPrincipal UserSecurity principalDetails) {
-        String nickname = principalDetails.getUser().getNickname();
+    public String home(Model model, @AuthenticationPrincipal UserSecurity userSecurity) {
+        String nickname = userSecurity.getUser().getNickname();
         model.addAttribute("nickname", nickname);
 
         return "home";
