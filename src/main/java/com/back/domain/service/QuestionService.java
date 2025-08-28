@@ -42,13 +42,13 @@ public class QuestionService {
 
     public List<Question> findByKeyword(String searchType, String keyword) {
         if (searchType == null || keyword == null) {
-            return questionRepository.findAll();
+            return this.findAll();
         }
 
         return switch (searchType) {
             case "title" -> questionRepository.findByTitleContaining(keyword);
             case "content" -> questionRepository.findByContentContaining(keyword);
-            default -> questionRepository.findAll();
+            default -> this.findAll();
         };
     }
 }
