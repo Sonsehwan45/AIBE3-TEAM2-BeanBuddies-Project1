@@ -16,5 +16,28 @@
         </form>
     </div>
 
+    <div>
+        <h3>답변 작성</h3>
+        <form th:action="@{/answer/write/{id}(id=${question.id})}" method="post" th:object="${form}">
+            <textarea th:field="*{content}" rows="4" cols="50" placeholder="답변 내용을 입력하세요"></textarea>
+            <div th:if="${#fields.hasErrors('content')}" style="color:red;">
+                <p th:errors="*{content}"></p>
+            </div>
+            <br/>
+            <button type="submit">답변 등록</button>
+        </form>
+    </div>
+
+    <div>
+        <h3>답변 목록</h3>
+        <ul>
+            <li th:each="answer : ${question.answers}">
+                <p th:text="${answer.content}">답변 내용</p>
+                <p>작성자: <span th:text="${answer.author.nickname}">작성자</span></p>
+                <p>작성일: <span th:text="${#temporals.format(answer.createdDate, 'yyyy-MM-dd HH:mm')}">작성일</span></p>
+            </li>
+        </ul>
+    </div>
+
 </div>
 

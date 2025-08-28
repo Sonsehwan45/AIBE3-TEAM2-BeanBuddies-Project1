@@ -1,5 +1,6 @@
 package com.back.jsb.domain.question;
 
+import com.back.jsb.domain.answer.AnswerForm;
 import com.back.jsb.global.security.UserSecurity;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -52,6 +53,7 @@ public class QuestionController {
     public String showDetail(@PathVariable Long id, Model model) {
         Question question = questionService.findById(id);
         model.addAttribute("question", question);
+        model.addAttribute("form", new AnswerForm());
         return "question_detail";
     }
 
