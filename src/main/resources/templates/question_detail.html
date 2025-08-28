@@ -32,9 +32,29 @@
         <h3>답변 목록</h3>
         <ul>
             <li th:each="answer : ${question.answers}">
-                <p th:text="${answer.content}">답변 내용</p>
-                <p>작성자: <span th:text="${answer.author.nickname}">작성자</span></p>
-                <p>작성일: <span th:text="${#temporals.format(answer.createdDate, 'yyyy-MM-dd HH:mm')}">작성일</span></p>
+                <div th:if="${editAnswerId == answer.id}">
+                    <!-- 수정 폼 -->
+                    <p>작성자: <span th:text="${answer.author.nickname}">작성자</span></p>
+                    <form th:action="@{/answer/modify/{question_id}/{answer_id}(question_id=${question.id}, answer_id=${answer.id})}" method="post" th:object="${editForm}">
+                        <textarea th:field="*{content}" rows="4"></textarea>
+                        <button type="submit">수정 완료</button>
+                        <a th:href="@{/question/detail/{id}(id=${question.id})}">취소</a>
+                        <!-- 에러 메시지 -->
+                        <div th:if="${#fields.hasErrors('content')}" style="color:red;">
+                            <p th:errors="*{content}"></p>
+                        </div>
+                    </form>
+                </div>
+
+                <div th:if="${editAnswerId != answer.id}">
+                    <!-- 일반 보기 모드 -->
+                    <p th:text="${answer.content}">답변 내용</p>
+                    <p>작성자: <span th:text="${answer.author.nickname}">작성자</span></p>
+                    <a th:href="@{/answer/modify/{question_id}/{answer_id}(question_id=${question.id}, answer_id=${answer.id})}">수정</a>
+                    <form th:action="@{/answer/delete/{question_id}/{answer_id}(question_id=${question.id}, answer_id=${answer.id})}" method="post" style="display:inline;">
+                        <button type="submit" onclick="return confirm('정말 삭제하시겠습니까?');">삭제</button>
+                    </form>
+                </div>
             </li>
         </ul>
     </div>

@@ -31,4 +31,8 @@ public class Answer extends BaseEntity {
         this.content = form.getContent();
         this.question = question;
     }
+
+    public void modify(AnswerForm form) {
+        setContent(form.getContent());
+    }
 }

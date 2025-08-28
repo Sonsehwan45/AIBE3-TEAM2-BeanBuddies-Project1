@@ -102,7 +102,8 @@ public class QuestionController {
 
     @PostMapping("/modify/{id}")
     public String modify(@PathVariable Long id,
-                         @ModelAttribute("form") QuestionForm form,
+                         @Valid @ModelAttribute("form") QuestionForm form,
+                         BindingResult bindingResult,
                          Principal principal,
                          RedirectAttributes redirectAttributes
     ) {
@@ -116,6 +117,10 @@ public class QuestionController {
         if(principal == null || !question.getAuthor().getUsername().equals(principal.getName())) {
             redirectAttributes.addFlashAttribute("msg", "수정 권한이 없습니다. 본인만 수정할 수 있습니다.");
             return "redirect:/question/detail/%d".formatted(id);
+        }
+
+        if(bindingResult.hasErrors()) {
+            return "question_form";
         }
 
         questionService.modify(question, form);

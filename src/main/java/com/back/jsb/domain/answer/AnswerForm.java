@@ -12,4 +12,8 @@ public class AnswerForm {
 
     @NotBlank(message = "내용을 써주세요.")
     private String content;
+
+    public AnswerForm(Answer answer) {
+        this.content = answer.getContent();
+    }
 }
