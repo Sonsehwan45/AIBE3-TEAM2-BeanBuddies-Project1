@@ -3,6 +3,7 @@ package com.back.domain.service;
 import com.back.domain.entity.SiteUser;
 import com.back.domain.repository.SiteUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -10,18 +11,21 @@ public class SiteUserService {
     @Autowired
     private SiteUserRepository siteUserRepository;
 
-    public void write(String username, String password) {
-        SiteUser checkUser = siteUserRepository.findByUsername(username).orElse(null);
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
-        if (checkUser != null) {
-            throw new IllegalArgumentException("이미 사용중인 아이디입니다.");
-        }
-
+    public void write(String username, String password, String passwordCheck, String email) {
         SiteUser siteUser = new SiteUser();
 
         siteUser.setUsername(username);
-        siteUser.setPassword(password);
+        siteUser.setPassword(passwordEncoder.encode(password));
+        siteUser.setEmail(email);
 
         siteUserRepository.save(siteUser);
+    }
+
+
+    public SiteUser findByUsername(String username) {
+        return siteUserRepository.findByUsername(username).orElse(null);
     }
 }

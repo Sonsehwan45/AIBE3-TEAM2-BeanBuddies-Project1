@@ -10,5 +10,9 @@ import lombok.Setter;
 public class SiteUser extends BaseEntity {
     @Column(unique = true)
     private String username;
+
     private String password;
+
+    @Column(unique = true)
+    private String email;
 }

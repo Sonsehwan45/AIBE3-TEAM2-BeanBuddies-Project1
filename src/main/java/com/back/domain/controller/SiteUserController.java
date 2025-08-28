@@ -29,16 +29,24 @@ public class SiteUserController {
 
     @PostMapping("/signup")
     public String signup(@Valid UserCreateForm userCreateForm, BindingResult bindingResult) {
+        // 아이디 중복 확인
+        if (siteUserService.findByUsername(userCreateForm.getUsername()) != null) {
+            bindingResult.rejectValue("username", "duplicate", "이미 사용 중인 아이디입니다.");
+            return "user/signup_form";
+        }
+
+        // 비밀번호 체크 확인
+        if (!userCreateForm.getPassword().equals(userCreateForm.getPasswordCheck())) {
+            bindingResult.rejectValue("passwordCheck", "passwordInCorrect",
+                    "2개의 패스워드가 일치하지 않습니다.");
+            return "user/signup_form";
+        }
+
         if (bindingResult.hasErrors()) {
             return "user/signup_form";
         }
 
-        try {
-            siteUserService.write(userCreateForm.getUsername(), userCreateForm.getPassword());
-        } catch (IllegalArgumentException e) {
-            bindingResult.rejectValue("username", "duplicate", e.getMessage());
-            return "user/signup_form";
-        }
+        siteUserService.write(userCreateForm.getUsername(), userCreateForm.getPassword(), userCreateForm.getPasswordCheck(), userCreateForm.getEmail());
 
         return "redirect:/user/login";
     }
