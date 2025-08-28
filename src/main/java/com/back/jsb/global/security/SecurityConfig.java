@@ -40,6 +40,11 @@ public class SecurityConfig{
                         .permitAll()
                 )
 
+                .rememberMe(r -> r
+                        .key("uniqueAndSecret")
+                        .tokenValiditySeconds(3600)
+                )
+
                 .csrf(csrf -> csrf.disable());
 
         return http.build();
