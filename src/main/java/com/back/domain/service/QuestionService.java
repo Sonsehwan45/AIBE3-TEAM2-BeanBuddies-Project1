@@ -41,7 +41,7 @@ public class QuestionService {
     }
 
     public List<Question> findByKeyword(String searchType, String keyword) {
-        if (searchType == null || keyword == null) {
+        if (searchType == null) {
             return this.findAll();
         }
 
