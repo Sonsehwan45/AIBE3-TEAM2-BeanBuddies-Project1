@@ -3,6 +3,7 @@ package com.back.jsb.service;
 import com.back.jsb.dto.UserCreateForm;
 import com.back.jsb.entity.SiteUser;
 import com.back.jsb.repository.UserRepository;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -20,5 +21,13 @@ public class UserService {
 
         SiteUser user = userRepository.save(siteUser);
         return user;
+    }
+
+    public SiteUser getSiteUser(String name) {
+        Optional<SiteUser> optionalSiteUser = userRepository.findByUsername(name);
+        if (optionalSiteUser.isPresent()) {
+            return optionalSiteUser.get();
+        }
+        throw new IllegalArgumentException("SiteUser not found");
     }
 }

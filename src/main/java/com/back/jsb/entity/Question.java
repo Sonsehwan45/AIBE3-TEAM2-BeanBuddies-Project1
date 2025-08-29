@@ -4,8 +4,8 @@ import com.back.jsb.entity.base.BaseEntity;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
-import jakarta.validation.constraints.NotBlank;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.Getter;
@@ -24,13 +24,17 @@ public class Question extends BaseEntity {
     @Column(columnDefinition = "TEXT")
     private List<Answer> answers = new ArrayList<>();
 
-    public Question(String title, String content) {
-        this.title = title;
-        this.content = content;
-    }
+    @ManyToOne
+    private SiteUser author;
 
     public void update(String title, String content) {
         this.title = title;
         this.content = content;
+    }
+
+    public Question(String title, String content, SiteUser author) {
+        this.title = title;
+        this.content = content;
+        this.author = author;
     }
 }

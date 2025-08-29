@@ -1,6 +1,7 @@
 package com.back.jsb.service;
 
 import com.back.jsb.entity.Question;
+import com.back.jsb.entity.SiteUser;
 import com.back.jsb.repository.QuestionRepository;
 import jakarta.persistence.EntityNotFoundException;
 import java.util.List;
@@ -22,20 +23,18 @@ public class QuestionService {
         return questionRepository.findAll();
     }
 
-    public Question write(String title, String content) {
-        Question question = new Question(title, content);
+    public Question write(String title, String content, SiteUser siteUser) {
+        Question question = new Question(title, content, siteUser);
         return questionRepository.save(question);
     }
 
-    public void delete(Integer id) {
+    public void deleteById(Integer id) {
         Question foundQuestion = findById(id);
         questionRepository.delete(foundQuestion);
     }
 
-    public void update(Integer id, String title, String content) {
-        Question foundQuestion = findById(id);
-        foundQuestion.update(title, content);
-
-        questionRepository.save(foundQuestion);
+    public void update(Question question, String title, String content) {
+        question.update(title, content);
+        questionRepository.save(question);
     }
 }

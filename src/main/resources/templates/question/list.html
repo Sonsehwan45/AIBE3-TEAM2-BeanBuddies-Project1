@@ -4,28 +4,30 @@
 
     <table class="table">
         <thead class="table-dark">
-        <tr>
-            <th>게시글 번호</th>
-            <th>제목</th>
+        <tr class="text-center">
+            <th>번호</th>
+            <th style="width:50%">제목</th>
+            <th>글쓴이</th>
             <th>작성일시</th>
         </tr>
         </thead>
 
         <tbody>
-        <tr th:each="question : ${questions}">
+        <tr class="text-center" th:each="question : ${questions}">
             <td th:text="${question.id}"></td>
-            <td>
+            <td class="text-start">
                 <a th:text="${question.title}" th:href="@{|/questions/detail/${question.id}|}"></a>
             </td>
+            <td><span th:if="${question.author != null}" th:text="${question.author.username}"></span></td>
             <td th:text="${#temporals.format(question.createDate, 'yy-MM-dd HH:mm')}"></td>
         </tr>
         </tbody>
     </table>
     <a href="/questions/write" class="btn btn-primary"> 질문 등록 </a>
-    <a href="/siteusers/signup" class="btn btn-primary"> 회원 가입</a>
+    <a href="/siteusers/signup" class="btn btn-primary" sec:authorize="isAnonymous()"> 회원 가입</a>
     <a href="/siteusers/login" class="btn btn-primary" sec:authorize="isAnonymous()"> 로그인</a>
     <form th:action="@{/siteusers/logout}" method="post" sec:authorize="isAuthenticated()">
-        <button type="submit" class="btn btn-primary">로그아웃</button>
+        <button type="submit" class="btn btn-primary mt-2">로그아웃</button>
     </form>
 </div>
 </html>
