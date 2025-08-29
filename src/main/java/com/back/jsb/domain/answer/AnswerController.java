@@ -42,7 +42,6 @@ public class AnswerController {
         }
 
         if(bindingResult.hasErrors()) {
-            bindingResult.rejectValue("content", "내용을 작성해주세요");
             model.addAttribute("question", question);
             return "question_detail";
         }

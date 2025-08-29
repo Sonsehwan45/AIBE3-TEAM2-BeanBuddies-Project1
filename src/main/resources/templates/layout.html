@@ -2,22 +2,20 @@
 <html lang="ko">
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Hello, sbb!</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>My Q&A Site</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
 
 <header>
     <nav>
         <ul>
-            <!-- 항상 표시 -->
             <li><a th:href="@{/}">시작</a></li>
             <li><a th:href="@{/home}">홈</a></li>
-            <li><a th:href="@{/user/sign}">회원가입</a></li>
             <li><a th:href="@{/question/write}">질문 등록</a></li>
             <li><a th:href="@{/question/list}">질문 목록</a></li>
 
-            <!-- 로그인 상태일 때 -->
             <li sec:authorize="isAuthenticated()">
                 안녕하세요, <span th:text="${#authentication.principal.nickname}"></span>님
             </li>
@@ -25,42 +23,32 @@
                 <a th:href="@{/user/logout}">로그아웃</a>
             </li>
 
-            <!-- 비로그인 상태일 때 -->
-            <li sec:authorize="isAnonymous()">
-                <a th:href="@{/user/login}">로그인</a>
-            </li>
-
+            <li sec:authorize="isAnonymous()"><a th:href="@{/user/login}">로그인</a></li>
+            <li sec:authorize="isAnonymous()"><a th:href="@{/user/sign}">회원가입</a></li>
         </ul>
     </nav>
 </header>
 
 <main>
-    <!-- 플래시 메세지 -->
-    <div id="flashMsg"
-         th:if="${msg}"
-         style="background:#d9edf7; color:#31708f; padding:10px; margin:10px 0; border-radius:5px;">
+    <div id="flashMsg" th:if="${msg}" class="flash-msg">
         <span th:text="${msg}"></span>
     </div>
 
-    <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            const msgBox = document.getElementById("flashMsg");
-            if (msgBox) {
-                // 3초 뒤에 사라지게 하기
-                setTimeout(() => {
-                    msgBox.style.transition = "opacity 0.5s";
-                    msgBox.style.opacity = "0";
-                    setTimeout(() => msgBox.style.display = "none", 500); // 완전히 숨김
-                }, 3000);
-            }
-        });
-    </script>
-
-    <!-- 개별 페이지의 내용이 들어가는 자리 -->
-    <th:block layout:fragment="content">
-
-    </th:block>
+    <th:block layout:fragment="content"></th:block>
 </main>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const msgBox = document.getElementById("flashMsg");
+        if(msgBox) {
+            setTimeout(()=>{
+                msgBox.style.transition="opacity 0.5s";
+                msgBox.style.opacity="0";
+                setTimeout(()=>msgBox.style.display="none",500);
+            },3000);
+        }
+    });
+</script>
 
 </body>
 </html>

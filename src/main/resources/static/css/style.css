@@ -1,0 +1,177 @@
+/* ==============================
+   기본
+============================== */
+body {
+    font-family: 'Noto Sans KR', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f5f6fa;
+    color: #2c3e50;
+    margin: 0;
+    padding: 0;
+}
+
+a {
+    text-decoration: none;
+    color: #3498db;
+}
+
+a:hover {
+    color: #2980b9;
+}
+
+h1, h2, h3 {
+    color: #2c3e50;
+    margin-bottom: 12px;
+}
+
+p {
+    line-height: 1.6;
+    margin: 6px 0;
+}
+
+.subtext, .meta {
+    font-size: 0.85rem;
+    color: #7f8c8d;
+}
+
+/* ==============================
+   헤더 & 네비게이션
+============================== */
+header {
+    background-color: #34495e;
+    color: #fff;
+    padding: 15px 30px;
+}
+
+header nav ul {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+header nav ul li a {
+    color: #fff;
+    padding: 6px 12px;
+    border-radius: 4px;
+    transition: 0.3s;
+}
+
+header nav ul li a:hover {
+    background-color: #2c3e50;
+}
+
+/* ==============================
+   메인 컨테이너
+============================== */
+main {
+    max-width: 1000px;
+    margin: 30px auto;
+    padding: 25px 30px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+/* ==============================
+   플래시 메시지
+============================== */
+.flash-msg {
+    background-color: #d9edf7;
+    color: #31708f;
+    padding: 12px 15px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    font-weight: 500;
+}
+
+/* ==============================
+   버튼
+============================== */
+.btn {
+    padding: 8px 16px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: 0.3s;
+    background-color: #3498db;
+    color: #fff;
+}
+
+.btn:hover { background-color: #2980b9; }
+.btn-danger { background-color: #e74c3c; }
+.btn-danger:hover { background-color: #c0392b; }
+.btn-secondary { background-color: #95a5a6; }
+
+/* ==============================
+   폼
+============================== */
+input[type="text"], input[type="password"], textarea, select {
+    width: 100%;
+    padding: 10px 12px;
+    margin-top: 6px;
+    margin-bottom: 12px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 0.95rem;
+    box-sizing: border-box;
+    resize: vertical;
+}
+
+.field-error {
+    color: #e74c3c;
+    font-size: 0.8rem;
+    margin-top: 4px;
+}
+
+/* ==============================
+   질문 / 답변
+============================== */
+.question-detail h1 {
+    font-size: 1.9rem;
+    margin-bottom: 8px;
+}
+
+.answer-form, .answer-list {
+    margin-top: 25px;
+}
+
+.answer-list ul {
+    list-style: none;
+    padding: 0;
+}
+
+.answer-list li {
+    border-top: 1px solid #eee;
+    padding: 12px 0;
+}
+
+.answer-list li:first-child {
+    border-top: none;
+}
+
+/* ==============================
+   테이블
+============================== */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+table th, table td {
+    border: 1px solid #ddd;
+    padding: 10px 12px;
+}
+
+table th {
+    background-color: #f0f0f0;
+    font-weight: 600;
+}
+
+table tr:hover {
+    background-color: #f9f9f9;
+}

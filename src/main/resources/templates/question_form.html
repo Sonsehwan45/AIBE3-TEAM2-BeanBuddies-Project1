@@ -1,31 +1,20 @@
-<style>
-    .field-error {
-        color: red;
-        font-size: 0.8em;
-        margin-top: 4px;
-    }
-</style>
-
-<h1>질문 등록</h1>
-<form th:object="${form}" method="post">
-
-    <div>
-        <label>제목</label>
-        <input type="text" th:field="*{title}" />
-        <div th:if="${#fields.hasErrors('title')}"
-             th:errors="*{title}"
-             class="field-error"></div>
-    </div>
-
-    <div>
-        <label>내용</label>
-        <textarea th:field="*{content}"></textarea>
-        <div th:if="${#fields.hasErrors('content')}"
-             th:errors="*{content}"
-             class="field-error"></div>
-    </div>
-
-    <div>
-        <button type="submit">질문 등록</button>
-    </div>
-</form>
+<html layout:decorate="~{layout}">
+<div layout:fragment="content">
+    <h1>질문 등록</h1>
+    <form th:object="${form}" method="post">
+        <div>
+            <label>제목</label>
+            <input type="text" th:field="*{title}" />
+            <div th:if="${#fields.hasErrors('title')}" class="field-error" th:errors="*{title}"></div>
+        </div>
+        <div>
+            <label>내용</label>
+            <textarea th:field="*{content}"></textarea>
+            <div th:if="${#fields.hasErrors('content')}" class="field-error" th:errors="*{content}"></div>
+        </div>
+        <div>
+            <button type="submit" class="btn">질문 등록</button>
+        </div>
+    </form>
+</div>
+</html>
