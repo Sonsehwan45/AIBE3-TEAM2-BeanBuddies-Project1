@@ -127,4 +127,24 @@ public class QuestionController {
         redirectAttributes.addFlashAttribute("msg", "질문이 수정되었습니다.");
         return "redirect:/question/detail/%d".formatted(id);
     }
+
+    @GetMapping("/search")
+    public String search(
+            @RequestParam(value="type", required=false) List<String> types,
+            @RequestParam(value="keyword", required=false) String keyword,
+            Model model
+    ) {
+
+        if(keyword == null) {
+            return "redirect:/question/list";
+        }
+
+        if(types == null || types.isEmpty() || types.contains("all")) {
+            types = List.of("title", "content", "answer", "author");
+        }
+
+        List<Question> questions = questionService.search(types, keyword);
+        model.addAttribute("questions", questions);
+        return "question_list";
+    }
 }
