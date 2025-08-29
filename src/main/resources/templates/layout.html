@@ -10,13 +10,26 @@
 <header>
     <nav>
         <ul>
+            <!-- 항상 표시 -->
             <li><a th:href="@{/}">시작</a></li>
             <li><a th:href="@{/home}">홈</a></li>
             <li><a th:href="@{/user/sign}">회원가입</a></li>
-            <li><a th:href="@{/user/login}">로그인</a></li>
-            <li><a th:href="@{/user/logout}">로그아웃</a></li>
             <li><a th:href="@{/question/write}">질문 등록</a></li>
             <li><a th:href="@{/question/list}">질문 목록</a></li>
+
+            <!-- 로그인 상태일 때 -->
+            <li sec:authorize="isAuthenticated()">
+                안녕하세요, <span th:text="${#authentication.principal.nickname}"></span>님
+            </li>
+            <li sec:authorize="isAuthenticated()">
+                <a th:href="@{/user/logout}">로그아웃</a>
+            </li>
+
+            <!-- 비로그인 상태일 때 -->
+            <li sec:authorize="isAnonymous()">
+                <a th:href="@{/user/login}">로그인</a>
+            </li>
+
         </ul>
     </nav>
 </header>

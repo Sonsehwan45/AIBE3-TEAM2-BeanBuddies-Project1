@@ -34,6 +34,10 @@ public class UserSecurity implements UserDetails {
         return user.getUsername();
     }
 
+    public String getNickname() {
+        return user.getNickname();
+    }
+
     public User getUser() {
         return this.user;
     }

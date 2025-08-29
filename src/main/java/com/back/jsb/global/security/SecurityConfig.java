@@ -23,7 +23,12 @@ public class SecurityConfig{
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
                                 "/home",
-                                "/question/write"
+                                "/question/write",
+                                "/question/delete/**",
+                                "/question/modify/**",
+                                "/answer/write/**",
+                                "/answer/delete/**",
+                                "/answer/modify/**"
                         ).authenticated()
                         .anyRequest().permitAll()
                 )

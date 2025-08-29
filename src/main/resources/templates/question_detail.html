@@ -6,19 +6,24 @@
     <p th:text="${#temporals.format(question.createdDate, 'yyyy-MM-dd HH:mm')}">작성일</p>
     <p th:text="${#temporals.format(question.modifiedDate, 'yyyy-MM-dd HH:mm')}">수정일</p>
 
-    <div>
-        <a th:href="@{/question/modify/{id}(id=${question.id})}">
-            <button type="button">수정</button>
+    <div sec:authorize="isAuthenticated()">
+        <a th:if="${#authentication.name == question.author.username}"
+           th:href="@{/question/modify/{id}(id=${question.id})}">
+            수정
         </a>
 
-        <form th:action="@{/question/delete/{id}(id=${question.id})}" method="post" style="display:inline;">
+        <form th:if="${#authentication.name == question.author.username}"
+              th:action="@{/question/delete/{id}(id=${question.id})}" method="post" style="display:inline;">
             <button type="submit" onclick="return confirm('정말 삭제하시겠습니까?');">삭제</button>
         </form>
     </div>
 
     <div>
         <h3>답변 작성</h3>
-        <form th:action="@{/answer/write/{id}(id=${question.id})}" method="post" th:object="${form}">
+        <!-- 로그인한 사용자용 -->
+        <form sec:authorize="isAuthenticated()"
+              th:action="@{/answer/write/{id}(id=${question.id})}"
+              method="post" th:object="${form}">
             <textarea th:field="*{content}" rows="4" cols="50" placeholder="답변 내용을 입력하세요"></textarea>
             <div th:if="${#fields.hasErrors('content')}" style="color:red;">
                 <p th:errors="*{content}"></p>
@@ -26,6 +31,11 @@
             <br/>
             <button type="submit">답변 등록</button>
         </form>
+
+        <!-- 비로그인 사용자용 -->
+        <div sec:authorize="!isAuthenticated()">
+            <textarea rows="4" cols="50" placeholder="로그인 후 이용하실 수 있습니다." readonly></textarea>
+        </div>
     </div>
 
     <div>
@@ -50,8 +60,13 @@
                     <!-- 일반 보기 모드 -->
                     <p th:text="${answer.content}">답변 내용</p>
                     <p>작성자: <span th:text="${answer.author.nickname}">작성자</span></p>
-                    <a th:href="@{/answer/modify/{question_id}/{answer_id}(question_id=${question.id}, answer_id=${answer.id})}">수정</a>
-                    <form th:action="@{/answer/delete/{question_id}/{answer_id}(question_id=${question.id}, answer_id=${answer.id})}" method="post" style="display:inline;">
+                    <a th:if="${#authentication.name == answer.author.username}"
+                       th:href="@{/answer/modify/{question_id}/{answer_id}(question_id=${question.id}, answer_id=${answer.id})}">
+                        수정
+                    </a>
+                    <form th:if="${#authentication.name == answer.author.username}"
+                          th:action="@{/answer/delete/{question_id}/{answer_id}(question_id=${question.id}, answer_id=${answer.id})}"
+                          method="post" style="display:inline;">
                         <button type="submit" onclick="return confirm('정말 삭제하시겠습니까?');">삭제</button>
                     </form>
                 </div>
