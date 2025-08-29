@@ -292,6 +292,14 @@ header nav ul li a:hover {
     display: block;
 }
 
+/* 수정 모드용 */
+.question-detail .answer-edit-form .field-error {
+    color: #e74c3c;
+    font-size: 0.85rem;
+    margin-top: 6px;
+    display: block;
+}
+
 /* 로그인 안 했을 때 답변 폼 */
 .question-detail .answer-form-disabled {
     display: flex;
@@ -383,7 +391,8 @@ header nav ul li a:hover {
 }
 
 /* 답변 item */
-.answer-item {
+.answer-item
+.answer-edit-form {
     padding: 15px 12px;
     border: 1px solid #eee;
     border-radius: 8px;
@@ -416,6 +425,23 @@ header nav ul li a:hover {
     border: 1px solid #ccc;
     background-color: #f4f4f4;
     color: #999;
+}
+
+.answer-edit-form textarea {
+    width: 100%;
+    padding: 10px 12px;
+    font-size: 1rem;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    resize: vertical;
+    box-sizing: border-box;
+    margin-bottom: 8px;
+}
+
+.answer-edit-form .btn {
+    padding: 10px 18px;
+    font-size: 0.95rem;
+    border-radius: 6px;
 }
 
 /* ==============================

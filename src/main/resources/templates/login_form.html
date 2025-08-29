@@ -5,6 +5,7 @@
 
     <form th:action="@{/user/login}" method="post">
 
+        <!-- 글로벌 에러메세지 (ex : 아이디나 비밀번호가 일치하지 않습니다.) -->
         <div th:if="${loginError}" class="flash-msg" style="background-color:#fdecea; color:#e74c3c;">
             <p th:text="${loginError}"></p>
         </div>

@@ -1,24 +1,24 @@
-<html layout:decorate="~{layout}">
+<html layout:decorate="~{layout}" xmlns:sec="http://www.w3.org/1999/xhtml">
 <div layout:fragment="content" class="question-detail">
 
-    <!-- 질문 제목 + 작성자 -->
+    <!-- 질문글(제목, 작성자, 내용, 작성자) -->
     <div class="question-header">
         <h1 class="question-title" th:text="${question.title}">제목</h1>
         <span class="question-author" th:text="${question.author.nickname}">작성자</span>
     </div>
-
-    <!-- 질문 내용 -->
     <div class="question-content" th:text="${question.content}">내용</div>
-
-    <!-- 작성일 / 수정일 + 수정/삭제 버튼 -->
     <div class="question-footer flex-between">
         <div class="question-meta">
             <span th:text="'작성일: ' + ${#temporals.format(question.createdDate,'yyyy-MM-dd HH:mm')}">작성일</span>
             <span th:text="'수정일: ' + ${#temporals.format(question.modifiedDate,'yyyy-MM-dd HH:mm')}">수정일</span>
         </div>
+
+        <!-- 수정/삭제 버튼(본인만 접근 가능하도록 제한) -->
         <div class="action-buttons" sec:authorize="isAuthenticated()">
             <a th:if="${#authentication.name == question.author.username}"
-               th:href="@{/question/modify/{id}(id=${question.id})}" class="btn">수정</a>
+               th:href="@{/question/modify/{id}(id=${question.id})}" class="btn">
+                수정
+            </a>
             <form th:if="${#authentication.name == question.author.username}"
                   th:action="@{/question/delete/{id}(id=${question.id})}" method="post" class="inline-form">
                 <button type="submit" class="btn btn-danger"
@@ -27,25 +27,23 @@
         </div>
     </div>
 
-    <hr class="divider"> <!-- 질문과 답변 구분선 -->
+    <!-- 질문과 답변 구분선 -->
+    <hr class="divider">
 
-    <!-- 답변 작성 -->
+    <!-- 답변 작성(로그인하지 않았을 때와, 했을 때 UI 구분)-->
     <div class="answer-form">
+        <!-- 로그인한 경우(내용이 공백일 때 에러메세지 출력)-->
         <form sec:authorize="isAuthenticated()"
               th:action="@{/answer/write/{id}(id=${question.id})}"
               method="post" th:object="${form}">
-
-            <!-- textarea + 버튼 가로 배치 -->
+            <!-- 내용 입력 -->
             <div class="answer-input">
                 <textarea th:field="*{content}" placeholder="답변 내용을 입력하세요"></textarea>
                 <button type="submit" class="btn">답변 등록</button>
             </div>
-
-            <!-- 에러 메시지는 아래에 표시 -->
+            <!-- 에러 메시지 표시 -->
             <div th:if="${#fields.hasErrors('content')}" th:errors="*{content}" class="field-error"></div>
         </form>
-
-
 
         <!-- 로그인하지 않은 경우 -->
         <div sec:authorize="!isAuthenticated()" class="answer-form-disabled">
@@ -54,25 +52,49 @@
         </div>
     </div>
 
-    <!-- 답변 목록 -->
+    <!-- 답변 목록(여기서 수정까지 가능) -->
     <div class="answer-list">
         <ul>
             <li th:each="answer : ${question.answers}" class="answer-item">
-                <div class="answer-content" th:text="${answer.content}">답변 내용</div>
-                <div class="answer-footer flex-between">
-                    <div class="answer-meta">
-                        <span th:text="${answer.author.nickname}">작성자</span>
-                        <span th:text="${#temporals.format(answer.createdDate,'yyyy-MM-dd HH:mm')}">작성일</span>
-                    </div>
-                    <div class="answer-actions" sec:authorize="isAuthenticated()">
-                        <a th:if="${#authentication.name == answer.author.username}"
-                           th:href="@{/answer/modify/{question_id}/{answer_id}(question_id=${question.id}, answer_id=${answer.id})}" class="btn">수정</a>
-                        <form th:if="${#authentication.name == answer.author.username}"
-                              th:action="@{/answer/delete/{question_id}/{answer_id}(question_id=${question.id}, answer_id=${answer.id})}"
-                              method="post" class="inline-form">
-                            <button type="submit" class="btn btn-danger"
-                                    onclick="return confirm('정말 삭제하시겠습니까?');">삭제</button>
-                        </form>
+
+                <!-- 수정 모드 -->
+                <div th:if="${editAnswerId == answer.id}">
+                    <form th:action="@{/answer/modify/{question_id}/{answer_id}(question_id=${question.id}, answer_id=${answer.id})}"
+                          method="post" th:object="${editForm}" class="answer-edit-form">
+                        <textarea th:field="*{content}" rows="4"></textarea>
+                        <button type="submit" class="btn">수정 완료</button>
+                        <a th:href="@{/question/detail/{id}(id=${question.id})}" class="btn btn-secondary">취소</a>
+                        <div th:if="${#fields.hasErrors('content')}" class="field-error">
+                            <p th:errors="*{content}"></p>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- 일반 모드 -->
+                <div th:if="${editAnswerId != answer.id}">
+                    <div class="answer-content" th:text="${answer.content}">답변 내용</div>
+                    <div class="answer-footer flex-between">
+                        <div class="answer-meta">
+                            <span th:text="${answer.author.nickname}">작성자</span>
+                            <span th:text="${#temporals.format(answer.createdDate,'yyyy-MM-dd HH:mm')}">작성일</span>
+                        </div>
+                        <!-- 본인이 작성한 답변일 경우 수정/삭제 버튼 접근 가능 -->
+                        <div class="answer-actions" sec:authorize="isAuthenticated()">
+                            <a th:if="${#authentication.name == answer.author.username}"
+                               th:href="@{/answer/modify/{question_id}/{answer_id}(question_id=${question.id},
+                                answer_id=${answer.id})}" class="btn">
+                                수정
+                            </a>
+                            <form th:if="${#authentication.name == answer.author.username}"
+                                  th:action="@{/answer/delete/{question_id}/{answer_id}(question_id=${question.id},
+                                   answer_id=${answer.id})}"
+                                  method="post" class="inline-form">
+                                <button type="submit" class="btn btn-danger"
+                                        onclick="return confirm('정말 삭제하시겠습니까?');">
+                                    삭제
+                                </button>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </li>

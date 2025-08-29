@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 /**
  * 스프링 시큐리티가 로그인 시 DB에서 사용자 정보를 가져올 때 호출되는 서비스
  * username으로 DB 조회 -> User 객체 가져오는 역할
- * 있다면 User객체를 PrincipalDetails로 감싸서 반환
+ * 있다면 User객체를 PrincipalDetails(이 프로젝트에서는 UserSecurity)로 감싸서 반환
  */
 @Service
 @RequiredArgsConstructor

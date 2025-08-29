@@ -20,6 +20,7 @@ public class SecurityConfig{
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
+                //몇몇 페이지는 인증 필요, 나머지 페이지는 모두 허용
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
                                 "/home",
@@ -33,9 +34,10 @@ public class SecurityConfig{
                         .anyRequest().permitAll()
                 )
 
+                //커스텀 로그인 페이지 사용 + 로그인 후 직전 페이지로 돌아가기(false)
                 .formLogin(form -> form
                     .loginPage("/user/login")
-                    .defaultSuccessUrl("/question/list", true)
+                    .defaultSuccessUrl("/question/list", false)
                     .permitAll()
                 )
 
@@ -45,6 +47,7 @@ public class SecurityConfig{
                         .permitAll()
                 )
 
+                //세션 유지 (1시간)
                 .rememberMe(r -> r
                         .key("uniqueAndSecret")
                         .tokenValiditySeconds(3600)

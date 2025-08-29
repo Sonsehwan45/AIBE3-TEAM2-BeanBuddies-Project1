@@ -3,6 +3,7 @@
 
     <h1 class="page-title">질문 등록</h1>
 
+    <!-- 질문 폼, 공백 시 오류 메세지 출력되도록 함(ex : 제목은 필수입력입니다.) -->
     <form th:object="${form}" method="post" class="question-form">
         <div class="form-group">
             <label>제목</label>

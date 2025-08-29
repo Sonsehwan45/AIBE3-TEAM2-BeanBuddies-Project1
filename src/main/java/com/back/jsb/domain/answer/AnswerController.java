@@ -30,17 +30,22 @@ public class AnswerController {
             RedirectAttributes redirectAttributes,
             @AuthenticationPrincipal UserSecurity userSecurity
     ) {
+        //해당 질문글 찾기
         Question question = questionService.findById(id);
+
+        //질문글이 존재하지 않을 때 예외처리
         if(question == null) {
             redirectAttributes.addFlashAttribute("msg", "해당 질문글이 존재하지 않습니다.");
             return "redirect:/question/detail/%d".formatted(id);
         }
 
+        //로그인하지 않았을 때 예외처리
         if (userSecurity == null) {
             redirectAttributes.addFlashAttribute("msg", "댓글 작성은 로그인 후 가능합니다.");
             return "redirect:/question/detail/%d".formatted(id);
         }
 
+        //내용이 공백일 때 예외처리
         if(bindingResult.hasErrors()) {
             model.addAttribute("question", question);
             return "question_detail";
@@ -58,12 +63,16 @@ public class AnswerController {
             RedirectAttributes redirectAttributes,
             Principal principal
     ) {
+        //해당 답변 찾기
         Answer answer = answerService.findById(answerId);
+
+        //답변이 존재하지 않을 때 예외처리
         if(answer == null) {
             redirectAttributes.addFlashAttribute("msg", "해당 답변이 존재하지 않습니다.");
             return "redirect:/question/detail/%d".formatted(questionId);
         }
 
+        //로그인하지 않았거나 본인이 아닐 때 예외처리
         if (principal == null || !answer.getAuthor().getUsername().equals(principal.getName())) {
             redirectAttributes.addFlashAttribute("msg", "댓글 삭제 권한이 없습니다. 본인만 삭제할 수 있습니다.");
             return "redirect:/question/detail/%d".formatted(questionId);
@@ -83,12 +92,16 @@ public class AnswerController {
             RedirectAttributes redirectAttributes,
             Principal principal
     ) {
+        //해당 답변 찾기
         Answer answer = answerService.findById(answerId);
+
+        //답변이 존재하지 않을 때 예외처리
         if(answer == null) {
             redirectAttributes.addFlashAttribute("msg", "해당 답변이 존재하지 않습니다.");
             return "redirect:/question/detail/%d".formatted(questionId);
         }
 
+        //로그인하지 않았거나 본인이 아닐 때 예외처리
         if (principal == null || !answer.getAuthor().getUsername().equals(principal.getName())) {
             redirectAttributes.addFlashAttribute("msg", "댓글 수정 권한이 없습니다. 본인만 수정할 수 있습니다.");
             return "redirect:/question/detail/%d".formatted(questionId);
@@ -98,7 +111,6 @@ public class AnswerController {
         model.addAttribute("question", questionService.findById(questionId));
         model.addAttribute("editForm", new AnswerForm(answer));
         model.addAttribute("editAnswerId", answerId);
-
         return "question_detail";
     }
 
@@ -112,17 +124,22 @@ public class AnswerController {
             RedirectAttributes redirectAttributes,
             Principal principal
     ) {
+        //해당 답변 찾기
         Answer answer = answerService.findById(answerId);
+
+        //답변이 존재하지 않을 때 예외처리
         if(answer == null) {
             redirectAttributes.addFlashAttribute("msg", "해당 답변이 존재하지 않습니다.");
             return "redirect:/question/detail/%d".formatted(questionId);
         }
 
+        //로그인하지 않았거나 본인이 아닐 때 예외처리
         if(principal == null || !answer.getAuthor().getUsername().equals(principal.getName())) {
             redirectAttributes.addFlashAttribute("msg", "댓글 수정 권한이 없습니다. 본인만 수정할 수 있습니다.");
             return "redirect:/question/detail/%d".formatted(questionId);
         }
 
+        //공백인 필드가 있을 때 예외처리
         if(bindingResult.hasErrors()) {
             model.addAttribute("question", questionService.findById(questionId));
             model.addAttribute("editAnswerId", answerId);

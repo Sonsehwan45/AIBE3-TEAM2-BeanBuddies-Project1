@@ -2,7 +2,6 @@ package com.back.jsb.domain.question;
 
 import com.back.jsb.domain.answer.Answer;
 import com.back.jsb.domain.user.User;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.JoinType;
 import jakarta.persistence.criteria.Predicate;
@@ -19,6 +18,7 @@ public class QuestionService {
     private final QuestionRepository questionRepository;
 
     public void register(QuestionForm form, User user) {
+        //form과 user로 Question 객체 생성
         Question question = new Question(form, user);
         questionRepository.save(question);
     }
@@ -28,7 +28,7 @@ public class QuestionService {
     }
 
     public Question findById(Long id) {
-        return questionRepository.findById(id) .orElseThrow(() ->new EntityNotFoundException("Question not found"));
+        return questionRepository.findById(id).orElse(null);
     }
 
     public void deleteById(Long id) {
@@ -36,12 +36,14 @@ public class QuestionService {
     }
 
     public void modify(Question question, QuestionForm form) {
+        //수정 폼으로 Question 객체 수정
         question.modify(form);
         questionRepository.save(question);
     }
 
     public List<Question> search(List<String> types, String keyword) {
 
+        //specification으로 types에 따라 keyword OR 검색
         Specification<Question> spec = (root, query, builder) -> {
             List<Predicate> predicates = new ArrayList<>();
 

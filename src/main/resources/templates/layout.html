@@ -3,12 +3,13 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>My Q&A Site</title>
+    <title>BeanBuddies!</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
 
 <header>
+    <!--내비바-->
     <nav>
         <ul>
             <li><a th:href="@{/}">시작</a></li>
@@ -16,6 +17,7 @@
             <li><a th:href="@{/question/write}">질문 등록</a></li>
             <li><a th:href="@{/question/list}">질문 목록</a></li>
 
+            <!-- 로그인했을 경우 안내문구와 로그아웃 버튼 활성화 -->
             <li sec:authorize="isAuthenticated()">
                 안녕하세요, <span th:text="${#authentication.principal.nickname}"></span>님
             </li>
@@ -23,6 +25,7 @@
                 <a th:href="@{/user/logout}">로그아웃</a>
             </li>
 
+            <!-- 로그인하지 않았을 경우 로그인 버튼과 회원가입 버튼 활성화 -->
             <li sec:authorize="isAnonymous()"><a th:href="@{/user/login}">로그인</a></li>
             <li sec:authorize="isAnonymous()"><a th:href="@{/user/sign}">회원가입</a></li>
         </ul>
@@ -30,6 +33,7 @@
 </header>
 
 <main>
+    <!-- redirect 시 flash 메세지(ex : 댓글이 작성/삭제/수정되었습니다. -->
     <div id="flashMsg" th:if="${msg}" class="flash-msg">
         <span th:text="${msg}"></span>
     </div>
@@ -37,6 +41,7 @@
     <th:block layout:fragment="content"></th:block>
 </main>
 
+<!-- flash 메세지 띄우고 사라지게 하는 코드-->
 <script>
     document.addEventListener("DOMContentLoaded", () => {
         const msgBox = document.getElementById("flashMsg");

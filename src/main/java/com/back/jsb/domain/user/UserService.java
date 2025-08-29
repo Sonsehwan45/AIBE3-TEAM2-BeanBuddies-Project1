@@ -12,8 +12,10 @@ public class UserService {
 
 
     public void register(UserCreateForm form) {
+        //암호화된 비밀번호로 변경
         form.setPassword(passwordEncoder.encode(form.getPassword()));
 
+        //form으로 User 객체 생성
         User user = new User(form);
         userRepository.save(user);
     }
