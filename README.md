@@ -1,4 +1,6 @@
-# 📂 프로젝트 파일 구조
+# JSB 질문/답변 게시판 구현
+
+## 📂 프로젝트 파일 구조
 
 ```bash
 # 📂 프로젝트 파일 구조
@@ -34,3 +36,8 @@ jsb-project/
                 ├── user/login_form.html          # 로그인
                 └── user/signup_form.html         # 회원가입        
 ```
+
+## 💡 특이사항
+
+- Spring security를 활용한 회원 로그인/로그아웃 기능 구현에 문서를 참고하였습니다. [링크](https://wikidocs.net/162150)
+- 로그인 후 header에서 사용자 이름을 표시할 때, Spring Security의 인증 객체(Authentication)에 담긴 로그인 사용자 정보를 Thymeleaf를 통해 출력하도록 구현함.
