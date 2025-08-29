@@ -25,8 +25,8 @@ public class AnswerController {
     public String write(
             @PathVariable Long id,
             @Valid @ModelAttribute("form") AnswerForm form,
-            Model model,
             BindingResult bindingResult,
+            Model model,
             RedirectAttributes redirectAttributes,
             @AuthenticationPrincipal UserSecurity userSecurity
     ) {
