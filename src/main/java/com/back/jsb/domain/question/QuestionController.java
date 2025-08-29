@@ -46,6 +46,8 @@ public class QuestionController {
     public String showList(Model model) {
         List<Question> questions = questionService.findAll();
         model.addAttribute("questions", questions);
+        model.addAttribute("selectedTypes", List.of("all"));
+        model.addAttribute("keyword", "");
         return "question_list";
     }
 
@@ -135,9 +137,8 @@ public class QuestionController {
             Model model
     ) {
 
-        if(keyword == null) {
-            return "redirect:/question/list";
-        }
+        model.addAttribute("selectedTypes", types != null ? types : List.of("all"));
+        model.addAttribute("keyword", keyword);
 
         if(types == null || types.isEmpty() || types.contains("all")) {
             types = List.of("title", "content", "answer", "author");
@@ -145,6 +146,8 @@ public class QuestionController {
 
         List<Question> questions = questionService.search(types, keyword);
         model.addAttribute("questions", questions);
+
+
         return "question_list";
     }
 }

@@ -1,20 +1,26 @@
 <html layout:decorate="~{layout}">
-<div layout:fragment="content">
-    <h1>질문 등록</h1>
-    <form th:object="${form}" method="post">
-        <div>
+<div layout:fragment="content" class="page-container question-form">
+
+    <h1 class="page-title">질문 등록</h1>
+
+    <form th:object="${form}" method="post" class="question-form">
+        <div class="form-group">
             <label>제목</label>
-            <input type="text" th:field="*{title}" />
+            <input type="text" th:field="*{title}" placeholder="제목을 입력하세요" />
             <div th:if="${#fields.hasErrors('title')}" class="field-error" th:errors="*{title}"></div>
         </div>
-        <div>
+
+        <div class="form-group">
             <label>내용</label>
-            <textarea th:field="*{content}"></textarea>
+            <textarea th:field="*{content}" rows="6" placeholder="내용을 입력하세요"></textarea>
             <div th:if="${#fields.hasErrors('content')}" class="field-error" th:errors="*{content}"></div>
         </div>
-        <div>
-            <button type="submit" class="btn">질문 등록</button>
+
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">질문 등록</button>
         </div>
     </form>
+
 </div>
 </html>
+
