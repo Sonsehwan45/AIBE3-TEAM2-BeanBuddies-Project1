@@ -1,5 +1,5 @@
-<html layout:decorate="~{layout}">
-<div layout:fragment="content" class="container">
+<html th:replace="~{layout::layout (~{::content})}">
+<div th:fragment="content" class="container">
     <h5 class="my-3 border-bottom pb-2">질문등록</h5>
     <form th:action="@{/questions/write}" th:object="${questionForm}" method="post">
         <div th:replace="~{form_errors::fieldErrors}"></div>

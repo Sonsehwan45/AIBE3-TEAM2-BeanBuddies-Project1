@@ -1,5 +1,5 @@
-<html layout:decorate="~{layout}">
-<div layout:fragment="content" class="container my-3">
+<html th:replace="~{layout::layout(~{::content})}">
+<div th:fragment="content" class="container my-3">
     <h1>게시글 목록</h1>
 
     <table class="table">
@@ -22,5 +22,10 @@
         </tbody>
     </table>
     <a href="/questions/write" class="btn btn-primary"> 질문 등록 </a>
+    <a href="/siteusers/signup" class="btn btn-primary"> 회원 가입</a>
+    <a href="/siteusers/login" class="btn btn-primary" sec:authorize="isAnonymous()"> 로그인</a>
+    <form th:action="@{/siteusers/logout}" method="post" sec:authorize="isAuthenticated()">
+        <button type="submit" class="btn btn-primary">로그아웃</button>
+    </form>
 </div>
 </html>
