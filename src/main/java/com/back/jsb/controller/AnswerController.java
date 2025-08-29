@@ -51,7 +51,7 @@ public class AnswerController {
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/update/{id}")
-    public String update(@PathVariable Integer id, Principal principal, Model model) {
+    public String update(@PathVariable Integer id, Model model) {
         Answer answer = answerService.findById(id);
         model.addAttribute("answerForm", new AnswerForm(answer.getContent()));
 

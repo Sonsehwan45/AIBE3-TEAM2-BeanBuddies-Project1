@@ -17,8 +17,6 @@
 
 ### 📋 게시판 기능 (Q&A)
 
-아래 기능은 필수로 구현 하여야 합니다.
-
 - 질문
     - 질문 목록 보기
     - 질문 등록 ✍️
@@ -106,7 +104,7 @@ jsb-project/
 >
 > 점프 투 스프링부트 3.06
 
-`SecurityFilterChain.encoed()`에 문자열을 전달함으로써 암호화 가능하다.
+`SecurityFilterChain.encode()`에 문자열을 전달함으로써 암호화 가능하다.
 
 ```java
 BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
