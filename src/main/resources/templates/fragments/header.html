@@ -4,7 +4,7 @@
             <a class="navbar-brand" href="/">질문 게시판</a>
             <a class="navbar-brand" href="/user/login" sec:authorize="isAnonymous()">로그인</a>
             <div sec:authorize="isAuthenticated()" class="d-flex">
-                <div class="mr-2">반갑습니다! <span></span> 님</div>
+                <span th:text="${#authentication.name}">로그인아이디</span> 님 환영합니다!
                 <a class="nav-link ml-2" th:href="@{/user/logout}">로그아웃</a>
             </div>
         </nav>
