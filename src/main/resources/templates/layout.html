@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>JSB Project</title>
+</head>
+<body>
+
+<div style="border-bottom: 1px solid #ccc; padding: 10px; margin-bottom: 20px;">
+    <a href="/question/list" style="text-decoration: none; color: black;">
+        <strong>JSB 홈</strong>
+    </a>
+
+    <div style="float: right;">
+        <a th:href="@{/user/login}" sec:authorize="isAnonymous()">로그인</a>
+        <a th:href="@{/user/signup}" sec:authorize="isAnonymous()" style="margin-left: 10px;">회원가입</a>
+
+        <a href="javascript:void(0);" onclick="document.getElementById('logoutForm').submit();"
+           sec:authorize="isAuthenticated()">로그아웃</a>
+    </div>
+</div>
+
+<form th:action="@{/user/logout}" method="post" id="logoutForm" style="display: none;"></form>
+
+<div layout:fragment="content" style="padding: 0 20px;">
+</div>
+
+</body>
+</html>

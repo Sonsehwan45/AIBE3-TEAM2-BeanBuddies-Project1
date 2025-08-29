@@ -1,8 +1,12 @@
 package com.back.domain.repository;
 
-import com.back.domain.entity.Question;
+import com.back.domain.entity.SiteUser;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-public interface UserRepository extends JpaRepository<Question, Integer> {
+import java.util.Optional;
 
+@Repository
+public interface UserRepository extends JpaRepository<SiteUser, Integer> {
+    Optional<SiteUser> findByUsername(String username);
 }
