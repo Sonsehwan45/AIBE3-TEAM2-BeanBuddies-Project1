@@ -22,9 +22,10 @@ public class QuestionController {
     @Autowired
     private final QuestionService questionService;
 
+
+
     @GetMapping("/list")
     public String list(Model model, @RequestParam(value = "kw", defaultValue = "") String kw) {
-        // 서비스의 검색 메서드를 호출합니다.
         List<Question> questions = questionService.search(kw);
         model.addAttribute("questions", questions);
         return "post/question/list";
@@ -76,7 +77,6 @@ public class QuestionController {
         }
         Question question = questionService.findById(id);
 
-        // 서비스 계층의 modify 메서드를 호출하여 데이터를 수정합니다.
         questionService.modify(question, form.getTitle(), form.getContent());
 
         return "redirect:/question/detail/" + id;

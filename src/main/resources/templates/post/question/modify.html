@@ -1,38 +1,24 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>게시글 수정</title>
-</head>
-<body>
-
-<form th:action th:object="${question}" method="POST">
-
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<div layout:fragment="content">
     <h3>#<span th:text="${question.id}"></span>번 게시글 수정</h3>
-
-    <ul th:if="${#fields.hasAnyErrors()}">
-        <li th:each="err : ${#fields.allErrors()}" th:text="${err}" style="color:red;"></li>
-    </ul>
-
-    <div>
-        <label for="title">제목</label>
-        <input type="text" id="title" th:field="*{title}" placeholder="제목" autofocus>
-    </div>
-
-    <br>
-
-    <div>
-        <label for="content">내용</label>
-        <textarea id="content" th:field="*{content}" placeholder="내용" rows="10"></textarea>
-    </div>
-
-    <br>
-
-    <input type="submit" value="수정하기">
-
-    <a th:href="@{|/post/detail/${question.id}|}">취소</a>
-
-</form>
-
-</body>
+    <form th:action="@{|/question/modify/${question.id}|}" th:object="${question}" method="POST">
+        <ul th:if="${#fields.hasAnyErrors()}" class="error">
+            <li th:each="err : ${#fields.allErrors()}" th:text="${err}"></li>
+        </ul>
+        <div>
+            <label for="title">제목</label>
+            <input type="text" id="title" th:field="*{title}">
+        </div>
+        <div>
+            <label for="content">내용</label>
+            <textarea id="content" th:field="*{content}" rows="10"></textarea>
+        </div>
+        <input type="submit" value="수정하기">
+        <a th:href="@{|/question/detail/${question.id}|}" style="margin-left: 10px;">취소</a>
+    </form>
+</div>
 </html>

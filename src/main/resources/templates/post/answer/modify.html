@@ -1,28 +1,19 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>답변 수정</title>
-</head>
-<body>
-<h3>답변 수정</h3>
-
-<form method="POST" th:action="@{|/answer/modify/${answer.id}|}" th:object="${answerForm}">
-
-    <ul th:if="${#fields.hasAnyErrors()}">
-        <li th:each="err : ${#fields.allErrors()}" th:text="${err}" style="color:red;"></li>
-    </ul>
-
-    <div>
-        <textarea id="content" th:field="*{content}" rows="10"></textarea>
-    </div>
-
-    <br>
-
-    <input type="submit" value="수정 완료">
-
-    <a th:href="@{|/question/detail/${answer.question.id}|}">취소</a>
-
-</form>
-</body>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<div layout:fragment="content">
+    <h3>답변 수정</h3>
+    <form method="POST" th:action="@{|/answer/modify/${answer.id}|}" th:object="${answerForm}">
+        <ul th:if="${#fields.hasAnyErrors()}" class="error">
+            <li th:each="err : ${#fields.allErrors()}" th:text="${err}"></li>
+        </ul>
+        <div>
+            <textarea id="content" th:field="*{content}" rows="10"></textarea>
+        </div>
+        <input type="submit" value="수정 완료">
+        <a th:href="@{|/question/detail/${answer.question.id}|}" style="margin-left: 10px;">취소</a>
+    </form>
+</div>
 </html>
