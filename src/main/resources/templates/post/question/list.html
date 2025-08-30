@@ -2,16 +2,14 @@
 <html lang="ko"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       layout:decorate="~{layout}">
-
 <div layout:fragment="content">
     <h3>게시글 목록</h3>
-
     <form action="/question/list" method="get" style="margin-bottom: 20px;">
         <input type="text" name="kw" placeholder="검색어를 입력하세요" style="width: 300px;">
         <input type="submit" value="찾기">
     </form>
-
     <table>
         <thead>
         <tr>
@@ -26,17 +24,14 @@
             <td>
                 <a th:href="@{|/question/detail/${question.id}|}" th:text="${question.title}"></a>
                 <span th:if="${question.answerList != null and !question.answerList.isEmpty()}"
-                      th:text="| [${question.answerList.size()}]|" style="color: #dc3545; font-size: 0.9em;">
-                </span>
+                      th:text="| [${question.answerList.size()}]|" style="color: #dc3545; font-size: 0.9em;"></span>
             </td>
             <td th:text="${#temporals.format(question.createDate, 'yy.MM.dd HH:mm')}"></td>
         </tr>
         </tbody>
     </table>
-
     <br>
-
-    <div>
+    <div sec:authorize="isAuthenticated()">
         <a href="/question/form" class="btn">글쓰기</a>
     </div>
 </div>

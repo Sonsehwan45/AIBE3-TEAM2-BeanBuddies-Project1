@@ -7,6 +7,7 @@ import com.back.domain.service.QuestionService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -22,8 +23,6 @@ public class QuestionController {
     @Autowired
     private final QuestionService questionService;
 
-
-
     @GetMapping("/list")
     public String list(Model model, @RequestParam(value = "kw", defaultValue = "") String kw) {
         List<Question> questions = questionService.search(kw);
@@ -31,11 +30,13 @@ public class QuestionController {
         return "post/question/list";
     }
 
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/form")
     public String write(@ModelAttribute("form") QuestionForm form) {
         return "post/question/form";
     }
 
+    @PreAuthorize("isAuthenticated()")
     @Transactional
     @PostMapping("/form")
     public String write(
@@ -58,6 +59,7 @@ public class QuestionController {
         return "post/question/detail";
     }
 
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/modify/{id}")
     public String modify(@PathVariable Integer id, Model model) {
         Question question = questionService.findById(id);
@@ -66,6 +68,7 @@ public class QuestionController {
         return "post/question/modify";
     }
 
+    @PreAuthorize("isAuthenticated()")
     @PostMapping("/modify/{id}")
     public String modify(
             @PathVariable("id") Integer id,
@@ -82,6 +85,7 @@ public class QuestionController {
         return "redirect:/question/detail/" + id;
     }
 
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/delete/{id}")
     public String delete(@PathVariable Integer id) {
         questionService.delete(id);

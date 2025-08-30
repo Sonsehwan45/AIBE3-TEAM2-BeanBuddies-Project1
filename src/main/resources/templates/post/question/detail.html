@@ -2,6 +2,7 @@
 <html lang="ko"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       layout:decorate="~{layout}">
 <div layout:fragment="content">
     <h2 th:text="${question.title}"></h2>
@@ -13,12 +14,14 @@
         <p th:text="${answer.content}"></p>
         <div style="font-size: small;">
             <span th:text="|작성일: ${#temporals.format(answer.createDate, 'yy.MM.dd HH:mm')}|"></span>
-            <a th:href="@{|/answer/modify/${answer.id}|}" style="margin-left: 10px;">수정</a>
-            <a th:href="@{|/answer/delete/${answer.id}|}" style="margin-left: 5px;">삭제</a>
+            <span sec:authorize="isAuthenticated()">
+                <a th:href="@{|/answer/modify/${answer.id}|}" style="margin-left: 10px;">수정</a>
+                <a th:href="@{|/answer/delete/${answer.id}|}" style="margin-left: 5px;">삭제</a>
+            </span>
         </div>
     </div>
     <hr>
-    <form th:action="@{|/answer/form/${question.id}|}" method="post" th:object="${answerForm}">
+    <form th:action="@{|/answer/form/${question.id}|}" method="post" th:object="${answerForm}" sec:authorize="isAuthenticated()">
         <div th:if="${#fields.hasErrors('content')}" class="error" th:errors="*{content}"></div>
         <textarea th:field="*{content}" rows="5" placeholder="답변을 입력해주세요."></textarea>
         <input type="submit" value="답변 등록">
@@ -26,8 +29,10 @@
     <hr>
     <div>
         <a href="/question/list">글 목록</a>
-        <a th:href="@{|/question/modify/${question.id}|}" style="margin-left: 10px;">질문 수정</a>
-        <a th:href="@{|/question/delete/${question.id}|}" style="margin-left: 5px;">질문 삭제</a>
+        <span sec:authorize="isAuthenticated()">
+            <a th:href="@{|/question/modify/${question.id}|}" style="margin-left: 10px;">질문 수정</a>
+            <a th:href="@{|/question/delete/${question.id}|}" style="margin-left: 5px;">질문 삭제</a>
+        </span>
     </div>
 </div>
 </html>

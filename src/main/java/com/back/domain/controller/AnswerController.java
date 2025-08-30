@@ -7,6 +7,7 @@ import com.back.domain.service.AnswerService;
 import com.back.domain.service.QuestionService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -39,6 +40,7 @@ public class AnswerController {
         return "redirect:/question/detail/" + questionId;
     }
 
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/modify/{id}")
     public String showModify(
             @PathVariable("id") Integer id,
@@ -54,6 +56,7 @@ public class AnswerController {
         return "post/answer/modify";
     }
 
+    @PreAuthorize("isAuthenticated()")
     @PostMapping("/modify/{id}")
     public String modify(
             @PathVariable("id") Integer id,
@@ -70,6 +73,7 @@ public class AnswerController {
         return "redirect:/question/detail/" + answer.getQuestion().getId();
     }
 
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/delete/{id}")
     public String delete(@PathVariable("id") Integer id) {
         Answer answer = answerService.findById(id);
