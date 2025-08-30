@@ -1,6 +1,16 @@
 <html th:replace="~{layout::layout(~{::content})}">
 <div th:fragment="content" class="container my-3">
     <h1>게시글 목록</h1>
+    <div class="row my-3">
+        <div class="col-6">
+            <div class="input-group">
+                <form th:action="@{/questions/list}" method="get">
+                    <input type="text" class="form-control" name="keyword" th:value="${keyword}">
+                    <button class="btn btn-outline-secondary" type="submit">찾기</button>
+                </form>
+            </div>
+        </div>
+    </div>
 
     <table class="table">
         <thead class="table-dark">
