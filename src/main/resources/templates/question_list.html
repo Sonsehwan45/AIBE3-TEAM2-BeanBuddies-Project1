@@ -1,0 +1,40 @@
+<html layout:decorate="~{layout}">
+<div layout:fragment="content" class="container my-3">
+    <table class="table">
+        <thead class="table-dark">
+        <tr>
+            <th>번호</th>
+            <th>제목</th>
+            <th>작성자</th>
+            <th>작성일시</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="question, loop : ${questionList}">
+            <td th:text="${loop.count}"></td>
+            <td>
+                <a th:href="@{|/question/detail/${question.id}|}" th:text="${question.title}"></a>
+            </td>
+            <td><span th:text="${question.author.username}"></span></td>
+            <td th:text="${#temporals.format(question.createDate, 'yyyy-MM-dd HH:mm')}"></td>
+        </tr>
+        </tbody>
+    </table>
+    <div class="d-flex align-items-center my-3">
+        <a th:href="@{/question/create}" class="btn btn-primary me-2">질문 등록하기</a>
+
+        <form th:action="@{/question/search}" method="get" class="d-flex align-items-center flex-grow-1">
+            <select name="kwType" class="form-select me-2" style="max-width: 120px; height: 38px;">
+                <option value="title">제목</option>
+                <option value="content">내용</option>
+            </select>
+
+            <input type="text" name="kw" class="form-control me-2" placeholder="검색어 입력" style="height: 38px;">
+
+            <button type="submit" class="btn btn-outline-success" style="height: 38px; white-space: nowrap;">
+                검색
+            </button>
+        </form>
+    </div>
+</div>
+</html>

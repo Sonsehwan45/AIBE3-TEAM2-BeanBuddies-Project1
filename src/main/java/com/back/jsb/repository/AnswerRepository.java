@@ -1,5 +1,8 @@
 package com.back.jsb.repository;
 
-public class AnswerRepository {
+import com.back.jsb.entity.Answer;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface AnswerRepository extends JpaRepository<Answer,Integer> {
 
 }
