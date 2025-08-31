@@ -4,16 +4,14 @@ import com.back.domain.entity.Answer;
 import com.back.domain.entity.Question;
 import com.back.domain.repository.AnswerRepository;
 import com.back.domain.repository.QuestionRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class AnswerService {
-    @Autowired
-    private AnswerRepository answerRepository;
-
-    @Autowired
-    private QuestionRepository questionRepository;
+    private final AnswerRepository answerRepository;
+    private final QuestionRepository questionRepository;
 
     public Answer save(Integer id, String content, int questionId) {
         Answer answer;

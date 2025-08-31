@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class QuestionSearchDto {
+public class QuestionSearchForm {
     private String searchType;
     private String keyword;
 }

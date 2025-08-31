@@ -2,11 +2,11 @@ package com.back.domain.controller;
 
 import com.back.domain.dto.AnswerForm;
 import com.back.domain.dto.QuestionForm;
-import com.back.domain.dto.QuestionSearchDto;
+import com.back.domain.dto.QuestionSearchForm;
 import com.back.domain.entity.Question;
 import com.back.domain.service.QuestionService;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -17,15 +17,15 @@ import java.util.List;
 
 @RequestMapping("/question")
 @Controller
+@RequiredArgsConstructor
 public class QuestionController {
-    @Autowired
-    private QuestionService questionService;
+    private final QuestionService questionService;
 
     @GetMapping("/list")
-    public String list(QuestionSearchDto questionSearchDto, Model model) {
-        List<Question> questions = questionService.findByKeyword(questionSearchDto.getSearchType(), questionSearchDto.getKeyword());
+    public String list(QuestionSearchForm questionSearchForm, Model model) {
+        List<Question> questions = questionService.findByKeyword(questionSearchForm.getSearchType(), questionSearchForm.getKeyword());
         model.addAttribute("questions", questions);
-        model.addAttribute("questionSearchDto", questionSearchDto);
+        model.addAttribute("questionSearchForm", questionSearchForm);
         return "question/question_list";
     }
 

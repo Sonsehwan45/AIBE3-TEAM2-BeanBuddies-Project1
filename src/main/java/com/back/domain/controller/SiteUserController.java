@@ -4,7 +4,7 @@ import com.back.domain.dto.UserCreateForm;
 import com.back.domain.dto.UserLoginForm;
 import com.back.domain.service.SiteUserService;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @RequestMapping("/user")
 @Controller
+@RequiredArgsConstructor
 public class SiteUserController {
-    @Autowired
-    private SiteUserService siteUserService;
+    private final SiteUserService siteUserService;
 
     @GetMapping("/login")
     public String login(UserLoginForm userLoginForm) {

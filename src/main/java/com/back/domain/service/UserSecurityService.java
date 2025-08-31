@@ -3,7 +3,7 @@ package com.back.domain.service;
 import com.back.domain.constant.UserRole;
 import com.back.domain.entity.SiteUser;
 import com.back.domain.repository.SiteUserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -17,9 +17,9 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class UserSecurityService implements UserDetailsService {
-    @Autowired
-    private SiteUserRepository siteUserRepository;
+    private final SiteUserRepository siteUserRepository;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

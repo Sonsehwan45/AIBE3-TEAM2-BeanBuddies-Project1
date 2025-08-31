@@ -6,7 +6,7 @@ import com.back.domain.entity.Question;
 import com.back.domain.service.AnswerService;
 import com.back.domain.service.QuestionService;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -14,11 +14,10 @@ import org.springframework.web.bind.annotation.*;
 
 @RequestMapping("/answer")
 @Controller
+@RequiredArgsConstructor
 public class AnswerController {
-    @Autowired
-    private AnswerService answerService;
-    @Autowired
-    private QuestionService questionService;
+    private final AnswerService answerService;
+    private final QuestionService questionService;
 
 
     @PostMapping("/write")

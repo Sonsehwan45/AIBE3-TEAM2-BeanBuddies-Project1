@@ -2,15 +2,15 @@ package com.back.domain.service;
 
 import com.back.domain.entity.Question;
 import com.back.domain.repository.QuestionRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class QuestionService {
-    @Autowired
-    private QuestionRepository questionRepository;
+    private final QuestionRepository questionRepository;
 
     public Question save(Integer id, String title, String content) {
         Question question;
