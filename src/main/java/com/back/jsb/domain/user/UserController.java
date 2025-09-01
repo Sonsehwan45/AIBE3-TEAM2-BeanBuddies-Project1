@@ -60,4 +60,9 @@ public class UserController {
         }
         return "/login_form";
     }
+
+    @GetMapping("/password") // 비밀번호 변경
+    public String password() {
+        return "/password_form";
+    }
 }
