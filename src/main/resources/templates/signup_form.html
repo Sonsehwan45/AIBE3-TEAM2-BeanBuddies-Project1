@@ -1,0 +1,44 @@
+<html layout:decorate="~{layout}">
+<div layout:fragment="content" class="page-container user">
+
+    <h1 class="page-title">회원가입</h1>
+
+    <!-- 회원가입폼 -->
+    <form th:action="@{/user/sign}" th:object="${form}" method="post">
+
+        <!-- 에러 발생 시 각 필드에 메세지 표시되도록 함 (ex : 사용중인 아이디입니다, 아이디는 필수 입력입니다.) -->
+
+        <div>
+            <label for="username">아이디</label>
+            <input id="username" type="text" th:field="*{username}" />
+            <div th:if="${#fields.hasErrors('username')}"
+                 th:errors="*{username}" class="field-error"></div>
+        </div>
+
+        <div>
+            <label for="nickname">닉네임</label>
+            <input id="nickname" type="text" th:field="*{nickname}" />
+            <div th:if="${#fields.hasErrors('nickname')}"
+                 th:errors="*{nickname}" class="field-error"></div>
+        </div>
+
+        <div>
+            <label for="password">비밀번호</label>
+            <input id="password" type="password" th:field="*{password}" />
+            <div th:if="${#fields.hasErrors('password')}"
+                 th:errors="*{password}" class="field-error"></div>
+        </div>
+
+        <div>
+            <label for="passwordConfirm">비밀번호 확인</label>
+            <input id="passwordConfirm" type="password" th:field="*{passwordConfirm}" />
+            <div th:if="${#fields.hasErrors('passwordConfirm')}"
+                 th:errors="*{passwordConfirm}" class="field-error"></div>
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn">회원가입</button>
+        </div>
+    </form>
+</div>
+</html>

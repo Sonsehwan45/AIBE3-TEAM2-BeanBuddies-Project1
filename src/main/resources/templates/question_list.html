@@ -1,0 +1,41 @@
+<html layout:decorate="~{layout}">
+<div layout:fragment="content" class="page-container question-list">
+
+    <h1 class="page-title">질문 목록</h1>
+
+    <!-- 검색 폼 -->
+    <form th:action="@{/question/list}" method="get" class="search-form question-list">
+        <!-- 검색 타입 (중복 선택 시 OR로 검색) -->
+        <div class="type-checkboxes">
+            <label><input type="checkbox" name="type" value="all"
+                          th:checked="${selectedTypes.contains('all')}"> 전체</label>
+            <label><input type="checkbox" name="type" value="author"
+                          th:checked="${selectedTypes.contains('author')}"> 작성자</label>
+            <label><input type="checkbox" name="type" value="title"
+                          th:checked="${selectedTypes.contains('title')}"> 제목</label>
+            <label><input type="checkbox" name="type" value="content"
+                          th:checked="${selectedTypes.contains('content')}"> 내용</label>
+            <label><input type="checkbox" name="type" value="answer"
+                          th:checked="${selectedTypes.contains('answer')}"> 답변</label>
+        </div>
+
+        <!-- 검색 키워드 -->
+        <div class="search-row">
+            <input type="text" name="keyword" th:value="${keyword}" placeholder="검색어 입력">
+            <button type="submit" class="btn">검색</button>
+        </div>
+    </form>
+
+    <!-- 질문 목록 -->
+    <ul class="question-items">
+        <li th:each="question : ${questions}">
+            <a th:href="@{/question/detail/{id}(id=${question.id})}" class="question-title" th:text="${question.title}"></a>
+            <div class="question-meta">
+                <span th:text="${question.author.username}"></span>
+                <span th:text="${#temporals.format(question.createdDate,'yyyy-MM-dd HH:mm')}"></span>
+            </div>
+        </li>
+    </ul>
+
+</div>
+</html>

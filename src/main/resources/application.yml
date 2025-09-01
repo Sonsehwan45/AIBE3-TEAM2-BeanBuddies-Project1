@@ -1,0 +1,25 @@
+spring:
+  application:
+    name: 3w-t2-jsb-Project
+
+  profiles:
+    active: dev
+
+  output:
+    ansi:
+      enabled: always
+
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        format_sql: true
+        highlight_sql: true
+        use_sql_comments: true
+
+logging:
+  level:
+    org.hibernate.orm.jdbc.bind: TRACE
+    org.hibernate.orm.jdbc.extract: TRACE
