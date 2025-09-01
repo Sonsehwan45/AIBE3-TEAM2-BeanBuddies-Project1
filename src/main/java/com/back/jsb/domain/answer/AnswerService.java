@@ -3,7 +3,14 @@ package com.back.jsb.domain.answer;
 import com.back.jsb.domain.question.Question;
 import com.back.jsb.domain.user.User;
 import jakarta.validation.Valid;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.domain.Sort.Order;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -29,5 +36,13 @@ public class AnswerService {
         //수정폼으로 Answer 객체 수정
         answer.modify(form);
         answerRepository.save(answer);
+    }
+
+    // 최근 답변 기준 findAll
+    public List<Answer> findRecentAnswers(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Direction.DESC, "createdDate");
+        Page<Answer> answers = answerRepository.findAll(pageable);
+
+        return answers.getContent();
     }
 }
