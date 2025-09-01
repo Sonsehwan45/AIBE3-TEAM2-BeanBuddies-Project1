@@ -7,6 +7,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +23,7 @@ public class AnswerController {
     private final QuestionService questionService;
 
     @PostMapping("/write/{id}")
+    @Transactional
     public String write(
             @PathVariable Long id,
             @Valid @ModelAttribute("form") AnswerForm form,
@@ -36,7 +38,7 @@ public class AnswerController {
         //질문글이 존재하지 않을 때 예외처리
         if(question == null) {
             redirectAttributes.addFlashAttribute("msg", "해당 질문글이 존재하지 않습니다.");
-            return "redirect:/question/detail/%d".formatted(id);
+            return "redirect:/question/list";
         }
 
         //로그인하지 않았을 때 예외처리
@@ -57,6 +59,7 @@ public class AnswerController {
     }
 
     @PostMapping("/delete/{question_id}/{answer_id}")
+    @Transactional
     public String delete(
             @PathVariable("question_id") Long questionId,
             @PathVariable("answer_id") Long answerId,
@@ -115,6 +118,7 @@ public class AnswerController {
     }
 
     @PostMapping("/modify/{question_id}/{answer_id}")
+    @Transactional
     public String modify(
             @PathVariable("question_id") Long questionId,
             @PathVariable("answer_id") Long answerId,
@@ -151,6 +155,4 @@ public class AnswerController {
         redirectAttributes.addFlashAttribute("msg", "댓글이 수정되었습니다.");
         return "redirect:/question/detail/%d".formatted(questionId);
     }
-
-
 }

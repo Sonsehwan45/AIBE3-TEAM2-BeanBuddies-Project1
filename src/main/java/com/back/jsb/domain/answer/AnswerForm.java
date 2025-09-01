@@ -14,6 +14,6 @@ public class AnswerForm {
     private String content;
 
     public AnswerForm(Answer answer) {
-        this.content = answer.getContent();
+        setContent(answer.getContent());
     }
 }

@@ -16,7 +16,7 @@ public class QuestionForm {
     private String content;
 
     public QuestionForm(Question question) {
-        this.title = question.getTitle();
-        this.content = question.getContent();
+        setTitle(question.getTitle());
+        setContent(question.getContent());
     }
 }

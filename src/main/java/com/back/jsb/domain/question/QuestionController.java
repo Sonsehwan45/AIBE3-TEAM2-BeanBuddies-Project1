@@ -6,6 +6,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -27,6 +28,7 @@ public class QuestionController {
     }
 
     @PostMapping("/write")
+    @Transactional
     public String write(
             @Valid @ModelAttribute("form") QuestionForm form,
             BindingResult bindingResult,
@@ -43,11 +45,24 @@ public class QuestionController {
     }
 
     @GetMapping("/list")
-    public String list(Model model) {
-        List<Question> questions = questionService.findAll();
+    public String list(
+            @RequestParam(value="type", required=false) List<String> types,
+            @RequestParam(value="keyword", required=false) String keyword,
+            Model model
+    ) {
+        //검색 버튼 누른 후에도, 검색 설정이 지워지지 않도록 저장
+        model.addAttribute("selectedTypes", types != null ? types : List.of("all"));
+        model.addAttribute("keyword", keyword);
+
+        List<Question> questions;
+        //검색어 유무에 따라 findAll or Search
+        if (keyword == null || keyword.trim().isEmpty()) {
+            questions = questionService.findAll();
+        } else {
+            questions = questionService.search(types, keyword);
+        }
+
         model.addAttribute("questions", questions);
-        model.addAttribute("selectedTypes", List.of("all"));
-        model.addAttribute("keyword", "");
         return "question_list";
     }
 
@@ -72,6 +87,7 @@ public class QuestionController {
     }
 
     @PostMapping("/delete/{id}")
+    @Transactional
     public String delete(
             @PathVariable Long id,
             Principal principal,
@@ -124,6 +140,7 @@ public class QuestionController {
     }
 
     @PostMapping("/modify/{id}")
+    @Transactional
     public String modify(
             @PathVariable Long id,
             @Valid @ModelAttribute("form") QuestionForm form,
@@ -154,25 +171,5 @@ public class QuestionController {
         questionService.modify(question, form);
         redirectAttributes.addFlashAttribute("msg", "질문이 수정되었습니다.");
         return "redirect:/question/detail/%d".formatted(id);
-    }
-
-    @GetMapping("/search")
-    public String search(
-            @RequestParam(value="type", required=false) List<String> types,
-            @RequestParam(value="keyword", required=false) String keyword,
-            Model model
-    ) {
-        //검색 버튼 누른 후에도, 검색 설정이 지워지지 않도록 저장
-        model.addAttribute("selectedTypes", types != null ? types : List.of("all"));
-        model.addAttribute("keyword", keyword);
-
-        //검색 타입이 비었거나, all이라면 전체(제목, 내용, 답변, 작성자)에서 OR로 검색
-        if(types == null || types.isEmpty() || types.contains("all")) {
-            types = List.of("title", "content", "answer", "author");
-        }
-
-        List<Question> questions = questionService.search(types, keyword);
-        model.addAttribute("questions", questions);
-        return "question_list";
     }
 }

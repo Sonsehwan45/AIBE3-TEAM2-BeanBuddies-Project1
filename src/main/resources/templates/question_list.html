@@ -4,7 +4,7 @@
     <h1 class="page-title">질문 목록</h1>
 
     <!-- 검색 폼 -->
-    <form th:action="@{/question/search}" method="get" class="search-form question-list">
+    <form th:action="@{/question/list}" method="get" class="search-form question-list">
         <!-- 검색 타입 (중복 선택 시 OR로 검색) -->
         <div class="type-checkboxes">
             <label><input type="checkbox" name="type" value="all"
