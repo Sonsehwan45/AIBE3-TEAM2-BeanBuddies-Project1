@@ -62,7 +62,7 @@ public class UserController {
     }
 
     @GetMapping("/password") // 비밀번호 변경
-    public String password() {
+    public String password(@ModelAttribute("form") PasswordForm form) {
         return "/password_form";
     }
 }
