@@ -7,6 +7,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.header.writers.frameoptions.XFrameOptionsHeaderWriter;
+import org.springframework.security.web.header.writers.frameoptions.XFrameOptionsHeaderWriter.XFrameOptionsMode;
 
 @Configuration
 @EnableWebSecurity
@@ -53,7 +55,12 @@ public class SecurityConfig{
                         .tokenValiditySeconds(3600)
                 )
 
-                .csrf(csrf -> csrf.disable());
+                .csrf(csrf -> csrf.disable())
+
+                .headers(header -> header
+                        .addHeaderWriter(new XFrameOptionsHeaderWriter(
+                                XFrameOptionsMode.SAMEORIGIN
+                        )));
 
         return http.build();
     }

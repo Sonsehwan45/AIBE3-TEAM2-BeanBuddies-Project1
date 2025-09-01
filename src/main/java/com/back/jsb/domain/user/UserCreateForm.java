@@ -1,11 +1,15 @@
 package com.back.jsb.domain.user;
 
 import jakarta.validation.constraints.NotBlank;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class UserCreateForm {
 
     @NotBlank(message = "아이디는 필수 입력입니다.")
