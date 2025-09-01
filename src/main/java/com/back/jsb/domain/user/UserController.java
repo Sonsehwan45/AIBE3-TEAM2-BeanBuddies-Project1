@@ -1,7 +1,9 @@
 package com.back.jsb.domain.user;
 
+import com.back.jsb.global.security.UserSecurity;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -64,5 +66,35 @@ public class UserController {
     @GetMapping("/password") // 비밀번호 변경
     public String password(@ModelAttribute("form") PasswordForm form) {
         return "/password_form";
+    }
+
+    @PostMapping("/password")
+    public String password(@Valid @ModelAttribute("form") PasswordForm form, BindingResult bindingResult, @AuthenticationPrincipal UserSecurity userSecurity) {
+        // 현재 로그인 중인 유저 데이터 받아오기
+        User user = userSecurity.getUser();
+
+        // 기존 비밀번호 정상 입력 확인
+        if (!userService.matchPassword(form.getOldPassword(), user.getPassword())) {
+            bindingResult.rejectValue("oldPassword", "invalid.oldPassword", "기존 비밀번호가 올바르지 않습니다.");
+        }
+        
+        // 신규 비밀번호가 기존 비밀번호와 중복인지 체크
+        if (userService.matchPassword(form.getPassword(), user.getPassword())) {
+            bindingResult.rejectValue("password", "duplicatePassword", "기존 비밀번호와 중복됩니다.");
+        }
+
+        // 비밀번호 확인 체크
+        if(!form.getPassword().equals(form.getPasswordConfirm())) {
+            bindingResult.rejectValue("passwordConfirm", "mismatch", "비밀번호가 일치하지 않습니다.");
+        }
+
+        // 기타 오류 확인 후 반환
+        if (bindingResult.hasErrors()) {
+            return "/password_form";
+        }
+
+        userService.changePassword(user, form.getPassword());
+
+        return "redirect:/";
     }
 }
