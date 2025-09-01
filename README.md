@@ -21,6 +21,12 @@ answer -> question -> question이 List<answer>를 가져 다시 처음의 answer
 
 🔎 th:field는 내부적으로 `Spring DataBinder`의 바인딩 기능을 사용하기 위해 객체그래프 탐색을 시도한다.
 
-👉 대신에 
+👉 대신에 th:text를 통해 필요한 answer.question.toString()만 호출 하도록 한다.
 
-## ![img.png](img.png)
+## UI 시행착오
+
+![img.png](img.png)
+
+![img_1.png](img_1.png)
+
+시행착오를 통해 그나마 괜찮은 형식으로 바꾸었다.
