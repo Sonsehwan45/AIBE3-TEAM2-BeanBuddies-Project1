@@ -4,7 +4,9 @@ import com.back.jsb.domain.question.Question;
 import com.back.jsb.domain.question.QuestionService;
 import com.back.jsb.global.security.UserSecurity;
 import jakarta.validation.Valid;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -159,8 +161,14 @@ public class AnswerController {
     }
 
     @GetMapping("list")
-    public String list(@RequestParam(defaultValue = "0") Integer page) {
-        answerService.findRecentAnswers(page, DEFAULT_PAGE_SIZE);
+    public String list(@RequestParam(defaultValue = "0") Integer page, Model model) {
+        // 의도적으로 음수 넣는 것 처리
+        if (page <= 0) {
+            page = 0;
+        }
+        Page<Answer> answersPage = answerService.findRecentAnswers(page, DEFAULT_PAGE_SIZE);
+        model.addAttribute("answersPage", answersPage);
+
         return "answer_list";
     }
 }

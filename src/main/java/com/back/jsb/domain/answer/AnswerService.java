@@ -39,10 +39,8 @@ public class AnswerService {
     }
 
     // 최근 답변 기준 findAll
-    public List<Answer> findRecentAnswers(int page, int size) {
+    public Page<Answer> findRecentAnswers(int page, int size) {
         Pageable pageable = PageRequest.of(page, size, Direction.DESC, "createdDate");
-        Page<Answer> answers = answerRepository.findAll(pageable);
-
-        return answers.getContent();
+        return answerRepository.findAll(pageable);
     }
 }

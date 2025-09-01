@@ -1,10 +1,49 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+<html layout:decorate="~{layout}">
 
-</body>
+<div layout:fragment="content" class="page-container question-list">
+
+    <h3> 최근 등록된 답변 </h3>
+
+    <!-- 질문-답변 목록 -->
+    <ul class="question-items">
+        <li th:each="answer : ${answersPage.content}" th:with="question=${answer.question}">
+            <div class="question-list">
+                <a th:href="@{/question/detail/{id}(id=${question.id})}" class="question-title"
+                   th:text="${question.title}"></a>
+                <span class="question-meta">
+                <span th:text="${question.author.username}"></span>
+                <span th:text="${#temporals.format(answer.question.createdDate,'yyyy-MM-dd HH:mm')}"></span>
+            </span>
+                <div>
+                    <span>ㄴ</span>
+                    <span class="answer-content" th:text="${answer.content}"></span>
+                </div>
+            </div>
+        </li>
+    </ul>
+
+    <!-- 페이징처리 시작 -->
+    <div th:if="${!answersPage.isEmpty()}">
+        <ul class="pagination justify-content-center">
+            <li class="page-item" th:classappend="${!answersPage.hasPrevious} ? 'disabled'">
+                <a class="page-link"
+                   th:href="@{|?page=${answersPage.number - 1}|}">
+                    <span>이전</span>
+                </a>
+            </li>
+            <li th:each="page: ${#numbers.sequence(0, answersPage.totalPages - 1)}"
+                th:if="${page >= answersPage.number - 5 and page <= answersPage.number + 5}"
+                th:classappend="${page == answersPage.number} ? 'active'"
+                class="page-item">
+                <a th:text="${page}" class="page-link" th:href="@{|?page=${page}|}"></a>
+            </li>
+            <li class="page-item" th:classappend="${!answersPage.hasNext} ? 'disabled'">
+                <a class="page-link" th:href="@{|?page=${answersPage.number + 1}|}">
+                    <span>다음</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <!-- 페이징처리 끝 -->
+</div>
 </html>
