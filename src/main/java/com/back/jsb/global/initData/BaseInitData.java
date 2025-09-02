@@ -42,18 +42,19 @@ public class BaseInitData {
             userForm2.setPasswordConfirm("user2");
             userForm2.setNickname("닉네임2");
             userService.register(userForm2);
+
+            //User 객체 가져오기
+            User user1 = userService.findByUsername("user1");
+            User user2 = userService.findByUsername("user2");
             for (int i = 0; i < 50; i++) {
-                //User 객체 가져오기
-                User user1 = userService.existsByUsername("user1") ? userService.findByUsername("user1") : null;
-                User user2 = userService.existsByUsername("user2") ? userService.findByUsername("user2") : null;
 
                 //질문 생성
                 Question question1 = new Question(
-                        new QuestionForm("질문 %d 제목".formatted(i), "질문 %d 내용".formatted(i)),
+                        new QuestionForm("질문 %d 제목".formatted(i * 2 + 1), "질문 %d 내용".formatted(i * 2 + 1)),
                         user1
                 );
                 Question question2 = new Question(
-                        new QuestionForm("질문 %d 제목".formatted(i + 10), "질문 %d 내용".formatted(i + 10)),
+                        new QuestionForm("질문 %d 제목".formatted(i * 2 + 2), "질문 %d 내용".formatted(i * 2 + 2)),
                         user2
                 );
                 Question q1 = questionRepository.save(question1);
@@ -61,12 +62,21 @@ public class BaseInitData {
 
                 //답변 생성
                 String answerFormat = "질문 %d의 답변 %d";
-                answerRepository.save(new Answer(new AnswerForm(answerFormat.formatted(i, i)), user2, q1));
-                answerRepository.save(new Answer(new AnswerForm(answerFormat.formatted(i, i + 1)), user1, q1));
-                answerRepository.save(new Answer(new AnswerForm(answerFormat.formatted(i + 1, i)), user1, q2));
-                answerRepository.save(new Answer(new AnswerForm(answerFormat.formatted(i + 1, i + 1)), user2, q2));
-                answerRepository.save(new Answer(new AnswerForm(answerFormat.formatted(i + 1, i + 2)), user2, q2));
+                answerRepository.save(new Answer(new AnswerForm(answerFormat.formatted(q1.getId(), 1)), user2, q1));
+                answerRepository.save(new Answer(new AnswerForm(answerFormat.formatted(q1.getId(), 2)), user1, q1));
+                answerRepository.save(new Answer(new AnswerForm(answerFormat.formatted(q2.getId(), 1)), user1, q2));
+                answerRepository.save(new Answer(new AnswerForm(answerFormat.formatted(q2.getId(), 2)), user2, q2));
+                answerRepository.save(new Answer(new AnswerForm(answerFormat.formatted(q2.getId(), 3)), user2, q2));
             }
+
+            // 최신 답변 1개 추가하기
+            answerRepository.save(
+                    new Answer(
+                            new AnswerForm("가장 최신 답변"),
+                            user1,
+                            questionRepository.findById(10L).get()
+                    ));
         };
+
     }
 }
