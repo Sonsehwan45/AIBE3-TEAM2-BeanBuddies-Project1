@@ -1,5 +1,6 @@
 package com.back.jsb.domain.user;
 
+import com.back.jsb.global.mail.MailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final MailService mailService;
 
 
     public void register(UserCreateForm form) {
@@ -39,5 +41,11 @@ public class UserService {
     public void changePassword(User user, String password) {
         user.setPassword(passwordEncoder.encode(password));
         userRepository.save(user);
+    }
+
+    public void sendPasswordEmail(User user, String password) {
+        String subject = "초기화된 비밀번호 [%s]".formatted(password);
+        String content = "☺️ 안녕하세요! BeansBuddies 입니다!\n🔑 초기화된 비밀번호는 [%s] 입니다!\n✅ 로그인 후 반드시 비밀번호를 변경해주세요!".formatted(password);
+        mailService.sendTxtEmail(user.getEmail(), subject, content);
     }
 }

@@ -26,6 +26,9 @@ public class User extends BaseEntity {
     @Column(unique = true, nullable = false)
     private String nickname;
 
+    @Column(unique = true)
+    private String email;
+
     @Column(nullable = false)
     private String role;
 
@@ -34,5 +37,6 @@ public class User extends BaseEntity {
         this.password = form.getPassword();
         this.nickname = form.getNickname();
         this.role = "USER";
+        this.email = form.getEmail();
     }
 }

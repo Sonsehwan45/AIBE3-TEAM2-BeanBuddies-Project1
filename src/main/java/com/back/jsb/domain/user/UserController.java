@@ -97,4 +97,33 @@ public class UserController {
 
         return "redirect:/";
     }
+
+    @GetMapping("/password/reset")
+    public String rest(@ModelAttribute("form") PasswordResetForm form) {
+        return "/password_reset_form";
+    }
+    
+    @PostMapping("/password/reset")
+    public String rest(@Valid @ModelAttribute("form") PasswordResetForm form, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return "/password_reset_form";
+        }
+
+        User user = userService.findByUsername(form.getUsername());
+
+        if (user == null) {
+            bindingResult.rejectValue("username", "notFindUser", "해당 아이디의 유저는 존재하지 않습니다.");
+            return "/password_reset_form";
+        }
+
+        // TODO: 비밀번호 랜덤 생성
+        String newPassword = "0000"; // 임시로 초기화 비밀번호를 1234로 지정
+        // 비밀번호 초기화하기
+        userService.changePassword(user, newPassword);
+
+        // 비밀번호 이메일로 보내기
+        userService.sendPasswordEmail(user, newPassword);
+        
+        return "redirect:/user/login";
+    }
 }
