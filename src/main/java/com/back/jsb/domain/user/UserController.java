@@ -116,13 +116,8 @@ public class UserController {
             return "/password_reset_form";
         }
 
-        // TODO: 비밀번호 랜덤 생성
-        String newPassword = "0000"; // 임시로 초기화 비밀번호를 1234로 지정
         // 비밀번호 초기화하기
-        userService.changePassword(user, newPassword);
-
-        // 비밀번호 이메일로 보내기
-        userService.sendPasswordEmail(user, newPassword);
+        userService.resetPassword(user);
         
         return "redirect:/user/login";
     }

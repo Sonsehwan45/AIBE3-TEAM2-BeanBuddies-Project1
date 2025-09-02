@@ -520,7 +520,8 @@ header nav ul li a:hover {
 }
 
 .user input[type="text"],
-.user input[type="password"] {
+.user input[type="password"],
+.user input[type="email"] {
     width: 100%;
     padding: 12px;
     border-radius: 6px;

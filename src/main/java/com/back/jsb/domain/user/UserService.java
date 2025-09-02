@@ -1,6 +1,7 @@
 package com.back.jsb.domain.user;
 
 import com.back.jsb.global.mail.MailService;
+import com.back.jsb.global.security.PasswordUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -41,6 +42,12 @@ public class UserService {
     public void changePassword(User user, String password) {
         user.setPassword(passwordEncoder.encode(password));
         userRepository.save(user);
+    }
+
+    public void resetPassword(User user) {
+        String newPassword = PasswordUtil.generateRandomPassword(8);
+        this.changePassword(user, newPassword);
+        this.sendPasswordEmail(user, newPassword);
     }
 
     public void sendPasswordEmail(User user, String password) {
