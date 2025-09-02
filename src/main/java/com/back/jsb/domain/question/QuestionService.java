@@ -6,6 +6,9 @@ import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.JoinType;
 import jakarta.persistence.criteria.Predicate;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -43,13 +46,11 @@ public class QuestionService {
 
     public List<Question> search(List<String> types, String keyword) {
 
-        //spec의 람다 함수에 들어가는 변수는 final이어야 함. types를 그대로 못 써서 finalTypes 새로 선언
         List<String> finalTypes =
                 (types == null || types.isEmpty() || types.contains("all"))
                         ? List.of("title", "content", "answer", "author")
                         : types;
 
-        //specification으로 types에 따라 keyword OR 검색
         Specification<Question> spec = (root, query, builder) -> {
             List<Predicate> predicates = new ArrayList<>();
 
@@ -71,5 +72,34 @@ public class QuestionService {
         };
 
         return questionRepository.findAll(spec);
+    }
+
+    private Specification<Question> createSpecification(List<String> types, String keyword) {
+        return (root, query, criteriaBuilder) -> {
+            if (keyword == null || keyword.trim().isEmpty() || types == null || types.isEmpty()) {
+                return criteriaBuilder.conjunction(); // 조건이 없으면 항상 true
+            }
+
+            List<Predicate> predicates = new ArrayList<>();
+            for (String type : types) {
+                switch (type) {
+                    case "title":
+                        predicates.add(criteriaBuilder.like(root.get("title"), "%" + keyword + "%"));
+                        break;
+                    case "content":
+                        predicates.add(criteriaBuilder.like(root.get("content"), "%" + keyword + "%"));
+                        break;
+                }
+            }
+
+            // 모든 OR 조건을 묶어서 반환
+            return criteriaBuilder.or(predicates.toArray(new Predicate[0]));
+        };
+    }
+
+    public Page<Question> getList(int page, List<String> types, String keyword) {
+        Pageable pageable = PageRequest.of(page, 10);
+        Specification<Question> spec = createSpecification(types, keyword);
+        return this.questionRepository.findAll(spec, pageable);
     }
 }

@@ -28,7 +28,7 @@
 
     <!-- 질문 목록 -->
     <ul class="question-items">
-        <li th:each="question : ${questions}">
+        <li th:each="question : ${paging}">
             <a th:href="@{/question/detail/{id}(id=${question.id})}" class="question-title" th:text="${question.title}"></a>
             <div class="question-meta">
                 <span th:text="${question.author.username}"></span>
