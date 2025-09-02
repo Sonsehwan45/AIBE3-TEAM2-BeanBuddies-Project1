@@ -13,20 +13,24 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Configuration
 @RequiredArgsConstructor
 public class BaseInitData {
 
-    private final UserService userService; // User는 서비스 통해 저장
+    private final UserService userService;
     private final QuestionRepository questionRepository;
     private final AnswerRepository answerRepository;
 
     @Bean
+    @Transactional // 모든 DB 작업이 하나의 트랜잭션으로 묶여 안정성이 높아짐
     public ApplicationRunner initializer() {
         return args -> {
 
-            //사용자1 생성
             UserCreateForm userForm1 = new UserCreateForm();
             userForm1.setUsername("user1");
             userForm1.setPassword("user1");
@@ -34,7 +38,6 @@ public class BaseInitData {
             userForm1.setNickname("닉네임1");
             userService.register(userForm1);
 
-            //사용자2 생성
             UserCreateForm userForm2 = new UserCreateForm();
             userForm2.setUsername("user2");
             userForm2.setPassword("user2");
@@ -42,20 +45,27 @@ public class BaseInitData {
             userForm2.setNickname("닉네임2");
             userService.register(userForm2);
 
-            //User 객체 가져오기
-            User user1 = userService.existsByUsername("user1") ? userService.findByUsername("user1") : null;
-            User user2 = userService.existsByUsername("user2") ? userService.findByUsername("user2") : null;
+            User user1 = userService.findByUsername("user1");
+            User user2 = userService.findByUsername("user2");
 
-            //질문 생성
-            Question q1 = questionRepository.save(new Question(new QuestionForm("질문 1 제목", "질문 1 내용"), user1));
-            Question q2 = questionRepository.save(new Question(new QuestionForm("질문 2 제목", "질문 2 내용"), user2));
+            List<Question> Questions = new ArrayList<>();
+            for (int i = 1; i <= 45; i++) {
+                String title = "질문 %d 제목".formatted(i);
+                String content = "질문 %d 내용".formatted(i);
+                QuestionForm questionForm = new QuestionForm(title, content);
+                User author = (i % 2 == 0) ? user2 : user1;
 
-            //답변 생성
-            answerRepository.save(new Answer(new AnswerForm("질문 1의 답변 1"), user2, q1));
-            answerRepository.save(new Answer(new AnswerForm("질문 1의 답변 2"), user1, q1));
-            answerRepository.save(new Answer(new AnswerForm("질문 2의 답변 1"), user1, q2));
-            answerRepository.save(new Answer(new AnswerForm("질문 2의 답변 2"), user2, q2));
-            answerRepository.save(new Answer(new AnswerForm("질문 2의 답변 3"), user2, q2));
+                Question question = questionRepository.save(new Question(questionForm, author));
+                Questions.add(question); // 저장된 질문을 리스트에 추가
+            }
+
+            Question firstQuestion = Questions.get(0);
+            answerRepository.save(new Answer(new AnswerForm("질문 1에 대한 user2의 답변입니다."), user2, firstQuestion));
+            answerRepository.save(new Answer(new AnswerForm("질문 1에 대한 user1의 답변입니다."), user1, firstQuestion));
+
+            Question secondQuestion = Questions.get(1);
+            answerRepository.save(new Answer(new AnswerForm("질문 2에 대한 user1의 답변입니다."), user1, secondQuestion));
+            answerRepository.save(new Answer(new AnswerForm("질문 2에 대한 user2의 답변입니다."), user2, secondQuestion));
         };
     }
 }
