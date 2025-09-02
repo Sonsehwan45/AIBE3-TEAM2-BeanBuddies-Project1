@@ -1,0 +1,7 @@
+<html layout:decorate="~{layout}">
+<div layout:fragment="content">
+    <h1>내 정보</h1>
+    <img th:src="'data:image/png;base64,' + ${profileImage}" alt="프로필 사진" width="150"/>
+    <p>닉네임: <span th:text="${user.nickname}"></span></p>
+    <a th:href="@{/user/profile/edit}">정보 수정</a>
+</div>
