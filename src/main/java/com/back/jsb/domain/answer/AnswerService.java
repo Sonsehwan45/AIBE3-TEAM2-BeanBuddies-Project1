@@ -1,10 +1,13 @@
 package com.back.jsb.domain.answer;
 
 import com.back.jsb.domain.question.Question;
+import com.back.jsb.domain.reply.AnswerReply;
+import com.back.jsb.domain.reply.ReplyRegisterForm;
 import com.back.jsb.domain.user.User;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -29,5 +32,17 @@ public class AnswerService {
         //수정폼으로 Answer 객체 수정
         answer.modify(form);
         answerRepository.save(answer);
+    }
+
+    @Transactional
+    public void registerReply(Long answerId, ReplyRegisterForm replyForm, String username) {
+        Answer answer = findById(answerId);
+        answer.addReply(replyForm.content(), username);
+    }
+
+    @Transactional
+    public void deleteReply(Long answerId, AnswerReply reply) {
+        Answer answer = findById(answerId);
+        answer.removeReply(reply);
     }
 }
