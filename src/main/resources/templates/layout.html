@@ -16,6 +16,7 @@
             <li><a th:href="@{/home}">홈</a></li>
             <li><a th:href="@{/question/write}">질문 등록</a></li>
             <li><a th:href="@{/question/list}">질문 목록</a></li>
+            <li><a th:href="@{/answer/list}">최근 답변</a></li>
 
             <!-- 로그인했을 경우 안내문구와 로그아웃 버튼 활성화 -->
             <li sec:authorize="isAuthenticated()">

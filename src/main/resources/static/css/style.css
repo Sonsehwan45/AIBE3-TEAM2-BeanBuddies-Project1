@@ -547,3 +547,47 @@ header nav ul li a:hover {
     padding: 12px;
     font-size: 1rem;
 }
+
+/* 페이징 스타일 */
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    list-style: none;
+    padding: 0;
+    margin-top: 30px;
+}
+
+.pagination li {
+    margin: 0 4px;
+}
+
+.pagination a {
+    display: block;
+    padding: 8px 14px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    color: #3498db;
+    text-decoration: none;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.pagination a:hover {
+    background-color: #f0f0f0;
+    color: #2980b9;
+}
+
+.pagination .page-item.active a {
+    background-color: #3498db;
+    color: #fff;
+    border-color: #3498db;
+    font-weight: bold;
+    pointer-events: none; /* 현재 페이지는 클릭 비활성화 */
+}
+
+.pagination .page-item.disabled a {
+    color: #ccc;
+    pointer-events: none; /* 클릭 비활성화 */
+    background-color: #fff;
+    border-color: #eee;
+}
