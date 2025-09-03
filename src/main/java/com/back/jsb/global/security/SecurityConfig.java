@@ -1,5 +1,7 @@
 package com.back.jsb.global.security;
 
+import com.back.jsb.domain.user.CustomOAuth2UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -12,6 +14,7 @@ import org.springframework.security.web.header.writers.frameoptions.XFrameOption
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfig{
 
     @Bean
@@ -20,7 +23,8 @@ public class SecurityConfig{
     }
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http,
+                                          CustomOAuth2UserService customOAuth2UserService) throws Exception {
         http
                 //몇몇 페이지는 인증 필요, 나머지 페이지는 모두 허용
                 .authorizeHttpRequests(auth -> auth
@@ -42,7 +46,11 @@ public class SecurityConfig{
                     .defaultSuccessUrl("/question/list", false)
                     .permitAll()
                 )
-
+                .oauth2Login(oauth -> oauth
+                        .loginPage("/user/login")                  // 폼/소셜 같은 로그인 페이지 사용
+                        .defaultSuccessUrl("/question/list", false)
+                                .userInfoEndpoint(u -> u.userService(customOAuth2UserService))
+                )
                 .logout(logout -> logout
                         .logoutUrl("/user/logout")
                         .logoutSuccessUrl("/")
