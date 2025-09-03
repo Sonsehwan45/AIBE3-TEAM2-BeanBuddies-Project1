@@ -3,7 +3,7 @@ package com.back.jsb.global.security;
 import java.security.SecureRandom;
 
 public class PasswordUtil {
-    private static final String CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    private static final String CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*";
     private static final SecureRandom RANDOM = new SecureRandom();
 
     public static String generateRandomPassword(int length) {
