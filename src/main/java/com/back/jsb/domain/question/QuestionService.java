@@ -39,61 +39,41 @@ public class QuestionService {
     }
 
     public void modify(Question question, QuestionForm form) {
-        //수정 폼으로 Question 객체 수정
         question.modify(form);
         questionRepository.save(question);
     }
 
-    public List<Question> search(List<String> types, String keyword) {
+    private Specification<Question> createSpecification(List<String> types, String keyword) {
+        return (root, query, builder) -> {
+            // 키워드가 없으면 아무 조건도 적용하지 않습니다 (전체 리스트 조회를 위함).
+            if (keyword == null || keyword.trim().isEmpty()) {
+                return builder.conjunction();
+            }
+            List<String> finalTypes =
+                    (types == null || types.isEmpty() || types.contains("all"))
+                            ? List.of("title", "content", "answer", "author")
+                            : types;
 
-        List<String> finalTypes =
-                (types == null || types.isEmpty() || types.contains("all"))
-                        ? List.of("title", "content", "answer", "author")
-                        : types;
-
-        Specification<Question> spec = (root, query, builder) -> {
             List<Predicate> predicates = new ArrayList<>();
 
-            if(finalTypes.contains("title")) {
-                predicates.add(builder.like(root.get("title"), "%"+keyword+"%"));
+            if (finalTypes.contains("title")) {
+                predicates.add(builder.like(root.get("title"), "%" + keyword + "%"));
             }
-            if(finalTypes.contains("content")) {
-                predicates.add(builder.like(root.get("content"), "%"+keyword+"%"));
+            if (finalTypes.contains("content")) {
+                predicates.add(builder.like(root.get("content"), "%" + keyword + "%"));
             }
-            if(finalTypes.contains("author")) {
-                predicates.add(builder.like(root.get("author").get("username"), "%"+keyword+"%"));
+            if (finalTypes.contains("author")) {
+                predicates.add(builder.like(root.get("author").get("username"), "%" + keyword + "%"));
             }
-            if(finalTypes.contains("answer")) {
+            if (finalTypes.contains("answer")) {
+                // Question과 Answer를 LEFT JOIN으로 연결합니다.
                 Join<Question, Answer> answers = root.join("answers", JoinType.LEFT);
                 predicates.add(builder.like(answers.get("content"), "%" + keyword + "%"));
             }
+
             query.distinct(true);
+
             return builder.or(predicates.toArray(new Predicate[0]));
-        };
-
-        return questionRepository.findAll(spec);
-    }
-
-    private Specification<Question> createSpecification(List<String> types, String keyword) {
-        return (root, query, criteriaBuilder) -> {
-            if (keyword == null || keyword.trim().isEmpty() || types == null || types.isEmpty()) {
-                return criteriaBuilder.conjunction(); // 조건이 없으면 항상 true
-            }
-
-            List<Predicate> predicates = new ArrayList<>();
-            for (String type : types) {
-                switch (type) {
-                    case "title":
-                        predicates.add(criteriaBuilder.like(root.get("title"), "%" + keyword + "%"));
-                        break;
-                    case "content":
-                        predicates.add(criteriaBuilder.like(root.get("content"), "%" + keyword + "%"));
-                        break;
-                }
-            }
-
-            // 모든 OR 조건을 묶어서 반환
-            return criteriaBuilder.or(predicates.toArray(new Predicate[0]));
         };
     }
 
