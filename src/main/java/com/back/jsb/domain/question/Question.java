@@ -5,6 +5,7 @@ import com.back.jsb.domain.answer.AnswerForm;
 import com.back.jsb.domain.user.User;
 import com.back.jsb.global.jpa.entity.BaseEntity;
 import jakarta.persistence.*;
+import java.util.ArrayList;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -29,7 +30,7 @@ public class Question extends BaseEntity {
     private User author;
 
     @OneToMany(mappedBy = "question", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
-    private List<Answer> answers;
+    private List<Answer> answers = new ArrayList<>();
 
     public Question(QuestionForm form, User user) {
         this.title = form.getTitle();

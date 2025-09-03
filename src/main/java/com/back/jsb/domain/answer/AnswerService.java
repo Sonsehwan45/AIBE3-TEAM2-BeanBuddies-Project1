@@ -5,7 +5,14 @@ import com.back.jsb.domain.reply.AnswerReply;
 import com.back.jsb.domain.reply.ReplyRegisterForm;
 import com.back.jsb.domain.user.User;
 import jakarta.validation.Valid;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.domain.Sort.Order;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,6 +39,12 @@ public class AnswerService {
         //수정폼으로 Answer 객체 수정
         answer.modify(form);
         answerRepository.save(answer);
+    }
+
+    // 최근 답변 기준 findAll
+    public Page<Answer> findRecentAnswers(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Direction.DESC, "createdDate");
+        return answerRepository.findAll(pageable);
     }
 
     @Transactional
