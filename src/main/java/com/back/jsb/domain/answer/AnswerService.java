@@ -1,18 +1,15 @@
 package com.back.jsb.domain.answer;
 
 import com.back.jsb.domain.question.Question;
-import com.back.jsb.domain.reply.AnswerReply;
 import com.back.jsb.domain.reply.ReplyRegisterForm;
+import com.back.jsb.domain.reply.ReplyRepository;
 import com.back.jsb.domain.user.User;
 import jakarta.validation.Valid;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
-import org.springframework.data.domain.Sort.Order;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -45,17 +42,5 @@ public class AnswerService {
     public Page<Answer> findRecentAnswers(int page, int size) {
         Pageable pageable = PageRequest.of(page, size, Direction.DESC, "createdDate");
         return answerRepository.findAll(pageable);
-    }
-
-    @Transactional
-    public void registerReply(Long answerId, ReplyRegisterForm replyForm, String username) {
-        Answer answer = findById(answerId);
-        answer.addReply(replyForm.content(), username);
-    }
-
-    @Transactional
-    public void deleteReply(Long answerId, AnswerReply reply) {
-        Answer answer = findById(answerId);
-        answer.removeReply(reply);
     }
 }

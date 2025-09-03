@@ -53,7 +53,11 @@ public class Answer extends BaseEntity {
         return reply;
     }
 
-    public void removeReply(AnswerReply reply) {
-        replies.remove(reply);
+    public void removeReply(Long replyId) {
+        System.out.println("매개변수 ID" + replyId);
+        System.out.println("저장된 ID" + replies.get(0).getId());
+        boolean isRemoved = replies.removeIf(reply -> reply.getId() == replyId);
+        System.out.println(isRemoved);
+        System.out.println(replies.size());
     }
 }
