@@ -23,6 +23,9 @@
                 안녕하세요, <span th:text="${#authentication.principal.nickname}"></span>님
             </li>
             <li sec:authorize="isAuthenticated()">
+                <a th:href="@{/user/password}">비밀번호 변경</a>
+            </li>
+            <li sec:authorize="isAuthenticated()">
                 <a th:href="@{/user/logout}">로그아웃</a>
             </li>
 

@@ -33,6 +33,7 @@ public class BaseInitData {
             userForm1.setPassword("user1");
             userForm1.setPasswordConfirm("user1");
             userForm1.setNickname("닉네임1");
+            userForm1.setEmail("user1@test.com");
             userService.register(userForm1);
 
             //사용자2 생성
@@ -41,6 +42,7 @@ public class BaseInitData {
             userForm2.setPassword("user2");
             userForm2.setPasswordConfirm("user2");
             userForm2.setNickname("닉네임2");
+            userForm2.setEmail("user2@test.com");
             userService.register(userForm2);
 
             //User 객체 가져오기
