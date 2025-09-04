@@ -99,12 +99,12 @@ public class UserController {
     }
 
     @GetMapping("/password/reset")
-    public String rest(@ModelAttribute("form") PasswordResetForm form) {
+    public String reset(@ModelAttribute("form") PasswordResetForm form) {
         return "/password_reset_form";
     }
     
     @PostMapping("/password/reset")
-    public String rest(@Valid @ModelAttribute("form") PasswordResetForm form, BindingResult bindingResult) {
+    public String reset(@Valid @ModelAttribute("form") PasswordResetForm form, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return "/password_reset_form";
         }

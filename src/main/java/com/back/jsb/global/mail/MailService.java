@@ -10,7 +10,7 @@ public class MailService {
     private final JavaMailSender mailSender;
 
     @Value("${spring.mail.username}")
-    private String formEmail;
+    private String fromEmail;
 
     public MailService(JavaMailSender mailSender) {
         this.mailSender = mailSender;
@@ -18,7 +18,7 @@ public class MailService {
 
     public void sendTxtEmail(String to, String subject, String content) {
         SimpleMailMessage smm = new SimpleMailMessage();
-        smm.setFrom(formEmail);
+        smm.setFrom(fromEmail);
         smm.setTo(to);           // 받는 사람 이메일
         smm.setSubject(subject); // 제목
         smm.setText(content);    // 내용
