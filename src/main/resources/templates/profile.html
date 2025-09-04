@@ -1,27 +1,30 @@
 <html layout:decorate="~{layout}">
-<div layout:fragment="content">
-    <h1>내 정보 수정</h1>
+<div layout:fragment="content" class="page-container">
 
-    <form th:action="@{/user/profile}" th:object="${profileForm}" method="post" enctype="multipart/form-data">
+    <h1 class="page-title">내 정보 수정</h1>
+
+    <form class="profile-form" th:action="@{/user/profile}" th:object="${profileForm}" method="post" enctype="multipart/form-data">
 
         <!-- 프로필 사진 -->
-        <div style="margin-bottom:1rem;">
+        <div class="profile-image-container">
             <img id="preview"
                  th:src="*{deleteProfileImage} ? '/images/defaultProfile.png' :
-              (${profileImageCurrent} != null ? 'data:image/png;base64,' + ${profileImageCurrent} : 'data:image/png;base64,' + ${profileImageOriginal})"
-                 alt="프로필 사진" width="150"/>
+                 (${profileImageCurrent} != null ? 'data:image/png;base64,' + ${profileImageCurrent} : 'data:image/png;base64,' + ${profileImageOriginal})"
+                 alt="프로필 사진" />
 
             <input id="profileImage" type="file" th:field="*{profileImage}" accept="image/*"/>
             <input type="hidden" th:field="*{deleteProfileImage}" id="deleteProfileImage"/>
             <input type="hidden" id="hiddenOriginalImage" th:value="${profileImageOriginal}"/>
 
-            <button type="button" id="deleteButton">사진 삭제</button>
-            <button type="button" id="cancelButton">변경 취소</button>
+            <div class="image-buttons">
+                <button type="button" id="deleteButton" class="btn btn-danger">사진 삭제</button>
+                <button type="button" id="cancelButton" class="btn">변경 취소</button>
+            </div>
         </div>
 
         <!-- 닉네임 -->
-        <div style="margin-bottom:1rem;">
-            <label for="nickname">닉네임</label><br/>
+        <div>
+            <label for="nickname">닉네임</label>
             <input id="nickname" type="text" th:field="*{nickname}" />
             <input type="hidden" id="hiddenOriginalNickname" th:value="${originalNickname}"/>
             <div th:if="${#fields.hasErrors('nickname')}" th:errors="*{nickname}" class="field-error"></div>
@@ -29,10 +32,8 @@
 
         <!-- 저장/취소 버튼 -->
         <div class="form-actions">
-            <button type="submit" id="saveButton" disabled>저장</button>
-        </div>
-        <div class="form-actions">
-            <a th:href="@{/profile}" class="btn btn-secondary">취소</a>
+            <button type="submit" id="saveButton" class="btn" disabled>저장</button>
+            <a th:href="@{/user/profile}" class="btn btn-secondary">취소</a>
         </div>
 
     </form>

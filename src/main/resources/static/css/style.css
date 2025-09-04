@@ -547,3 +547,161 @@ header nav ul li a:hover {
     padding: 12px;
     font-size: 1rem;
 }
+
+/* 프로필 이미지 스타일*/
+.user .profile-image-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    margin-bottom: 18px;
+}
+
+.user .profile-image-container img {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    background-color: #f4f4f4;
+}
+
+.user .profile-image-container button {
+    padding: 6px 12px;
+    font-size: 0.85rem;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    background-color: #e74c3c;
+    color: #fff;
+    transition: 0.3s;
+}
+
+.user .profile-image-container button:hover {
+    background-color: #c0392b;
+}
+
+/* 이미지 삭제/미리보기 버튼 그룹 */
+.user .profile-image-container .image-buttons {
+    display: flex;
+    gap: 8px;
+    margin-top: 6px;
+}
+
+/* ==============================
+   프로필 수정 페이지 전용 스타일
+============================== */
+.profile-form {
+    max-width: 800px;
+    margin: 30px auto;
+    padding: 25px 30px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    font-family: 'Noto Sans KR', sans-serif;
+    color: #2c3e50;
+}
+
+/* 프로필 이미지 컨테이너 */
+.profile-form .profile-image-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    margin-bottom: 18px;
+}
+
+.profile-form .profile-image-container img {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    background-color: #f4f4f4;
+}
+
+.profile-form .profile-image-container input[type="file"] {
+
+}
+
+.profile-form .profile-image-container .image-buttons {
+    display: flex;
+    gap: 8px;
+    margin-top: 6px;
+}
+
+.profile-form .profile-image-container button {
+    padding: 6px 12px;
+    font-size: 0.85rem;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.profile-form .profile-image-container .btn {
+    background-color: #3498db;
+    color: #fff;
+}
+
+.profile-form .profile-image-container .btn:hover {
+    background-color: #2980b9;
+}
+
+.profile-form .profile-image-container .btn-danger {
+    background-color: #e74c3c;
+}
+
+.profile-form .profile-image-container .btn-danger:hover {
+    background-color: #c0392b;
+}
+
+/* 닉네임 input */
+.profile-form input#nickname {
+    width: 100%;
+    padding: 12px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 1rem;
+    box-sizing: border-box;
+    transition: border-color 0.2s;
+}
+
+.profile-form input#nickname:focus {
+    border-color: #3498db;
+    outline: none;
+}
+
+/* 에러 메시지 */
+.profile-form .field-error {
+    color: #e74c3c;
+    font-size: 0.85rem;
+    margin-top: 4px;
+}
+
+/* 저장/취소 버튼 그룹 */
+.profile-form .form-actions {
+    margin-top: 12px;
+    display: flex;
+    gap: 10px;
+}
+
+.profile-form .form-actions button:disabled {
+    background-color: #95a5a6;
+    cursor: not-allowed;
+}
+
+.profile-form .form-actions .btn-secondary {
+    background-color: #3498db;
+    color: #fff;
+    text-align: center;
+    display: inline-block;
+    padding: 10px 18px;
+    border-radius: 6px;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.profile-form .form-actions .btn-secondary:hover {
+    background-color: #2980b9;
+}

@@ -9,11 +9,14 @@
         <!-- 에러 발생 시 각 필드에 메세지 표시되도록 함 (ex : 사용중인 아이디입니다, 아이디는 필수 입력입니다.) -->
 
         <!-- 프로필 사진 설정 -->
-        <div>
+        <div class="profile-image-container">
             <label for="profileImage">프로필 사진</label>
-            <img id="preview" th:src="@{/images/defaultProfile.png}" alt="프로필 사진" width="150" /><br/>
-            <input id="profileImage" type="file" name="profileImage" accept="image/*" onchange="loadPreview(event)"/>
-            <button type="button" onclick="deleteImage()">사진 삭제</button>
+            <img id="preview" th:src="@{/images/defaultProfile.png}" alt="프로필 사진" width="150" />
+            <input id="profileImage" type="file" name="profileImage" accept="image/*" onchange="loadPreview(event)" />
+
+            <div class="image-buttons">
+                <button type="button" onclick="deleteImage()">사진 삭제</button>
+            </div>
         </div>
 
         <div>
