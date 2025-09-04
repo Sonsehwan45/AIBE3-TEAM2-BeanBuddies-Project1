@@ -268,7 +268,7 @@ DTO에서 걸어준 Validation이 적용되어 BindingResult를 통해 쉽게 �
 
 # 추가 기능 구현
 
-## 프로필
+## 프로필 - 이은주
 
 ### 구현 개요
 - 회원가입 시 **프로필 사진 지정** 가능
@@ -411,3 +411,94 @@ public class ImageService {
        - `profileImageOriginal` : 원래 DB이미지를 Base64로 인코딩한 이미지
        - 폼 재렌더링할 떄에는 Current를 넣어주고, 변경 이력을 확인하여 저장 버튼을 활성화할 땐 DB이미지를 기준으로 하도록 변경
 
+## 비밀번호 변경 및 초기화 - 최원제
+
+## 개요
+사용자의 **비밀번호 수정** 기능과 **비밀번호 초기화** 기능을 구현하였습니다.  
+비밀번호 초기화 시에는 회원 가입 시 입력한 이메일로 초기화된 비밀번호가 발송되도록 하였습니다.
+
+---
+
+## 세부 설명
+
+### 1. 비밀번호 수정
+<img width="760" height="68" alt="image" src="https://github.com/user-attachments/assets/52c444b8-6832-45db-b389-1cb1c7b7b28b" />
+
+로그인 시 상단 메뉴바에서 비밀번호 변경 항목을 확인할 수 있습니다.
+
+
+
+<img width="883" height="499" alt="image" src="https://github.com/user-attachments/assets/0f98d080-f0eb-45c5-ac19-058b2670906d" />
+
+비밀번호 변경 화면에는 다음과 같은 입력창이 있습니다.
+- 기존 비밀번호
+- 신규 비밀번호
+- 신규 비밀번호 확인
+
+입력 후 **변경 버튼**을 누르면 비밀번호가 변경됩니다.  
+비밀번호 변경 조건은 다음과 같습니다.
+
+- 기존 비밀번호가 올바르게 입력되어야 함
+- 신규 비밀번호는 기존 비밀번호와 동일하지 않아야 함
+- 신규 비밀번호 확인 입력란과 동일해야 함.
+
+---
+
+### 2. 비밀번호 초기화
+<img width="868" height="429" alt="image" src="https://github.com/user-attachments/assets/e06532fe-57ca-456e-bc39-4762efa4d289" />
+
+로그인 화면 아래의 링크를 통해 비밀번호 초기화 화면으로 들어갈 수 있습니다.
+
+
+<img width="886" height="370" alt="image" src="https://github.com/user-attachments/assets/e27ab86e-8f45-439b-9fb5-37d715bfc5b5" />
+
+비밀번호 초기화 과정은 다음과 같습니다.
+
+1. 초기화 화면에서 계정 아이디 입력
+2. 존재하지 않는 계정일 경우 오류 반환
+3. 정상 계정일 경우 비밀번호 초기화 진행
+4. 변경된 비밀번호가 계정 이메일로 발송됨
+
+<img width="349" height="252" alt="image" src="https://github.com/user-attachments/assets/27eea808-113f-4116-8203-f78b47e78b91" />
+
+발송된 이메일은 위의 사진과 같습니다.
+
+---
+
+## 기타 변경 사항 및 참고 사항
+
+### User Entity 수정
+- User Entity에 `email` 속성을 추가하였습니다.
+- `initData`에서도 User 생성 시 이메일을 넣도록 수정하였습니다.
+
+### SMTP 설정
+비밀번호 초기화 기능 구현을 위해 **Naver SMTP**를 사용하였습니다.  
+이를 위한 설정은 `application-mail.yml` 파일에 작성되며, 보안 상 해당 파일은 깃허브에 업로드하지 않았습니다.  
+아래 예시를 참고하여 직접 작성해야 합니다.
+
+
+```YAML
+spring:                           # 예시에서는 네이버 SMTP 사용중
+  mail:
+    host: smtp.naver.com          # 네이버 SMTP 서버 주소
+    port: 465                     # 네이버 SMTP 포트 번호
+    username: xxxxxxx@naver.com    # 네이버 이메일
+    password: xxxxxxxxxxx          # 네이버 비밀번호
+    properties:
+      mail:
+        smtp:
+          auth: true              # 사용자 인증 여부
+          ssl:
+            enable: true
+            trust: smtp.naver.com
+```
+
+관련 참고 링크:  
+- [[Java] NAVER 메일 SMTP 환경 설정 방법](https://adjh54.tistory.com/596)
+
+<img width="802" height="197" alt="image" src="https://github.com/user-attachments/assets/4ea8c105-54bd-4d36-bb5e-799e07729048" />
+
+
+> ⚠️ **주의:**  
+> `yml` 파일의 `spring.mail.password`는 네이버 계정 비밀번호가 아닌,  
+> POP3/SMTP 사용 설정 시 발급할 수 있는 **전용 어플리케이션 비밀번호**를 사용해야 합니다.
