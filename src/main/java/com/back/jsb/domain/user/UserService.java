@@ -1,5 +1,6 @@
 package com.back.jsb.domain.user;
 
+import com.back.jsb.ProfileForm;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -30,5 +31,10 @@ public class UserService {
 
     public User findByUsername(String username) {
         return userRepository.findByUsername(username).orElse(null);
+    }
+
+    public void modify(User user, ProfileForm form) {
+        user.modify(form);
+        userRepository.save(user);
     }
 }

@@ -1,5 +1,6 @@
 package com.back.jsb.domain.user;
 
+import com.back.jsb.ProfileForm;
 import com.back.jsb.global.jpa.entity.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -48,6 +49,22 @@ public class User extends BaseEntity {
             } catch (IOException e) {
                 e.printStackTrace();
                 this.profileImage = null; // 실패 시 null 처리
+            }
+        }
+    }
+
+    public void modify(ProfileForm form) {
+        this.nickname=form.nickname();
+        if(form.deleteProfileImage()) this.profileImage=null;
+        else if(form.profileImage()!=null) {
+            MultipartFile file = form.profileImage();
+            if (!file.isEmpty()) {
+                try {
+                    this.profileImage = file.getBytes();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    this.profileImage = null; // 실패 시 null 처리
+                }
             }
         }
     }
