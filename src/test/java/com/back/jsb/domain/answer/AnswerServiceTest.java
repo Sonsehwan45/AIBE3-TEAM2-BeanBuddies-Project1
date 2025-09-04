@@ -45,7 +45,7 @@ class AnswerServiceTest {
 
     @BeforeEach
     void setup() {
-        userService.register(new UserCreateForm("user0", "1234", "1234", "유저0"));
+        userService.register(new UserCreateForm("user0", "1234", "1234", "유저0", "123@123.com", null));
         User user = userService.findByUsername("user0");
 
         questionService.register(new QuestionForm("제목", "내용"), user);
