@@ -1,6 +1,5 @@
 package com.back.jsb.domain.user;
 
-import com.back.jsb.ProfileForm;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;

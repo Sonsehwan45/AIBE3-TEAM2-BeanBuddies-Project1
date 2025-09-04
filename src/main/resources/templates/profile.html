@@ -2,7 +2,7 @@
 <div layout:fragment="content">
     <h1>내 정보 수정</h1>
 
-    <form th:action="@{/profile}" th:object="${profileForm}" method="post" enctype="multipart/form-data">
+    <form th:action="@{/user/profile}" th:object="${profileForm}" method="post" enctype="multipart/form-data">
 
         <!-- 프로필 사진 -->
         <div style="margin-bottom:1rem;">

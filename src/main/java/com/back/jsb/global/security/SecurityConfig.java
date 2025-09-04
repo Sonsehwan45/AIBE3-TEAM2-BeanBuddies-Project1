@@ -25,7 +25,7 @@ public class SecurityConfig{
                 //몇몇 페이지는 인증 필요, 나머지 페이지는 모두 허용
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
-                                "/profile",
+                                "/user/profile",
                                 "/question/write",
                                 "/question/delete/**",
                                 "/question/modify/**",

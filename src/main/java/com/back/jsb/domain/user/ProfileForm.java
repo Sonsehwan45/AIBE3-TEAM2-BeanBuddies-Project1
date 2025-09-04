@@ -1,6 +1,5 @@
-package com.back.jsb;
+package com.back.jsb.domain.user;
 
-import com.back.jsb.domain.user.User;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import org.springframework.web.multipart.MultipartFile;
