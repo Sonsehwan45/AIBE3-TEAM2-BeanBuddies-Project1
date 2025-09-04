@@ -876,3 +876,40 @@ BaseInitData의 각 entity들의 키가 int로 선언된 것과
 repository의 두번째 제네릭이 으로 선언되어 불일치한 것을 확인 할 수 있었다.
 
 ▶️ repository의 두번쨰 매개변수 타입은 엔티티의 키 타입이다.
+
+## 소셜 로그인 구현 - 이록은
+
+▶️ 기능 흐름
+1. 사용자가 로그인 버튼 클릭시 /oauth2/authorization/kakao 카카오 로그인 페이지로 이동
+2. 카카오가 로그인 동의 받고 인가 코드 발급
+3. Spring Security가 확인후 id 토큰값 생성 + 사용자 프로필 JSON 수신
+4. DB에서 이미 존재하는 유저인지 확인 or 저장
+5. UserSecurity 객체 생성으로 로그인
+
+
+🚀 트러블슈팅
+1️⃣ 사용자 정보(nickname) 미조회 문제
+
+문제
+소셜 로그인은 정상적으로 성공했지만,
+사용자 정보 #authentication.principal.nickname 값을 가져오지 못함.
+
+원인
+카카오 로그인의 사용자 정보는 OAuth2User 인터페이스를 통해 제공되는데,
+기존 UserSecurity 클래스에서 UserDetails 만 구현되어 유저 속성을 읽을 수 없었음.
+
+해결
+UserSecurity 클래스에 OAuth2User 인터페이스를 추가 구현하여 조회할 수 있도록 수정.
+
+2️⃣ 카카오 동의 항목 불일치 오류
+
+문제
+카카오 로그인 시 "동의 항목 불일치" 에러가 발생.
+
+원인
+application.yml에서 요청한 스코프와
+카카오 개발자 센터 앱 설정의 사용자 동의 항목이 서로 일치하지 않았음.
+
+해결
+application.yml에서 불필요한 항목을 제거하고,
+카카오 개발자 콘솔에서 프로필(닉네임) 항목만 동의하도록 맞춤.
