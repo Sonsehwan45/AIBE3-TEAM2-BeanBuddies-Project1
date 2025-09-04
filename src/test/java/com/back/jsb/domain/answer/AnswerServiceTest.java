@@ -73,7 +73,8 @@ class AnswerServiceTest {
     @Test
     @DisplayName("응답 저장 테스트")
     void registerReply() {
-        replyService.registerReply(answerService.findById(1L), new ReplyRegisterForm("reply"), "유저0");
+        User user = userService.findByUsername("user0");
+        replyService.registerReply(answerService.findById(1L), new ReplyRegisterForm("reply"), user);
 
         em.flush();
         em.clear();
@@ -87,13 +88,14 @@ class AnswerServiceTest {
     @Test
     @DisplayName("응답 삭제 테스트")
     void deleteReply() {
-        replyService.registerReply(answerService.findById(1L), new ReplyRegisterForm("reply"), "유저1");
+        User user = userService.findByUsername("user0");
+        replyService.registerReply(answerService.findById(1L), new ReplyRegisterForm("reply"), user);
 
         em.flush();
         em.clear();
 
         Answer before = answerService.findById(1L);
-        replyService.deleteReply(before, 1L, "유저1");
+        replyService.deleteReply(before, 1L, user);
 
         em.flush();
         em.clear();

@@ -2,6 +2,7 @@ package com.back.jsb.domain.reply;
 
 import com.back.jsb.domain.answer.Answer;
 import com.back.jsb.domain.answer.AnswerService;
+import com.back.jsb.domain.user.User;
 import com.back.jsb.global.security.UserSecurity;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
@@ -41,8 +42,8 @@ public class ReplyController {
 
         try {
             Answer answer = answerService.findById(answerId);
-            String username = userSecurity.getUsername();
-            replyService.registerReply(answer, form, username);
+            User user = userSecurity.getUser();
+            replyService.registerReply(answer, form, user);
         } catch (EntityNotFoundException e) {
             redirectAttributes.addFlashAttribute("msg", "해당 답글이 존재하지 않습니다.");
             return "redirect:/question/detail/%d".formatted(questionId);
@@ -62,8 +63,8 @@ public class ReplyController {
     ) {
         try {
             Answer answer = answerService.findById(answerId);
-            String username = userSecurity.getUsername();
-            replyService.deleteReply(answer, id, username);
+            User user = userSecurity.getUser();
+            replyService.deleteReply(answer, id, user);
         } catch (EntityNotFoundException e) {
             //TODO : 답글이 존재하지 않는지, 답변이 존재하지 않는지 구분
             redirectAttributes.addFlashAttribute("msg", "해당 답글이 존재하지 않습니다.");

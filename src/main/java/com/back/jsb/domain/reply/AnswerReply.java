@@ -1,6 +1,7 @@
 package com.back.jsb.domain.reply;
 
 import com.back.jsb.domain.answer.Answer;
+import com.back.jsb.domain.user.User;
 import com.back.jsb.global.jpa.entity.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -20,9 +21,10 @@ public class AnswerReply extends BaseEntity {
     @ManyToOne
     private Answer answer;
 
-    private String author;
+    @ManyToOne
+    private User author;
 
-    public AnswerReply(String content, Answer answer, String author) {
+    public AnswerReply(String content, Answer answer, User author) {
         this.content = content;
         this.answer = answer;
         this.author = author;

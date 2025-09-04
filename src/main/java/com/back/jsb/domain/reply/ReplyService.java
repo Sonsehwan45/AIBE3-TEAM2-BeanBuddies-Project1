@@ -1,6 +1,7 @@
 package com.back.jsb.domain.reply;
 
 import com.back.jsb.domain.answer.Answer;
+import com.back.jsb.domain.user.User;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -14,14 +15,14 @@ public class ReplyService {
     private final ReplyRepository replyRepository;
 
     @Transactional
-    public void registerReply(Answer answer, ReplyRegisterForm replyForm, String username) {
-        answer.addReply(replyForm.content(), username);
+    public void registerReply(Answer answer, ReplyRegisterForm replyForm, User user) {
+        answer.addReply(replyForm.content(), user);
     }
 
     @Transactional
-    public void deleteReply(Answer answer, Long id, String username) {
+    public void deleteReply(Answer answer, Long id, User user) {
         AnswerReply reply = findById(id);
-        if (!reply.getAuthor().equals(username)) {
+        if (!reply.getAuthor().getUsername().equals(user.getUsername())) {
             throw new SecurityException("");
         }
 

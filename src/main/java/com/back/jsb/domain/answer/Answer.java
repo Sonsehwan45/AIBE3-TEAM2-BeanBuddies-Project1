@@ -47,17 +47,13 @@ public class Answer extends BaseEntity {
         setContent(form.getContent());
     }
 
-    public AnswerReply addReply(String replyContent, String username) {
-        AnswerReply reply = new AnswerReply(replyContent, this, username);
+    public AnswerReply addReply(String replyContent, User user) {
+        AnswerReply reply = new AnswerReply(replyContent, this, user);
         replies.add(reply);
         return reply;
     }
 
     public void removeReply(Long replyId) {
-        System.out.println("매개변수 ID" + replyId);
-        System.out.println("저장된 ID" + replies.get(0).getId());
-        boolean isRemoved = replies.removeIf(reply -> reply.getId() == replyId);
-        System.out.println(isRemoved);
-        System.out.println(replies.size());
+        replies.removeIf(reply -> reply.getId() == replyId);
     }
 }
