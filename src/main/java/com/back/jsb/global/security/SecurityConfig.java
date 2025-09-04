@@ -39,7 +39,6 @@ public class SecurityConfig{
                         ).authenticated()
                         .anyRequest().permitAll()
                 )
-
                 //커스텀 로그인 페이지 사용 + 로그인 후 직전 페이지로 돌아가기(false)
                 .formLogin(form -> form
                     .loginPage("/user/login")
@@ -47,7 +46,7 @@ public class SecurityConfig{
                     .permitAll()
                 )
                 .oauth2Login(oauth -> oauth
-                        .loginPage("/user/login")                  // 폼/소셜 같은 로그인 페이지 사용
+                        .loginPage("/user/login")
                         .defaultSuccessUrl("/question/list", false)
                                 .userInfoEndpoint(u -> u.userService(customOAuth2UserService))
                 )

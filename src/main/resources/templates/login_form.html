@@ -29,7 +29,11 @@
         <div>
             <button type="submit" class="btn">로그인</button>
         </div>
-        <a href="/oauth2/authorization/kakao" class="btn btn-warning">카카오 로그인</a>
+    </form>
+    <form th:action="@{/oauth2/authorization/kakao}" method="post">
+        <div>
+            <button type="submit" class="btn">카카오 로그인</button>
+        </div>
     </form>
 </div>
 </html>

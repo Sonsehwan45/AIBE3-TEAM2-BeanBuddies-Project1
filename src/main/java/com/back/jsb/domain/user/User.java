@@ -44,26 +44,24 @@ public class User extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private AuthProvider provider = AuthProvider.LOCAL; // LOCAL/KAKAO/GOOGLE...
+    private AuthProvider provider = AuthProvider.LOCAL;
 
     @Column(name = "provider_user_id")
-    private String providerUserId; // 카카오 id(숫자), 구글은 sub 등
+    private String providerUserId;
 
-    public enum AuthProvider { LOCAL, KAKAO, GOOGLE }
+    public enum AuthProvider { LOCAL, KAKAO }
 
-    // 소셜 가입용 팩토리
     public static User fromKakao(String kakaoId, String nickname, String encodedRandomPw) {
         User u = new User();
         u.provider = AuthProvider.KAKAO;
         u.providerUserId = kakaoId;
-        u.username = "kakao_" + kakaoId;                        // 충돌 시 뒤에 난수 덧붙이는 로직 추가 가능
+        u.username = "kakao_" + kakaoId;
         u.nickname = nickname;
-        u.password = encodedRandomPw;                           // NULL 금지 → 랜덤 해시
+        u.password = encodedRandomPw;
         u.role = "USER";
         return u;
     }
 
-    // 강한 랜덤 문자열 생성(필요 시 재사용)
     public static String newRandomString() {
         byte[] buf = new byte[32];
         new SecureRandom().nextBytes(buf);

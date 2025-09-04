@@ -33,9 +33,8 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
         Map<String, Object> kakaoAccount = (Map<String, Object>) attr.get("kakao_account");
         Map<String, Object> profile = kakaoAccount != null ? (Map<String, Object>) kakaoAccount.get("profile") : null;
-        String nickname = profile != null ? (String) profile.get("nickname") : null;
+        String nickname = profile != null ? (String) profile.get("nickname") : "";
 
-        // 1) provider+uid로 탐색
         User user = userRepository
                 .findByProviderAndProviderUserId(User.AuthProvider.KAKAO, kakaoId)
                 .orElseGet(() -> {
@@ -43,9 +42,6 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                     String randomHash = passwordEncoder.encode(randomRaw);
                     return userRepository.save(User.fromKakao(kakaoId, nickname, randomHash));
                 });
-
-        // 폼 로그인 차단을 원하면 UserDetailsService 쪽에서 provider 검사로 DisabledException 던지기
-
         return new UserSecurity(user, attr);
     }
 }
