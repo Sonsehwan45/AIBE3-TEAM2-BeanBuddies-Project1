@@ -34,5 +34,10 @@
             <a href="/user/password/reset">비밀번호를 분실했나요?</a>
         </div>
     </form>
+    <form th:action="@{/oauth2/authorization/kakao}" method="post">
+        <div>
+            <button type="submit" class="btn">카카오 로그인</button>
+        </div>
+    </form>
 </div>
 </html>
