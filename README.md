@@ -10,47 +10,73 @@ jsb-project/
     ├── main/
     │   ├── java/
     │   │   └── com/back/jsb/
+    │   │       ├── CommonUtil.java
+    │   │       ├── HomeController.java
     │   │       ├── JsbApplication.java
-    │   │       ├── controller/
-    │   │       │   ├── AnswerController.java
-    │   │       │   ├── QuestionController.java
-    │   │       │   └── UserController.java
-    │   │       ├── dto/
-    │   │       │   ├── AnswerForm.java
-    │   │       │   ├── QuestionForm.java
-    │   │       │   └── UserCreateForm.java
-    │   │       ├── entity/
-    │   │       │   ├── Answer.java
-    │   │       │   ├── Question.java
-    │   │       │   └── SiteUser.java
-    │   │       ├── repository/
-    │   │       │   ├── AnswerRepository.java
-    │   │       │   ├── QuestionRepository.java
-    │   │       │   └── UserRepository.java
-    │   │       ├── security/
-    │   │       │   ├── SecurityConfig.java
-    │   │       │   └── UserSecurityService.java
-    │   │       └── service/
-    │   │           ├── AnswerService.java
-    │   │           ├── QuestionService.java
-    │   │           └── UserService.java
+    │   │       ├── domain/
+    │   │       │   ├── answer/
+    │   │       │   │   ├── Answer.java
+    │   │       │   │   ├── AnswerController.java
+    │   │       │   │   ├── AnswerForm.java
+    │   │       │   │   ├── AnswerRepository.java
+    │   │       │   │   └── AnswerService.java
+    │   │       │   ├── question/
+    │   │       │   │   ├── Question.java
+    │   │       │   │   ├── QuestionController.java
+    │   │       │   │   ├── QuestionForm.java
+    │   │       │   │   ├── QuestionRepository.java
+    │   │       │   │   └── QuestionService.java
+    │   │       │   ├── reply/
+    │   │       │   │   ├── AnswerReply.java
+    │   │       │   │   ├── ReplyController.java
+    │   │       │   │   ├── ReplyRegisterForm.java
+    │   │       │   │   ├── ReplyRepository.java
+    │   │       │   │   └── ReplyService.java
+    │   │       │   └── user/
+    │   │       │       ├── CustomOAuth2UserService.java
+    │   │       │       ├── ImageService.java
+    │   │       │       ├── PasswordForm.java
+    │   │       │       ├── PasswordResetForm.java
+    │   │       │       ├── ProfileForm.java
+    │   │       │       ├── User.java
+    │   │       │       ├── UserController.java
+    │   │       │       ├── UserCreateForm.java
+    │   │       │       ├── UserRepository.java
+    │   │       │       └── UserService.java
+    │   │       └── global/
+    │   │           ├── initData/BaseInitData.java
+    │   │           ├── jpa/entity/BaseEntity.java
+    │   │           ├── mail/MailService.java
+    │   │           └── security/
+    │   │               ├── PasswordUtil.java
+    │   │               ├── SecurityConfig.java
+    │   │               ├── UserSecurity.java
+    │   │               └── UserSecurityService.java
     │   └── resources/
-    │       ├── application.properties
+    │       ├── application-dev.yml
+    │       ├── application-mail.yml
+    │       ├── application-test.yml
+    │       ├── application.yml
     │       ├── static/
-    │       │   └── css/
-    │       │       └── style.css
+    │       │   ├── css/style.css
+    │       │   └── images/defaultProfile.png
     │       └── templates/
-    │           ├── answer_form.html
+    │           ├── answer_list.html
+    │           ├── index.html
     │           ├── layout.html
     │           ├── login_form.html
+    │           ├── password_form.html
+    │           ├── password_reset_form.html
+    │           ├── profile.html
     │           ├── question_detail.html
     │           ├── question_form.html
     │           ├── question_list.html
     │           └── signup_form.html
     └── test/
-        └── java/
-            └── com/back/jsb/
-                └── ApplicationTests.java
+        └── java/com/back/jsb/
+            ├── JsbApplicationTest.java
+            ├── domain/answer/AnswerServiceTest.java
+            └── domain/user/UserServiceTest.java
 ```
 ---
 # 기본 기능 구현
@@ -254,28 +280,32 @@ jsb-project/
 
 1. Principal이 아니라 UserSecurity를 따로 만들어서 사용한 이유
 
-Spring Secuirty가 제공하는 Principal의 경우 간단하게 username 정도만 가져올 수 있는 것으로 알고 있음  
-nickname과 같이 따로 정의한 User 필드값을 가져오기 위해 UserDetails를 구현한 UserSecurity를 사용함
+    Spring Secuirty가 제공하는 Principal의 경우 간단하게 username 정도만 가져올 수 있는 것으로 알고 있음  
+    nickname과 같이 따로 정의한 User 필드값을 가져오기 위해 UserDetails를 구현한 UserSecurity를 사용함
 
 2. ReqestParam으로 값을 받지 않고 DTO로 받은 이유
 
-Entity의 경우 값이 변경되면 DB에 직접적으로 반영되기 때문에 DTO로 받음  
-이럴 경우 사용자에게 꼭 노출되어야 하는 부분만 떼어낼 수 있다는 장점이 있음
-RequestParam이 아니라 DTO로 Form값을 직접 받을 경우,
-DTO에서 걸어준 Validation이 적용되어 BindingResult를 통해 쉽게 오류를 처리할 수 있어 사용함
+    Entity의 경우 값이 변경되면 DB에 직접적으로 반영되기 때문에 DTO로 받음  
+    이럴 경우 사용자에게 꼭 노출되어야 하는 부분만 떼어낼 수 있다는 장점이 있음
+    RequestParam이 아니라 DTO로 Form값을 직접 받을 경우,
+    DTO에서 걸어준 Validation이 적용되어 BindingResult를 통해 쉽게 오류를 처리할 수 있어 사용함
 
 ---
 
 # 추가 기능 구현
 
-## 프로필 - 이은주
+## 프로필 화면 - 김은주
+
+### 스크린샷
+<img width="1280" height="690" alt="프로필화면" src="https://github.com/user-attachments/assets/a24d8505-e801-4ca0-86ec-516965aa63bf" />
 
 ### 구현 개요
 - 회원가입 시 **프로필 사진 지정** 가능
-- 프로필 페이지(`/user/profile`)에서 **조회 및 수정** 가능
+- 프로필 페이지(`/user/profile`)에서 회원 정보 **조회 및 수정** 가능
   - 프로필 사진 업로드/삭제(기본 이미지)/변경 취소(기존 DB 이미지)
   - 닉네임 변경
   - DB 정보와 동일한 경우엔 저장 버튼 비활성화 = 변경 사항이 있을 때만 버튼 활성화
+  
 ### 구현 방법
 - `User` 엔티티에 `profileImage(BLOB)` 필드 추가
 - `UserCreateFrom` DTO에 프로필 이미지(`MultipartFile`) 필드 추가
@@ -284,104 +314,7 @@ DTO에서 걸어준 Validation이 적용되어 BindingResult를 통해 쉽게 �
     - 뷰에서 `<img>` 태그에 바로 출력 가능하도록
 - 프로필 이미지가 없으면 DB에는 `null`로 저장, 뷰에서는 기본 이미지 출력
 
-### 스크린샷
-<img width="1280" height="690" alt="프로필화면" src="https://github.com/user-attachments/assets/a24d8505-e801-4ca0-86ec-516965aa63bf" />
-
-
-### 주요 코드
-1. DTO - `ProfileForm`
-```java
-//수정된 값들을 받아오기 위한 DTO
-public record ProfileForm (
-        MultipartFile profileImage,
-        @NotBlank(message = "닉네임을 입력해주세요.")
-        @Size(max=10, message ="닉네임은 10자 이하여야 합니다.")
-        String nickname,
-        boolean deleteProfileImage //기본 이미지 변경 여부를 확인하기 위한 플래그
-){
-    public ProfileForm(User user) {
-        this(
-                null,
-                user.getNickname(),
-                false
-        );
-    }
-}
-```
-
-2. 이미지 변환 - `ImageServie`
-```java
-@Service
-public class ImageService {
-
-    public String getBase64UserImage(User user) throws IOException {
-        byte[] imageBytes;
-
-        //DB에 저장된 이미지를 Base64로 인코딩 처리
-        //DB에 저장된 값이 null일 경우 기본이미지로
-        if(user.getProfileImage() != null) {
-            imageBytes = user.getProfileImage();
-        } else {
-            ClassPathResource imgFile = new ClassPathResource("static/images/defaultProfile.png");
-            imageBytes = imgFile.getInputStream().readAllBytes();
-        }
-        return Base64.getEncoder().encodeToString(imageBytes);
-    }
-
-    public String getBase64EditingImage(User user, MultipartFile newFile) throws IOException {
-        
-        //수정 중 변경하려했던 이미지를 Base64로 인코딩(오류나도 변경 이력을 유지한채로 폼을 재렌더링하기 위함)
-        if (newFile != null && !newFile.isEmpty()) {
-            return Base64.getEncoder().encodeToString(newFile.getBytes());
-        }
-        //수정 중인 이미지가 없을 경우 기본 이미지로 
-        return getBase64UserImage(user);
-    }
-}
-```
-
-3. 프로필 수정 처리 - `UserController`
-```java
-    @PostMapping("/profile")
-    public String modify(
-            Model model,
-            @Valid @ModelAttribute ProfileForm form,
-            BindingResult bindingResult,
-            RedirectAttributes redirectAttributes,
-            @AuthenticationPrincipal UserSecurity userSecurity
-    ) {
-        User user = userSecurity.getUser();
-
-        //공백 확인
-        if (bindingResult.hasErrors()) {
-
-            //DB이미지와 수정 요청했던 이미지를 Base64로 인코딩
-            String originalBase64 = null;
-            String currentBase64 =  null;
-            try {
-                originalBase64 = imageService.getBase64UserImage(user);
-                currentBase64 = imageService.getBase64EditingImage(user, form.profileImage());
-            } catch (IOException e) {
-                redirectAttributes.addFlashAttribute("msg", "이미지 처리 중 오류가 발생했습니다.");
-                return "redirect:/user/profile";
-            }
-            
-            // 입력 필드에 공백이 있어 오류가 나더라도,
-            // 기존 변경 이력들을 유지한 채로 폼을 재렌더링하기 위해 model에 저장
-            model.addAttribute("profileImageOriginal", originalBase64);
-            model.addAttribute("profileImageCurrent", currentBase64);
-            model.addAttribute("originalNickname", user.getNickname());
-            return "/profile";
-        }
-
-        userService.modify(user, form);
-        redirectAttributes.addFlashAttribute("msg", "회원 정보가 변경되었습니다.");
-        return "redirect:/user/profile";
-    }
-```
-
-
-### Multipartfile과 Base64
+### 이미지 데이터 타입
 1. `Multipartfile`
     - 정의 : 스프링에서 제공하는 파일 업로드 타입
     - 사용 이유 : `input type="file"`은 데이터를 바이너리로 전송하므로 `MultipartFile`로 받아야 함
@@ -410,6 +343,8 @@ public class ImageService {
        - `profileImageCurrent` : form에 담긴 변경하려했던 이미지를 Base64로 인코딩한 이미지
        - `profileImageOriginal` : 원래 DB이미지를 Base64로 인코딩한 이미지
        - 폼 재렌더링할 떄에는 Current를 넣어주고, 변경 이력을 확인하여 저장 버튼을 활성화할 땐 DB이미지를 기준으로 하도록 변경
+
+---
 
 ## 비밀번호 변경 및 초기화 - 최원제
 
