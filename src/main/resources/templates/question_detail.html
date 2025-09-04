@@ -72,7 +72,9 @@
 
                 <!-- 일반 모드 -->
                 <div th:if="${editAnswerId != answer.id}">
-                    <div class="answer-content" th:utext="${@commonUtil.markdown(answer.content)}">답변 내용</div>
+                    <div class="answer-content clickable"
+                         th:utext="${@commonUtil.markdown(answer.content)}"
+                         th:onclick="|showReplyForm('reply-form-${answer.id}')|">답변 내용</div>
                     <div class="answer-footer flex-between">
                         <div class="answer-meta">
                             <span th:text="${answer.author.nickname}">작성자</span>
@@ -96,10 +98,98 @@
                             </form>
                         </div>
                     </div>
+
+                    <!-- 답글 작성 폼 (처음엔 숨겨져 있음) -->
+                    <div th:id="'reply-form-' + ${answer.id}" class="reply-form" style="display: none;">
+                        <!-- 로그인한 경우 -->
+                        <form sec:authorize="isAuthenticated()"
+                              th:action="@{/question/detail/{questionId}/{answerId}/reply/write(questionId=${question.id}, answerId=${answer.id})}"
+                              method="post">
+                            <div class="reply-input">
+                                <textarea name="content" placeholder="답글을 입력하세요" rows="3"></textarea>
+                                <div class="reply-buttons">
+                                    <button type="submit" class="btn btn-sm">답글 등록</button>
+                                    <button type="button" class="btn btn-secondary btn-sm"
+                                            th:onclick="|hideReplyForm('reply-form-${answer.id}')|">취소</button>
+                                </div>
+                            </div>
+                        </form>
+
+                        <!-- 로그인하지 않은 경우 -->
+                        <div sec:authorize="!isAuthenticated()" class="reply-form-disabled">
+                            <textarea rows="3" placeholder="로그인 후 답글을 작성할 수 있습니다." readonly></textarea>
+                            <div class="reply-buttons">
+                                <button type="button" class="btn btn-secondary btn-sm" disabled>답글 등록</button>
+                                <button type="button" class="btn btn-secondary btn-sm"
+                                        th:onclick="|hideReplyForm('reply-form-${answer.id}')|">취소</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 답글 목록 표시 -->
+                    <div class="reply-list" th:if="${answer.replies != null and !answer.replies.isEmpty()}">
+                        <ul>
+                            <li th:each="reply : ${answer.replies}" class="reply-item">
+                                <div class="reply-content" th:text="${reply.content}">답글 내용</div>
+                                <div class="reply-meta-footer flex-between">
+                                    <div class="reply-meta">
+                                        <span th:text="${reply.author.nickname}">답글 작성자</span>
+                                        <span th:text="${#temporals.format(reply.createdDate,'yyyy-MM-dd HH:mm')}">답글 작성일</span>
+                                    </div>
+                                    <!-- 본인이 작성한 답글일 경우 삭제 버튼 -->
+                                    <div class="reply-actions" sec:authorize="isAuthenticated()">
+                                        <form th:if="${#authentication.name == reply.author.username}"
+                                              th:action="@{/question/detail/{questionId}/{answerId}/reply/delete/{id}(questionId=${question.id}, answerId=${answer.id}, id=${reply.id})}"
+                                              method="post" class="inline-form">
+                                            <button type="submit" class="btn btn-danger btn-sm"
+                                                    onclick="return confirm('정말 삭제하시겠습니까?');">
+                                                삭제
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </li>
         </ul>
     </div>
-
 </div>
+
+<th:block layout:fragment="script">
+    <script>
+        function showReplyForm(formId) {
+            // 모든 답글 폼 숨기기
+            const allReplyForms = document.querySelectorAll('.reply-form');
+            allReplyForms.forEach(form => {
+                if (form.id !== formId) {
+                    form.style.display = 'none';
+                }
+            });
+
+            // 해당 답글 폼 토글
+            const replyForm = document.getElementById(formId);
+            if (replyForm.style.display === 'none' || replyForm.style.display === '') {
+                replyForm.style.display = 'block';
+                const textarea = replyForm.querySelector('textarea');
+                if (textarea) {
+                    textarea.focus();
+                }
+            } else {
+                replyForm.style.display = 'none';
+            }
+        }
+
+        function hideReplyForm(formId) {
+            const replyForm = document.getElementById(formId);
+            replyForm.style.display = 'none';
+            const textarea = replyForm.querySelector('textarea');
+            if (textarea) {
+                textarea.value = '';
+            }
+        }
+    </script>
+</th:block>
+
 </html>

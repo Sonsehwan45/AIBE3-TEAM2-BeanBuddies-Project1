@@ -1,17 +1,17 @@
 package com.back.jsb.domain.answer;
 
 import com.back.jsb.domain.question.Question;
+import com.back.jsb.domain.reply.ReplyRegisterForm;
+import com.back.jsb.domain.reply.ReplyRepository;
 import com.back.jsb.domain.user.User;
 import jakarta.validation.Valid;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
-import org.springframework.data.domain.Sort.Order;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor

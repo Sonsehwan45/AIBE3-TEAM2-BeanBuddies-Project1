@@ -654,6 +654,87 @@ header nav ul li a:hover {
     border-color: #eee;
 }
 
+/* reply */
+.clickable {
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.clickable:hover {
+    background-color: #f8f9fa;
+    border-radius: 4px;
+    padding: 8px;
+}
+
+.reply-form {
+    margin-top: 10px;
+    padding: 15px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    border-left: 3px solid #007bff;
+}
+
+.reply-input textarea {
+    width: 100%;
+    resize: vertical;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 8px;
+    margin-bottom: 10px;
+}
+
+.reply-buttons {
+    display: flex;
+    gap: 8px;
+}
+
+.reply-form-disabled textarea {
+    background-color: #e9ecef;
+    cursor: not-allowed;
+}
+
+.reply-list {
+    margin-top: 15px;
+    padding-left: 20px;
+    border-left: 2px solid #e9ecef;
+}
+
+.reply-item {
+    padding: 10px;
+    background-color: #f8f9fa;
+    border-radius: 6px;
+    margin-bottom: 8px;
+}
+
+.reply-content {
+    margin-bottom: 8px;
+    line-height: 1.5;
+}
+
+.reply-meta-footer {
+    font-size: 0.85em;
+    color: #666;
+}
+
+.reply-meta {
+    display: flex;
+    gap: 15px;
+}
+
+.reply-actions {
+    display: flex;
+    gap: 5px;
+}
+
+.btn-sm {
+    padding: 4px 8px;
+    font-size: 0.875em;
+}
+
+.inline-form {
+    display: inline;
+}
+
 /* 프로필 이미지 스타일*/
 .user .profile-image-container {
     display: flex;
@@ -810,4 +891,5 @@ header nav ul li a:hover {
 
 .profile-form .form-actions .btn-secondary:hover {
     background-color: #2980b9;
+
 
