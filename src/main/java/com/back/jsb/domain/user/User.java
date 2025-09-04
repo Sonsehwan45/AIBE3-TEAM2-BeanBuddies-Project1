@@ -6,6 +6,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 import java.security.SecureRandom;
 import java.util.Base64;
@@ -32,14 +35,47 @@ public class User extends BaseEntity {
     @Column(unique = true, nullable = false)
     private String nickname;
 
+    @Column(unique = true)
+    private String email;
+
     @Column(nullable = false)
     private String role;
+
+    @Lob
+    private byte[] profileImage;
 
     public User(UserCreateForm form) {
         this.username = form.getUsername();
         this.password = form.getPassword();
         this.nickname = form.getNickname();
         this.role = "USER";
+        this.email = form.getEmail();
+
+        MultipartFile file = form.getProfileImage();
+        if (file != null && !file.isEmpty()) {
+            try {
+                this.profileImage = file.getBytes();
+            } catch (IOException e) {
+                e.printStackTrace();
+                this.profileImage = null;
+            }
+        }
+    }
+
+    public void modify(ProfileForm form) {
+        this.nickname=form.nickname();
+        if(form.deleteProfileImage()) this.profileImage=null;
+        else if(form.profileImage()!=null) {
+            MultipartFile file = form.profileImage();
+            if (!file.isEmpty()) {
+                try {
+                    this.profileImage = file.getBytes();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    this.profileImage = null;
+                }
+            }
+        }
     }
 
     @Enumerated(EnumType.STRING)
