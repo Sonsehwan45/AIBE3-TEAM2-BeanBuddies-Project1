@@ -108,7 +108,7 @@ public class UserController {
         if (bindingResult.hasErrors()) {
 
             String originalBase64 = null;
-            String currentBase64 =  null;
+            String currentBase64 = null;
             try {
                 originalBase64 = imageService.getBase64UserImage(user);
                 currentBase64 = imageService.getBase64EditingImage(user, form.profileImage());
@@ -126,6 +126,7 @@ public class UserController {
         userService.modify(user, form);
         redirectAttributes.addFlashAttribute("msg", "회원 정보가 변경되었습니다.");
         return "redirect:/user/profile";
+    }
 
     @GetMapping("/password") // 비밀번호 변경
     public String password(@ModelAttribute("form") PasswordForm form) {
