@@ -1,25 +1,17 @@
 package com.back.jsb;
 
-import com.back.jsb.global.security.UserSecurity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import com.back.jsb.domain.user.UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
+@RequiredArgsConstructor
 public class HomeController {
-
+    private final UserService userService;
 
     @GetMapping("/")
     public String index() {
         return "index";
-    }
-
-    @GetMapping("/home")
-    public String home(Model model, @AuthenticationPrincipal UserSecurity userSecurity) {
-        String nickname = userSecurity.getUser().getNickname();
-        model.addAttribute("nickname", nickname);
-
-        return "home";
     }
 }

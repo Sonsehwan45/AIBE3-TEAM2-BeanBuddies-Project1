@@ -4,6 +4,7 @@ import com.back.jsb.domain.answer.AnswerForm;
 import com.back.jsb.global.security.UserSecurity;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -45,24 +46,21 @@ public class QuestionController {
     }
 
     @GetMapping("/list")
-    public String list(
-            @RequestParam(value="type", required=false) List<String> types,
-            @RequestParam(value="keyword", required=false) String keyword,
-            Model model
-    ) {
-        //검색 버튼 누른 후에도, 검색 설정이 지워지지 않도록 저장
+    public String list(Model model,
+                       @RequestParam(value="page", defaultValue="0") int page,
+                       @RequestParam(value="type", required=false) List<String> types,
+                       @RequestParam(value="keyword", defaultValue="") String keyword) {
+
+        //서비스에 페이징과 검색을 모두 처리하는 메서드를 호출합니다.
+        Page<Question> paging = this.questionService.getList(page, types, keyword);
+
+        //모델에 페이징 데이터를 추가합니다.
+        model.addAttribute("paging", paging);
+
+        //검색 후에도 검색 조건이 유지되도록 모델에 추가합니다.
         model.addAttribute("selectedTypes", types != null ? types : List.of("all"));
         model.addAttribute("keyword", keyword);
 
-        List<Question> questions;
-        //검색어 유무에 따라 findAll or Search
-        if (keyword == null || keyword.trim().isEmpty()) {
-            questions = questionService.findAll();
-        } else {
-            questions = questionService.search(types, keyword);
-        }
-
-        model.addAttribute("questions", questions);
         return "question_list";
     }
 
