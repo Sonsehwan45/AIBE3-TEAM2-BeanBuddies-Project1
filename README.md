@@ -58,6 +58,8 @@ jsb-project/
 ## 1. 회원 기능
 
 ### 회원가입
+<img width="1280" height="690" alt="회원가입" src="https://github.com/user-attachments/assets/93c191eb-be4b-4d04-be33-fbf58929d372" />
+
 | 항목            | 내용                                                     |
 | ------------- |--------------------------------------------------------|
 | 🌐 **URL**    | `/user/sign`                                           |
@@ -78,6 +80,8 @@ jsb-project/
 ---
 
 ### 로그인
+<img width="1280" height="690" alt="로그인" src="https://github.com/user-attachments/assets/3def0fbb-5003-412f-b306-7506b4512223" />
+
 | 항목            | 내용                     |
 | ------------- | ---------------------- |
 | 🌐 **URL**    | `/user/login`          |
@@ -119,6 +123,8 @@ jsb-project/
 ## 2. 질문 기능
 
 ### 질문 등록
+<img width="1280" height="690" alt="질문등록" src="https://github.com/user-attachments/assets/5e3d95ff-dc4e-4720-9fa4-d3848c95e2f6" />
+
 | 항목            | 내용                 |
 | ------------- | ------------------ |
 | 🌐 **URL**    | `/question/write`  |
@@ -138,6 +144,8 @@ jsb-project/
 --
 
 ### 질문 목록 / 검색
+<img width="1280" height="690" alt="질문목록" src="https://github.com/user-attachments/assets/7a375ba0-4da3-4d18-9fa1-a1391e83dd2d" />
+
 | 항목             | 내용                                                           |
 |----------------|--------------------------------------------------------------|
 | 🌐 **URL**     | `/question/list`                                             |
@@ -160,6 +168,8 @@ jsb-project/
 ---
 
 ### 질문 상세
+<img width="1280" height="690" alt="질문상세" src="https://github.com/user-attachments/assets/1174e56d-d8df-49bd-a57b-4cb37be87e58" />
+
 | 항목              | 내용                      |
 | --------------- | ----------------------- |
 | 🌐 **URL**      | `/question/detail/{id}` |
@@ -200,6 +210,7 @@ jsb-project/
 ---
 
 ## 3. 답변 기능
+<img width="1280" height="690" alt="답변" src="https://github.com/user-attachments/assets/603aa8c2-0214-446a-a30a-f1f04cea27ac" />
 
 ### 답변 작성
 | 항목            | 내용                            |
@@ -274,6 +285,7 @@ DTO에서 걸어준 Validation이 적용되어 BindingResult를 통해 쉽게 �
 - 프로필 이미지가 없으면 DB에는 `null`로 저장, 뷰에서는 기본 이미지 출력
 
 ### 스크린샷
+<img width="1280" height="690" alt="프로필화면" src="https://github.com/user-attachments/assets/a24d8505-e801-4ca0-86ec-516965aa63bf" />
 
 
 ### 주요 코드
