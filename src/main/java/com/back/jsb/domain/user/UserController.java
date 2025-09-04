@@ -8,6 +8,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.io.IOException;
 
 @Controller
 @RequestMapping("/user")
@@ -15,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     private final UserService userService;
+    private final ImageService imageService;
 
     @GetMapping("/sign")
     public String signUp(@ModelAttribute("form") UserCreateForm form) {
@@ -62,6 +66,66 @@ public class UserController {
         }
         return "/login_form";
     }
+
+
+    @GetMapping("/profile")
+    public String profile(
+            Model model,
+            RedirectAttributes redirectAttributes,
+            @AuthenticationPrincipal UserSecurity userSecurity
+    ) {
+        User user = userSecurity.getUser();
+        ProfileForm form = new ProfileForm(user);
+
+        //DB 프로필 이미지 처리
+        String originalBase64 = null;
+        try {
+            originalBase64 = imageService.getBase64UserImage(user);
+        } catch (IOException e) {
+            redirectAttributes.addFlashAttribute("msg", "이미지 처리 중 오류가 발생했습니다.");
+            return "redirect:/user/profile";
+        }
+
+        model.addAttribute("profileForm", form);
+        model.addAttribute("profileImageCurrent", null);
+        model.addAttribute("profileImageOriginal", originalBase64);
+        model.addAttribute("originalNickname", user.getNickname());
+
+        return "profile";
+    }
+
+    @PostMapping("/profile")
+    public String modify(
+            Model model,
+            @Valid @ModelAttribute ProfileForm form,
+            BindingResult bindingResult,
+            RedirectAttributes redirectAttributes,
+            @AuthenticationPrincipal UserSecurity userSecurity
+    ) {
+        User user = userSecurity.getUser();
+
+        //공백 확인
+        if (bindingResult.hasErrors()) {
+
+            String originalBase64 = null;
+            String currentBase64 =  null;
+            try {
+                originalBase64 = imageService.getBase64UserImage(user);
+                currentBase64 = imageService.getBase64EditingImage(user, form.profileImage());
+            } catch (IOException e) {
+                redirectAttributes.addFlashAttribute("msg", "이미지 처리 중 오류가 발생했습니다.");
+                return "redirect:/user/profile";
+            }
+
+            model.addAttribute("profileImageOriginal", originalBase64);
+            model.addAttribute("profileImageCurrent", currentBase64);
+            model.addAttribute("originalNickname", user.getNickname());
+            return "/profile";
+        }
+
+        userService.modify(user, form);
+        redirectAttributes.addFlashAttribute("msg", "회원 정보가 변경되었습니다.");
+        return "redirect:/user/profile";
 
     @GetMapping("/password") // 비밀번호 변경
     public String password(@ModelAttribute("form") PasswordForm form) {

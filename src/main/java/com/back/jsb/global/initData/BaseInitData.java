@@ -11,7 +11,6 @@ import com.back.jsb.domain.user.UserCreateForm;
 import com.back.jsb.domain.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.ApplicationRunner;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
@@ -24,7 +23,7 @@ public class BaseInitData {
     private final QuestionRepository questionRepository;
     private final AnswerRepository answerRepository;
 
-    @Bean
+    //@Bean
     public ApplicationRunner initializer() {
         return args -> {
             //사용자1 생성

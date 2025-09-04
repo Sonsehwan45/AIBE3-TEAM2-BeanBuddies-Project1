@@ -35,6 +35,11 @@ public class UserService {
         return userRepository.findByUsername(username).orElse(null);
     }
 
+    public void modify(User user, ProfileForm form) {
+        user.modify(form);
+        userRepository.save(user);
+    }
+
     public boolean matchPassword(String rawPassword, String encodedPassword) {
         return passwordEncoder.matches(rawPassword, encodedPassword);
     }

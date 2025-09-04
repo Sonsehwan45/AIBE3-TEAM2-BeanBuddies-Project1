@@ -4,9 +4,20 @@
     <h1 class="page-title">회원가입</h1>
 
     <!-- 회원가입폼 -->
-    <form th:action="@{/user/sign}" th:object="${form}" method="post">
+    <form th:action="@{/user/sign}" th:object="${form}" method="post" enctype="multipart/form-data">
 
         <!-- 에러 발생 시 각 필드에 메세지 표시되도록 함 (ex : 사용중인 아이디입니다, 아이디는 필수 입력입니다.) -->
+
+        <!-- 프로필 사진 설정 -->
+        <div class="profile-image-container">
+            <label for="profileImage">프로필 사진</label>
+            <img id="preview" th:src="@{/images/defaultProfile.png}" alt="프로필 사진" width="150" />
+            <input id="profileImage" type="file" name="profileImage" accept="image/*" onchange="loadPreview(event)" />
+
+            <div class="image-buttons">
+                <button type="button" onclick="deleteImage()">사진 삭제</button>
+            </div>
+        </div>
 
         <div>
             <label for="username">아이디</label>
@@ -47,5 +58,28 @@
             <button type="submit" class="btn">회원가입</button>
         </div>
     </form>
+
+    <!-- 프로필 사진 미리보기를 위한 JS -->
+    <script>
+        const defaultImage = '/images/defaultProfile.png';
+
+        function loadPreview(event) {
+            const preview = document.getElementById('preview');
+            const file = event.target.files[0];
+
+            if(file) {
+                preview.src = URL.createObjectURL(file); // 선택한 파일을 미리보기로 표시
+            } else {
+                preview.src = defaultImage; // 파일 선택 취소 시 기본 이미지
+            }
+        }
+
+        function deleteImage() {
+            const preview = document.getElementById('preview');
+            const fileInput = document.getElementById('profileImage');
+            preview.src = defaultImage;
+            fileInput.value = null;
+        }
+    </script>
 </div>
 </html>
