@@ -3,9 +3,7 @@
 
     <h1 class="page-title">질문 목록</h1>
 
-    <!-- 검색 폼 -->
     <form th:action="@{/question/list}" method="get" class="search-form question-list">
-        <!-- 검색 타입 (중복 선택 시 OR로 검색) -->
         <div class="type-checkboxes">
             <label><input type="checkbox" name="type" value="all"
                           th:checked="${selectedTypes.contains('all')}"> 전체</label>
@@ -19,16 +17,14 @@
                           th:checked="${selectedTypes.contains('answer')}"> 답변</label>
         </div>
 
-        <!-- 검색 키워드 -->
         <div class="search-row">
             <input type="text" name="keyword" th:value="${keyword}" placeholder="검색어 입력">
             <button type="submit" class="btn">검색</button>
         </div>
     </form>
 
-    <!-- 질문 목록 -->
     <ul class="question-items">
-        <li th:each="question : ${questions}">
+        <li th:each="question : ${paging}">
             <a th:href="@{/question/detail/{id}(id=${question.id})}" class="question-title" th:text="${question.title}"></a>
             <div class="question-meta">
                 <span th:text="${question.author.nickname}"></span>
@@ -36,6 +32,30 @@
             </div>
         </li>
     </ul>
+
+    <div th:if="${!paging.isEmpty()}" class="pagination-container">
+        <ul class="pagination">
+
+            <li th:classappend="${!paging.hasPrevious()} ? 'disabled'">
+                <a th:href="@{/question/list(page=${paging.number-1}, type=${selectedTypes}, keyword=${keyword})}">
+                    <span>이전</span>
+                </a>
+            </li>
+
+            <li th:each="page: ${#numbers.sequence(0, paging.totalPages-1)}"
+                th:if="${page >= paging.number-5 and page <= paging.number+5}"
+                th:classappend="${page == paging.number} ? 'active'">
+                <a th:text="${page + 1}"
+                   th:href="@{/question/list(page=${page}, type=${selectedTypes}, keyword=${keyword})}"></a>
+            </li>
+
+            <li th:classappend="${!paging.hasNext()} ? 'disabled'">
+                <a th:href="@{/question/list(page=${paging.number+1}, type=${selectedTypes}, keyword=${keyword})}">
+                    <span>다음</span>
+                </a>
+            </li>
+        </ul>
+    </div>
 
 </div>
 </html>
