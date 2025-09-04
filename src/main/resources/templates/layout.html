@@ -16,10 +16,14 @@
             <li><a th:href="@{/user/profile}">홈</a></li>
             <li><a th:href="@{/question/write}">질문 등록</a></li>
             <li><a th:href="@{/question/list}">질문 목록</a></li>
+            <li><a th:href="@{/answer/list}">최근 답변</a></li>
 
             <!-- 로그인했을 경우 안내문구와 로그아웃 버튼 활성화 -->
             <li sec:authorize="isAuthenticated()">
                 안녕하세요, <span th:text="${#authentication.principal.nickname}"></span>님
+            </li>
+            <li sec:authorize="isAuthenticated()">
+                <a th:href="@{/user/password}">비밀번호 변경</a>
             </li>
             <li sec:authorize="isAuthenticated()">
                 <a th:href="@{/user/logout}">로그아웃</a>

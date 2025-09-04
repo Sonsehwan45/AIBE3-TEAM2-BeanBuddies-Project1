@@ -31,7 +31,8 @@ public class SecurityConfig{
                                 "/question/modify/**",
                                 "/answer/write/**",
                                 "/answer/delete/**",
-                                "/answer/modify/**"
+                                "/answer/modify/**",
+                                "/user/password"
                         ).authenticated()
                         .anyRequest().permitAll()
                 )

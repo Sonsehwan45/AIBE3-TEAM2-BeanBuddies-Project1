@@ -47,6 +47,13 @@
                  th:errors="*{passwordConfirm}" class="field-error"></div>
         </div>
 
+        <div>
+            <label for="email">이메일</label>
+            <input id="email" type="email" th:field="*{email}" />
+            <div th:if="${#fields.hasErrors('email')}"
+                 th:errors="*{email}" class="field-error"></div>
+        </div>
+
         <div class="form-actions">
             <button type="submit" class="btn">회원가입</button>
         </div>
