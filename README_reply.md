@@ -12,47 +12,24 @@ replies.removeIf(reply -> reply.getId() == replyId);
 
 equals자체가 Object에서 선언된 메소드라 매개변수 타입 자체를 Object로 받아들여서
 
-컴파일 에러가 발생하지 않았다.
+컴파일 에러가 발생하지 않아 버그감지에 시간이 좀 걸렸다.
 
-한편, 수정 후를 작성하면서 BaseInitData의 각 table들의 키가 int로 선언된 것과
+## 테스트코드 작성
+
+테스트 코드 작성 자체보다는 테스트 환경설정이 가장 큰 문제가 되었고, 시간이 많이 소요되었다.
+
+ApplicationRunner를 통해 test프로필로 데이터를 초기화 하는 방법은 예외가 발생했는데 해결하지 못하였다.
+
+`@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)`를 테스트 클래스에 추가하여
+
+해결하긴 하였으나, 컨텍스트를 지속적으로 초기화 하여 테스트가 상당히 느리다.
+
+다른 방법으로도 해결할 수 있으면 좋을 것 같다.
+
+# 👀 기존 기능 버그 감지
+## BaseInitData PK값 타입
+BaseInitData의 각 entity들의 키가 int로 선언된 것과
 
 repository의 두번째 제네릭이 <Long>으로 선언되어 불일치한 것을 확인 할 수 있었다.
 
-(repository의 두번쨰 매개변수 타입은 엔티티의 키 타입이다.)
-
-
-
-
-## UI 변경
-
-![img.png](img.png)
-
-![img_1.png](img_1.png)
-
-시행착오를 통해 그나마 괜찮은 형식으로 바꾸었다.
-
-## `TransientObjectException `
-
-비영속인 객체를 영속인 객체와 함께 저장하려고 하면 발생하는 예외
-
-test에서 간단하게 객체들을 생성하고 persist 하지 않고 사용하려고 했다가 발생했다.
-
-# 👀 기존 기능 버그 감지
-## 1 대 다 연관관계 초기화 문제
-```java
-@OneToMany(mappedBy = "question", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
-private List<Answer> answers = new ArrayList<>();
-```
-
-answers가 기존에 = new ArrayList<>(); 초기화 하지 않는 실수가 있었음
-
-## ddl 자동생성 문제
-
-view에서 content의 칼럼 설정이 없어, 자동생성된 content 칼럼이 varchar(255)로 선언됨
-
-![img_2.png](img_2.png)
-
-```java
-@Column(columnDefinition = "TEXT")
-private String content;
-```
+▶️ repository의 두번쨰 매개변수 타입은 엔티티의 키 타입이다.
