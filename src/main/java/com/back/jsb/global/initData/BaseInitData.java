@@ -33,6 +33,7 @@ public class BaseInitData {
     @Transactional // 모든 DB 작업이 하나의 트랜잭션으로 묶여 안정성이 높아짐
     public ApplicationRunner initializer() {
         return args -> {
+            if (userService.count() > 0) return;
             UserCreateForm userForm1 = new UserCreateForm();
             userForm1.setUsername("user1");
             userForm1.setPassword("user1");

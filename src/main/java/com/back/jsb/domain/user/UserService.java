@@ -60,4 +60,8 @@ public class UserService {
         String content = "☺️ 안녕하세요! BeansBuddies 입니다!\n🔑 초기화된 비밀번호는 [%s] 입니다!\n✅ 로그인 후 반드시 비밀번호를 변경해주세요!".formatted(password);
         mailService.sendTxtEmail(user.getEmail(), subject, content);
     }
+
+    public long count() {
+        return userRepository.count();
+    }
 }

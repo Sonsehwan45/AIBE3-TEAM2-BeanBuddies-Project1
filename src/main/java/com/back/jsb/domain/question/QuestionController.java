@@ -42,7 +42,7 @@ public class QuestionController {
 
         questionService.register(form, userSecurity.getUser());
 
-        return "redirect:/home";
+        return "redirect:/";
     }
 
     @GetMapping("/list")
