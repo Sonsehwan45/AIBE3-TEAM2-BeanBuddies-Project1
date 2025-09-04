@@ -11,12 +11,13 @@ import com.back.jsb.domain.user.UserCreateForm;
 import com.back.jsb.domain.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.ApplicationRunner;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.springframework.context.annotation.Profile;
 
 @Configuration
 @RequiredArgsConstructor
