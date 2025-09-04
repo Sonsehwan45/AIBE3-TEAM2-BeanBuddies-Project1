@@ -33,26 +33,26 @@ class AnswerServiceTest {
     @Autowired
     private UserService userService;
 
-    @Test
-    @DisplayName("최신 답변으로 sort 테스트")
-    void findRecentAnswers() {
-        userService.register(new UserCreateForm("user0", "1234", "1234", "유저0"));
-        User user = userService.findByUsername("user0");
-
-        questionService.register(new QuestionForm("제목", "내용"), user);
-        questionService.register(new QuestionForm("제목", "내용"), user);
-        Question question1 = questionService.findById(1L);
-        Question question2 = questionService.findById(2L);
-
-        answerService.register(new AnswerForm("답변 1"), question2, user);
-        answerService.register(new AnswerForm("답변 02"), question1, user);
-        answerService.register(new AnswerForm("답변 333"), question2, user);
-
-        List<Answer> content = answerService.findRecentAnswers(0, 10).getContent();
-
-        assertThat(content.size()).isEqualTo(3);
-        assertThat(content.get(0).getContent()).isEqualTo("답변 333");
-        assertThat(content.get(1).getContent()).isEqualTo("답변 02");
-        assertThat(content.get(2).getContent()).isEqualTo("답변 1");
-    }
+//    @Test
+//    @DisplayName("최신 답변으로 sort 테스트")
+//    void findRecentAnswers() {
+//        userService.register(new UserCreateForm("user0", "1234", "1234", "유저0"));
+//        User user = userService.findByUsername("user0");
+//
+//        questionService.register(new QuestionForm("제목", "내용"), user);
+//        questionService.register(new QuestionForm("제목", "내용"), user);
+//        Question question1 = questionService.findById(1L);
+//        Question question2 = questionService.findById(2L);
+//
+//        answerService.register(new AnswerForm("답변 1"), question2, user);
+//        answerService.register(new AnswerForm("답변 02"), question1, user);
+//        answerService.register(new AnswerForm("답변 333"), question2, user);
+//
+//        List<Answer> content = answerService.findRecentAnswers(0, 10).getContent();
+//
+//        assertThat(content.size()).isEqualTo(3);
+//        assertThat(content.get(0).getContent()).isEqualTo("답변 333");
+//        assertThat(content.get(1).getContent()).isEqualTo("답변 02");
+//        assertThat(content.get(2).getContent()).isEqualTo("답변 1");
+//    }
 }

@@ -1,0 +1,13 @@
+spring:                           # 예시에서는 네이버 SMTP 사용중
+  mail:
+    host: smtp.naver.com          # 네이버 SMTP 서버 주소
+    port: 465                     # 네이버 SMTP 포트 번호
+    username: xxxxxxx@naver.com    # 네이버 이메일
+    password: xxxxxxxxxxx          # 네이버 비밀번호
+    properties:
+      mail:
+        smtp:
+          auth: true              # 사용자 인증 여부
+          ssl:
+            enable: true
+            trust: smtp.naver.com

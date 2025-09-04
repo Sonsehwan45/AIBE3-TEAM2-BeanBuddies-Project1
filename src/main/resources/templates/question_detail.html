@@ -72,7 +72,7 @@
 
                 <!-- 일반 모드 -->
                 <div th:if="${editAnswerId != answer.id}">
-                    <div class="answer-content" th:utext="${@commonUtil.markdown(question.content)}">답변 내용</div>
+                    <div class="answer-content" th:utext="${@commonUtil.markdown(answer.content)}">답변 내용</div>
                     <div class="answer-footer flex-between">
                         <div class="answer-meta">
                             <span th:text="${answer.author.nickname}">작성자</span>
