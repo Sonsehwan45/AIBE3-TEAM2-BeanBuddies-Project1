@@ -1,10 +1,7 @@
 package com.back.jsb.domain.reply;
 
 import com.back.jsb.domain.answer.Answer;
-import com.back.jsb.domain.answer.AnswerRepository;
-import com.back.jsb.domain.answer.AnswerService;
-import com.back.jsb.domain.question.QuestionRepository;
-import com.back.jsb.domain.question.QuestionService;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,11 +13,23 @@ public class ReplyService {
 
     private final ReplyRepository replyRepository;
 
+    @Transactional
     public void registerReply(Answer answer, ReplyRegisterForm replyForm, String username) {
         answer.addReply(replyForm.content(), username);
     }
 
-    public void deleteReply(Answer answer, Long replyId) {
-        answer.removeReply(replyId);
+    @Transactional
+    public void deleteReply(Answer answer, Long id, String username) {
+        AnswerReply reply = findById(id);
+        if (!reply.getAuthor().equals(username)) {
+            throw new SecurityException("");
+        }
+
+        answer.removeReply(id);
+    }
+
+    private AnswerReply findById(Long id) {
+        return replyRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Reply with id " + id + " not found"));
     }
 }
