@@ -40,4 +40,4 @@ out/
 .idea/
 db_dev.mv.db
 db_dev.trace.db
-/resources/application-mail.yml
+src/main/resources/application-mail.yml
