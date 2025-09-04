@@ -6,6 +6,9 @@ import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.JoinType;
 import jakarta.persistence.criteria.Predicate;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -36,40 +39,47 @@ public class QuestionService {
     }
 
     public void modify(Question question, QuestionForm form) {
-        //수정 폼으로 Question 객체 수정
         question.modify(form);
         questionRepository.save(question);
     }
 
-    public List<Question> search(List<String> types, String keyword) {
+    private Specification<Question> createSpecification(List<String> types, String keyword) {
+        return (root, query, builder) -> {
+            // 키워드가 없으면 아무 조건도 적용하지 않습니다 (전체 리스트 조회를 위함).
+            if (keyword == null || keyword.trim().isEmpty()) {
+                return builder.conjunction();
+            }
+            List<String> finalTypes =
+                    (types == null || types.isEmpty() || types.contains("all"))
+                            ? List.of("title", "content", "answer", "author")
+                            : types;
 
-        //spec의 람다 함수에 들어가는 변수는 final이어야 함. types를 그대로 못 써서 finalTypes 새로 선언
-        List<String> finalTypes =
-                (types == null || types.isEmpty() || types.contains("all"))
-                        ? List.of("title", "content", "answer", "author")
-                        : types;
-
-        //specification으로 types에 따라 keyword OR 검색
-        Specification<Question> spec = (root, query, builder) -> {
             List<Predicate> predicates = new ArrayList<>();
 
-            if(finalTypes.contains("title")) {
-                predicates.add(builder.like(root.get("title"), "%"+keyword+"%"));
+            if (finalTypes.contains("title")) {
+                predicates.add(builder.like(root.get("title"), "%" + keyword + "%"));
             }
-            if(finalTypes.contains("content")) {
-                predicates.add(builder.like(root.get("content"), "%"+keyword+"%"));
+            if (finalTypes.contains("content")) {
+                predicates.add(builder.like(root.get("content"), "%" + keyword + "%"));
             }
-            if(finalTypes.contains("author")) {
-                predicates.add(builder.like(root.get("author").get("username"), "%"+keyword+"%"));
+            if (finalTypes.contains("author")) {
+                predicates.add(builder.like(root.get("author").get("username"), "%" + keyword + "%"));
             }
-            if(finalTypes.contains("answer")) {
+            if (finalTypes.contains("answer")) {
+                // Question과 Answer를 LEFT JOIN으로 연결합니다.
                 Join<Question, Answer> answers = root.join("answers", JoinType.LEFT);
                 predicates.add(builder.like(answers.get("content"), "%" + keyword + "%"));
             }
+
             query.distinct(true);
+
             return builder.or(predicates.toArray(new Predicate[0]));
         };
+    }
 
-        return questionRepository.findAll(spec);
+    public Page<Question> getList(int page, List<String> types, String keyword) {
+        Pageable pageable = PageRequest.of(page, 10);
+        Specification<Question> spec = createSpecification(types, keyword);
+        return this.questionRepository.findAll(spec, pageable);
     }
 }
