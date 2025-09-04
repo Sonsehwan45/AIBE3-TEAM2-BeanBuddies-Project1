@@ -1,0 +1,97 @@
+<html layout:decorate="~{layout}">
+<div layout:fragment="content" class="page-container">
+
+    <h1 class="page-title">내 정보 수정</h1>
+
+    <form class="profile-form" th:action="@{/user/profile}" th:object="${profileForm}" method="post" enctype="multipart/form-data">
+
+        <!-- 프로필 사진 -->
+        <div class="profile-image-container">
+            <img id="preview"
+                 th:src="*{deleteProfileImage} ? '/images/defaultProfile.png' :
+                 (${profileImageCurrent} != null ? 'data:image/png;base64,' + ${profileImageCurrent} : 'data:image/png;base64,' + ${profileImageOriginal})"
+                 alt="프로필 사진" />
+
+            <input id="profileImage" type="file" th:field="*{profileImage}" accept="image/*"/>
+            <input type="hidden" th:field="*{deleteProfileImage}" id="deleteProfileImage"/>
+            <input type="hidden" id="hiddenOriginalImage" th:value="${profileImageOriginal}"/>
+
+            <div class="image-buttons">
+                <button type="button" id="deleteButton" class="btn btn-danger">사진 삭제</button>
+                <button type="button" id="cancelButton" class="btn">변경 취소</button>
+            </div>
+        </div>
+
+        <!-- 닉네임 -->
+        <div>
+            <label for="nickname">닉네임</label>
+            <input id="nickname" type="text" th:field="*{nickname}" />
+            <input type="hidden" id="hiddenOriginalNickname" th:value="${originalNickname}"/>
+            <div th:if="${#fields.hasErrors('nickname')}" th:errors="*{nickname}" class="field-error"></div>
+        </div>
+
+        <!-- 저장/취소 버튼 -->
+        <div class="form-actions">
+            <button type="submit" id="saveButton" class="btn" disabled>저장</button>
+            <a th:href="@{/user/profile}" class="btn btn-secondary">취소</a>
+        </div>
+
+    </form>
+
+    <script th:inline="javascript">
+        document.addEventListener('DOMContentLoaded', function() {
+            const preview = document.getElementById('preview');
+            const fileInput = document.getElementById('profileImage');
+            const deleteProfileImage = document.getElementById('deleteProfileImage');
+            const nicknameInput = document.getElementById('nickname');
+
+            const deleteButton = document.getElementById('deleteButton');
+            const cancelButton = document.getElementById('cancelButton');
+            const saveButton = document.getElementById('saveButton');
+
+            const originalNickname = document.getElementById('hiddenOriginalNickname').value;
+            const originalImageBase64 = document.getElementById('hiddenOriginalImage').value;
+            const originalSrc = 'data:image/png;base64,' + originalImageBase64;
+
+            // 변경 체크 함수(저장 버튼 활성화 기준 : DB에 저장된 값에서 변경된 사항이 있는 가)
+            function checkChanges() {
+                const nicknameChanged = nicknameInput.value !== originalNickname;
+                const imageChanged = preview.src !== originalSrc;
+                saveButton.disabled = !(nicknameChanged || imageChanged);
+            }
+
+            // 프로필 사진 삭제 버튼(기본 이미지로 변경)
+            deleteButton.addEventListener('click', function() {
+                preview.src = '/images/defaultProfile.png';
+                deleteProfileImage.value = 'true';
+                fileInput.value = '';
+                checkChanges();
+            });
+
+            // 파일 선택 시 미리보기
+            fileInput.addEventListener('change', function() {
+                if (fileInput.files && fileInput.files[0]) {
+                    const reader = new FileReader();
+                    reader.onload = function(event) {
+                        preview.src = event.target.result;
+                        deleteProfileImage.value = 'false';
+                        checkChanges();
+                    };
+                    reader.readAsDataURL(fileInput.files[0]);
+                }
+            });
+
+            // 프로필 사진 변경 취소 버튼(기존 이미지로 변경)
+            cancelButton.addEventListener('click', function() {
+                preview.src = originalSrc;
+                deleteProfileImage.value = 'false';
+                fileInput.value = '';
+                checkChanges();
+            });
+
+            // 닉네임 입력 감지
+            nicknameInput.addEventListener('input', checkChanges);
+        });
+    </script>
+</div>
+</html>

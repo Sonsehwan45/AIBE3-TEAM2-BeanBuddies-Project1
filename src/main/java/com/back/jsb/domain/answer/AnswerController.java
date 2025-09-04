@@ -4,7 +4,9 @@ import com.back.jsb.domain.question.Question;
 import com.back.jsb.domain.question.QuestionService;
 import com.back.jsb.global.security.UserSecurity;
 import jakarta.validation.Valid;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +24,8 @@ public class AnswerController {
     private final AnswerService answerService;
     private final QuestionService questionService;
 
+    private static final int DEFAULT_PAGE_SIZE = 10;
+
     @PostMapping("/write/{id}")
     @Transactional
     public String write(
@@ -36,7 +40,7 @@ public class AnswerController {
         Question question = questionService.findById(id);
 
         //질문글이 존재하지 않을 때 예외처리
-        if(question == null) {
+        if (question == null) {
             redirectAttributes.addFlashAttribute("msg", "해당 질문글이 존재하지 않습니다.");
             return "redirect:/question/list";
         }
@@ -48,7 +52,7 @@ public class AnswerController {
         }
 
         //내용이 공백일 때 예외처리
-        if(bindingResult.hasErrors()) {
+        if (bindingResult.hasErrors()) {
             model.addAttribute("question", question);
             return "question_detail";
         }
@@ -70,7 +74,7 @@ public class AnswerController {
         Answer answer = answerService.findById(answerId);
 
         //답변이 존재하지 않을 때 예외처리
-        if(answer == null) {
+        if (answer == null) {
             redirectAttributes.addFlashAttribute("msg", "해당 답변이 존재하지 않습니다.");
             return "redirect:/question/detail/%d".formatted(questionId);
         }
@@ -99,7 +103,7 @@ public class AnswerController {
         Answer answer = answerService.findById(answerId);
 
         //답변이 존재하지 않을 때 예외처리
-        if(answer == null) {
+        if (answer == null) {
             redirectAttributes.addFlashAttribute("msg", "해당 답변이 존재하지 않습니다.");
             return "redirect:/question/detail/%d".formatted(questionId);
         }
@@ -132,19 +136,19 @@ public class AnswerController {
         Answer answer = answerService.findById(answerId);
 
         //답변이 존재하지 않을 때 예외처리
-        if(answer == null) {
+        if (answer == null) {
             redirectAttributes.addFlashAttribute("msg", "해당 답변이 존재하지 않습니다.");
             return "redirect:/question/detail/%d".formatted(questionId);
         }
 
         //로그인하지 않았거나 본인이 아닐 때 예외처리
-        if(principal == null || !answer.getAuthor().getUsername().equals(principal.getName())) {
+        if (principal == null || !answer.getAuthor().getUsername().equals(principal.getName())) {
             redirectAttributes.addFlashAttribute("msg", "댓글 수정 권한이 없습니다. 본인만 수정할 수 있습니다.");
             return "redirect:/question/detail/%d".formatted(questionId);
         }
 
         //공백인 필드가 있을 때 예외처리
-        if(bindingResult.hasErrors()) {
+        if (bindingResult.hasErrors()) {
             model.addAttribute("question", questionService.findById(questionId));
             model.addAttribute("editAnswerId", answerId);
             model.addAttribute("form", new AnswerForm());
@@ -154,5 +158,17 @@ public class AnswerController {
         answerService.modify(answer, form);
         redirectAttributes.addFlashAttribute("msg", "댓글이 수정되었습니다.");
         return "redirect:/question/detail/%d".formatted(questionId);
+    }
+
+    @GetMapping("list")
+    public String list(@RequestParam(defaultValue = "0") Integer page, Model model) {
+        // 의도적으로 음수 넣는 것 처리
+        if (page <= 0) {
+            page = 0;
+        }
+        Page<Answer> answersPage = answerService.findRecentAnswers(page, DEFAULT_PAGE_SIZE);
+        model.addAttribute("answersPage", answersPage);
+
+        return "answer_list";
     }
 }
