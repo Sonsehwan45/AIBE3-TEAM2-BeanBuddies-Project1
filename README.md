@@ -913,3 +913,35 @@ application.yml에서 요청한 스코프와
 해결
 application.yml에서 불필요한 항목을 제거하고,
 카카오 개발자 콘솔에서 프로필(닉네임) 항목만 동의하도록 맞춤.
+
+## 질문 목록 페이징 구현 - 손세환
+
+▶️ 기능 흐름
+1. 사용자가 검색 버튼이나 페이지 번호를 클릭하면, 검색/페이징 정보(page, type, keyword)가 담긴 URL이 서버로 요청됩니다.
+2. QuestionController는 URL의 파라미터들을 수신하여 QuestionService에 그대로 전달하며 비즈니스 로직을 위임합니다.
+3. QuestionService는 페이징 정보(Pageable)와 동적 검색 조건(Specification, JOIN 포함)을 생성한 후, 이 두 가지를 Repository에 전달하여 데이터를 요청합니다.
+4. Spring Data JPA가 서비스로부터 받은 Specification(WHERE 절)과 Pageable(LIMIT, OFFSET 절)을 실제 SQL 쿼리로 자동 변환하여 DB에 실행합니다.
+5. DB 조회 결과를 페이징 정보까지 담은 Page 객체로 가공하여 컨트롤러로 반환하고, 컨트롤러는 이 객체와 검색어를 Model에 담아 View로 전달합니다.
+6. Thymeleaf는 Page 객체로 목록과 페이지 번호 UI를 그리며, 이때 모든 페이지 링크에 검색어 파라미터를 다시 포함시켜 검색 상태가 유지되도록 합니다.
+
+
+🚀 트러블슈팅
+1️⃣  페이지 이동 시 검색 조건 초기화 문제
+
+문제
+- 질문 목록 페이지에서 특정 키워드로 검색한 후,
+- 페이징 UI에서 '2페이지' 또는 '다음' 버튼을 클릭하면 검색 조건이 사라지고 전체 목록의 2페이지로 이동하는 문제가 발생했습니다.
+
+원인
+- 문제는 백엔드가 아닌 프론트엔드 **Thymeleaf 템플릿 (question_list.html)**에 있었습니다.
+
+- 페이징 링크(<a> 태그)를 생성할 때 th:href 속성에 page 파라미터만 동적으로 넘겨주고, 기존의 검색 조건이었던 type과 keyword 파라미터를 포함시키지 않았습니다.
+
+- 따라서 링크 클릭 시 ?page=1 과 같은 URL만 생성되어 검색 관련 정보가 유실되었습니다.
+
+해결
+- Thymeleaf URL 파라미터 추가: 페이징 UI를 생성하는 모든 <a> 태그의 th:href 속성을 수정했습니다.
+
+- th:href="@{/question/list(page=...)}" 형태의 코드를 th:href="@{/question/list(page=..., type=${selectedTypes}, keyword=${keyword})}" 와 같이 변경했습니다.
+
+- 이를 통해 컨트롤러에서 모델에 담아 전달한 selectedTypes와 keyword 값을 모든 페이지 이동 링크에 동적으로 포함시켜, 검색 상태가 계속 유지되도록 문제를 해결했습니다.
